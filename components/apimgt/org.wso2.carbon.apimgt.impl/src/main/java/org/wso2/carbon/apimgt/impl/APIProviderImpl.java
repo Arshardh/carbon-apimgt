@@ -671,7 +671,7 @@ class APIProviderImpl extends AbstractAPIManager implements APIProvider {
      */
     private void updateWsdl(API api) throws APIManagementException {
 
-
+        boolean transactionCommitted = false;
         try {
             registry.beginTransaction();
             String apiArtifactId = registry.get(APIUtil.getAPIPath(api.getId())).getUUID();
@@ -689,11 +689,21 @@ class APIProviderImpl extends AbstractAPIManager implements APIProvider {
                 }
             }
             registry.commitTransaction();
+            transactionCommitted = true;
         } catch (RegistryException e) {
             try {
                 registry.rollbackTransaction();
             } catch (RegistryException ex) {
-                handleException("Error occurred while saving the wsdl in the registry.", ex);
+                handleException("Error occurred while rolling back the transaction.", ex);
+            }
+            throw new APIManagementException("Error occurred while saving the wsdl in the registry.", e);
+        } finally {
+            try {
+                if (!transactionCommitted) {
+                    registry.rollbackTransaction();
+                }
+            } catch (RegistryException ex) {
+                handleException("Error occurred while rolling back the transaction.", ex);
             }
         }
     }
