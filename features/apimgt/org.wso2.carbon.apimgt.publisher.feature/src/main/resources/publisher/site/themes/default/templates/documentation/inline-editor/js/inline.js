@@ -21,7 +21,7 @@ function loadDefaultTinyMCEContent(provider,apiName, version, docName) {
                       var docName = json.doc.provider.docName;
                       var apiName = json.doc.provider.apiName;
                       var docContent = json.doc.provider.content;
-                      $('#apiDeatils').empty().html('<p><h1> ' + docName + '</h1></p>');
+                      $('#apiDeatils').empty().html('<p><h1> ' + $('<div/>').text(docName).html() + '</h1></p>');
                       tinyMCE.activeEditor.setContent(docContent);
                   } else {
                       $('#inlineError').show('fast');
