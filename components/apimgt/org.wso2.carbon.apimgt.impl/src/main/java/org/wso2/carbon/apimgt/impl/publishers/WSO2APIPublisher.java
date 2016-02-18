@@ -794,7 +794,7 @@ public class WSO2APIPublisher implements APIPublisher {
     }
 
     private static String getFullRegistryIconUrl(String postfixUrl) {
-        String proxyContext = CarbonUtils.getServerConfiguration().getFirstProperty("ProxyContextPath");
+        String proxyContext = CarbonUtils.getServerConfiguration().getFirstProperty("MgtProxyContextPath");
         String tmpPostfixUrl = "";
         if (proxyContext != null && !proxyContext.equals("/")) {
             tmpPostfixUrl = proxyContext;
