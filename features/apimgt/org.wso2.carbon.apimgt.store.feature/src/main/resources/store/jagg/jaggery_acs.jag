@@ -75,7 +75,7 @@
                         }
                         jagg.setUser({username:ssoRelyingParty.getLoggedInUser(sessionId), cookie:null, hasPublisherAccess:showURL});
                         sessionId = session.getId();
-                        ssoRelyingParty.setSessionAuthenticated(sessionId, samlResponse, session);
+                        ssoRelyingParty.setSessionAuthenticated(sessionId, samlResponse);
                         ssoRelyingParty.addSession(session);
                         session.put("showLogin", "false");
                         session.put("LOGGED_IN_USER",ssoRelyingParty.getLoggedInUser(sessionId));
