@@ -30,7 +30,7 @@ var getRedirectPathForNonAuthenticatedUser = function () {
 
 var isTenantAllowed=function(){
  var user = jagg.getUser(),username;
-
+/*
 	var userInSession = session.get("LOGGED_IN_USER");
 	var hasPublisherAccess= session.get("hasPublisherAccess");
 	var MultitenantUtils = Packages.org.wso2.carbon.utils.multitenancy.MultitenantUtils;
@@ -43,7 +43,7 @@ var isTenantAllowed=function(){
 	    	}
 
 	}
-
+*/
    /*if(user!=null){
    	username=user.username;
    	if(jagg.getTenantDomain()!=null){
