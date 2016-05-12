@@ -2234,7 +2234,7 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         }
         //validate callback url
         if(!APIUtil.isValidURL(application.getCallbackUrl())){
-            application.setCallbackUrl("");
+            log.warn("Invalid Call Back URL "+ application.getCallbackUrl());
         }
 
         apiMgtDAO.updateApplication(application);
