@@ -5803,6 +5803,7 @@ public class ApiMgtDAO {
         PreparedStatement ps = null;
         try {
             connection = APIMgtDBUtil.getConnection();
+            connection.setAutoCommit(false);
             String deleteRegistrationEntry = "DELETE " +
                     "FROM" +
                     "   AM_APPLICATION_REGISTRATION " +
