@@ -9373,7 +9373,7 @@ public void addUpdateAPIAsDefaultVersion(API api, Connection connection) throws 
                     " WHERE APPLICATION_ID   = ? AND KEY_TYPE = ? ";
 
             ps = conn.prepareStatement(sqlQuery);
-            ps.setString(1, applicationId);
+            ps.setInt(1, Integer.parseInt(applicationId));
             ps.setString(2, keyType);
             resultSet = ps.executeQuery();
 
