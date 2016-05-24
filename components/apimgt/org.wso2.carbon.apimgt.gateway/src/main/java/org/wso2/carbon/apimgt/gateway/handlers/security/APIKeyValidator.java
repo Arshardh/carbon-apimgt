@@ -388,9 +388,19 @@ public class APIKeyValidator {
                 }
             }
 
-            if (selectedApi.getResources().length > 0) {
+            Set<Resource> acceptableResources = new HashSet<Resource>();
+
+            for(Resource resource : selectedApi.getResources()){
+                //If the requesting method is OPTIONS or if the Resource contains the requesting method
+                if (RESTConstants.METHOD_OPTIONS.equals(httpMethod) ||
+                        (resource.getMethods() != null && Arrays.asList(resource.getMethods()).contains(httpMethod))) {
+                    acceptableResources.add(resource);
+                }
+            }
+
+            if (acceptableResources.size() > 0) {
                 for (RESTDispatcher dispatcher : RESTUtils.getDispatchers()) {
-                    Resource resource = dispatcher.findResource(synCtx, Arrays.asList(selectedApi.getResources()));
+                    Resource resource = dispatcher.findResource(synCtx, acceptableResources);
                     if (resource != null && Arrays.asList(resource.getMethods()).contains(httpMethod)) {
                         selectedResource = resource;
                         break;
