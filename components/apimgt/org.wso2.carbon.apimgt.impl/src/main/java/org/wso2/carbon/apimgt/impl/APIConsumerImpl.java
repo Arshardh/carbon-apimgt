@@ -1754,9 +1754,10 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
 
         Application application = apiMgtDAO.getApplicationByName(applicationName, userName, groupId);
         String applicationId = String.valueOf(application.getId());
+        String consumerKey = apiMgtDAO.getConsumerkeyByApplicationIdAndKeyType(applicationId,tokenType);
         apiMgtDAO.deleteApplicationRegistration(applicationId , tokenType);
         apiMgtDAO.deleteApplicationKeyMappingByApplicationIdAndType(applicationId, tokenType);
-        String consumerKey = ApiMgtDAO.getConsumerkeyByApplicationIdAndKeyType(applicationId,tokenType);
+
         if(consumerKey != null){
             ApiMgtDAO.deleteAccessAllowDomains(consumerKey);
         }
