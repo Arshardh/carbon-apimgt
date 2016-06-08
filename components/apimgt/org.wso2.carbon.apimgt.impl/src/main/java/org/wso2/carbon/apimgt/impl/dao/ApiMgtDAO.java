@@ -6599,6 +6599,19 @@ public void addUpdateAPIAsDefaultVersion(API api, Connection connection) throws 
                 prepStmt.addBatch();
                 if(uriTemplate.getScope()!=null){
                     scopePrepStmt.setString(1, APIUtil.getResourceKey(api,uriTemplate));
+
+                    //If uriTemplate's scope Id is not properly set, the corresponding Id should be set using the
+                    //  API's scopes
+                    if (uriTemplate.getScope().getId() == 0) {
+                        String scopeKey = uriTemplate.getScope().getKey();
+                        Scope scopeByKey = APIUtil.findScopeByKey(api.getScopes(), scopeKey);
+                        if (scopeByKey != null) {
+                            if (scopeByKey.getId() > 0) {
+                                uriTemplate.getScopes().setId(scopeByKey.getId());
+                            }
+                        }
+                    }
+
                     scopePrepStmt.setInt(2,uriTemplate.getScope().getId());
                     scopePrepStmt.addBatch();
                 }
