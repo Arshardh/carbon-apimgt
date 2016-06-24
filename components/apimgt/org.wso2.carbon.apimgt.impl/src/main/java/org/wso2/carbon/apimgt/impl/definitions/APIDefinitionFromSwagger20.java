@@ -36,6 +36,7 @@ import org.wso2.carbon.registry.api.Registry;
 import org.wso2.carbon.registry.api.RegistryException;
 import org.wso2.carbon.registry.api.Resource;
 
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -217,14 +218,13 @@ public class APIDefinitionFromSwagger20 extends APIDefinition {
                 apiIdentifier.getVersion(), apiIdentifier.getProviderName());
 
         JSONParser parser = new JSONParser();
-        JSONObject apiJSON;
-        String apiDefinition = null;
+        String apiDocContent = null;
+
         try {
             if (registry.resourceExists(resourcePath + SWAGGER_2_0_FILE_NAME)) {
                 Resource apiDocResource = registry.get(resourcePath + SWAGGER_2_0_FILE_NAME);
-                String apiDocContent = new String((byte[]) apiDocResource.getContent());
-                apiJSON = (JSONObject) parser.parse(apiDocContent);
-                apiDefinition = apiJSON.toJSONString();
+                apiDocContent = new String((byte[]) apiDocResource.getContent(), Charset.defaultCharset());
+                parser.parse(apiDocContent);
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("Resource " + SWAGGER_2_0_FILE_NAME + " not found at " + resourcePath);
@@ -237,8 +237,9 @@ public class APIDefinitionFromSwagger20 extends APIDefinition {
             handleException("Error while parsing Swagger v2.0 Definition for " + apiIdentifier.getApiName() + "-" +
                     apiIdentifier.getVersion() + " in " + resourcePath, e);
         }
-        return apiDefinition;
+        return apiDocContent;
     }
+
 
     /**
      * This method generates swagger 2.0 definition to the given api

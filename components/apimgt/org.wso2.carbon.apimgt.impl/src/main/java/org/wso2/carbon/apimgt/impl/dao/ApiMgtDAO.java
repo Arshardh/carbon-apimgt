@@ -5803,6 +5803,7 @@ public class ApiMgtDAO {
         PreparedStatement ps = null;
         try {
             connection = APIMgtDBUtil.getConnection();
+            connection.setAutoCommit(false);
             String deleteRegistrationEntry = "DELETE " +
                     "FROM" +
                     "   AM_APPLICATION_REGISTRATION " +
@@ -6598,6 +6599,19 @@ public void addUpdateAPIAsDefaultVersion(API api, Connection connection) throws 
                 prepStmt.addBatch();
                 if(uriTemplate.getScope()!=null){
                     scopePrepStmt.setString(1, APIUtil.getResourceKey(api,uriTemplate));
+
+                    //If uriTemplate's scope Id is not properly set, the corresponding Id should be set using the
+                    //  API's scopes
+                    if (uriTemplate.getScope().getId() == 0) {
+                        String scopeKey = uriTemplate.getScope().getKey();
+                        Scope scopeByKey = APIUtil.findScopeByKey(api.getScopes(), scopeKey);
+                        if (scopeByKey != null) {
+                            if (scopeByKey.getId() > 0) {
+                                uriTemplate.getScopes().setId(scopeByKey.getId());
+                            }
+                        }
+                    }
+
                     scopePrepStmt.setInt(2,uriTemplate.getScope().getId());
                     scopePrepStmt.addBatch();
                 }
@@ -9372,7 +9386,7 @@ public void addUpdateAPIAsDefaultVersion(API api, Connection connection) throws 
                     " WHERE APPLICATION_ID   = ? AND KEY_TYPE = ? ";
 
             ps = conn.prepareStatement(sqlQuery);
-            ps.setString(1, applicationId);
+            ps.setInt(1, Integer.parseInt(applicationId));
             ps.setString(2, keyType);
             resultSet = ps.executeQuery();
 

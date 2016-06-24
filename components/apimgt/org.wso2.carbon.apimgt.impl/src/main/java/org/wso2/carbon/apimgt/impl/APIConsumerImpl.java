@@ -1754,9 +1754,10 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
 
         Application application = apiMgtDAO.getApplicationByName(applicationName, userName, groupId);
         String applicationId = String.valueOf(application.getId());
+        String consumerKey = apiMgtDAO.getConsumerkeyByApplicationIdAndKeyType(applicationId,tokenType);
         apiMgtDAO.deleteApplicationRegistration(applicationId , tokenType);
         apiMgtDAO.deleteApplicationKeyMappingByApplicationIdAndType(applicationId, tokenType);
-        String consumerKey = ApiMgtDAO.getConsumerkeyByApplicationIdAndKeyType(applicationId,tokenType);
+
         if(consumerKey != null){
             ApiMgtDAO.deleteAccessAllowDomains(consumerKey);
         }
@@ -2234,7 +2235,7 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         }
         //validate callback url
         if(!APIUtil.isValidURL(application.getCallbackUrl())){
-            application.setCallbackUrl("");
+            log.warn("Invalid Call Back URL "+ application.getCallbackUrl());
         }
 
         apiMgtDAO.updateApplication(application);
