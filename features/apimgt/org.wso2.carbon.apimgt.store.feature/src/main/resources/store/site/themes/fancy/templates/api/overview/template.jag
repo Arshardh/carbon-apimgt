@@ -17,9 +17,9 @@
                 // The reason is that the context will have the version now
                 for(var t=0;t < transports.length;t++){
                 %>
-                <div  class="well well-small api_urls"><%= transports[t] %>://<%=domainValue%><%= contextWithoutTenant %>
+                <div  class="well well-small api_urls"><%= encode.forHtml(transports[t])  %>://<%=domainValue%><%= contextWithoutTenant %>
                     <%if (api.isDefaultVersion){%>
-                        <br><%= transports[t] %><%= contextWithoutTenant %>
+                        <br><%= encode.forHtml(transports[t]) %><%= contextWithoutTenant %>
                     <%}%>
                 </div>
                 <%
@@ -78,24 +78,24 @@
     <% if(api.description && api.description != ""){ %>
         <h6><%=i18n.localize("desc")%>:</h6>
     <p>
-        <%=api.description%>
+        <%=encode.forHtml(api.description)%>
     </p>
         <% } %>
 
     <% if(api.bizOwner&& api.bizOwner != ""){ %>
         <h6><%=i18n.localize("busiOwner")%>:</h6>
     <p>
-        <%=api.bizOwner%> <% if(api.bizOwnerMail && api.bizOwnerMail!=""){%>
-           [<a href="mailto:<%=api.bizOwnerMail%>"><%=api.bizOwnerMail%></a>]
+        <%=encode.forHtml(api.bizOwner)%> <% if(api.bizOwnerMail && api.bizOwnerMail!=""){%>
+           [<a href="mailto:<%=encode.forHtmlAttribute(api.bizOwnerMail)%>"><%=encode.forHtml(api.bizOwnerMail)%></a>]
         <%}%>
     </p>
     <% } %>
     <% if(api.techOwner && api.techOwner != ""){ %>
         <h6><%=i18n.localize("techOwner")%>:</h6>
     <p>
-        <%=api.techOwner%>
+        <%=encode.forHtml(api.techOwner)%>
         <% if(api.techOwnerMail && api.techOwnerMail!=""){%>
-           [<a href="mailto:<%=api.techOwnerMail%>"><%=api.techOwnerMail%></a>]
+           [<a href="mailto:<%=encode.forHtmlAttribute(api.techOwnerMail)%>"><%=encode.forHtml(api.techOwnerMail)%></a>]
         <%}%>
     </p>
     <% } %>
