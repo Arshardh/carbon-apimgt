@@ -19,10 +19,6 @@ jagg.initializer("api/swagger", {
 
 		jagg.addHeaderCSS("api/api-info", "api-info13", "templates/api/swagger/swagger/css/screen.css");
 		jagg.addHeaderCSSCode("api/api-info", "api-info15", "#swagger-ui-container {max-width: 100%;}");
-    },
-
-    postInitialize:function(inputs, outputs) {
-        jagg.addFooterJSCode("api/api-info", "api", "jagg.api = " + stringify(inputs.api) + ";");
     }
 });
 
