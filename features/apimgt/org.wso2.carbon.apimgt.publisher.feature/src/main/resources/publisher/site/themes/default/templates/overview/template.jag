@@ -10,14 +10,15 @@
     </div>
     <div class="span10">
     <%if(api.description!=''){%>
-        <div class="well" id="apiView"><%=api.description%>
+        <div class="well" id="apiView"><%=encode.forHtml(api.description)%>
         </div>
     <%}%>
         <table class="table table-bordered">
             <tbody>
             <tr>
                 <td class="span3"><%=i18n.localize("visibility")%></td>
-                <td id="inUrl"><%if(api.visibility == "restricted"){%> <%="Restricted by roles, only visible to " + api.roles +"."%><%}else{%><%=i18n.localize(api.visibility)%><%}%></td>
+                <td id="inUrl"><%if(api.visibility == "restricted"){%> <%="Restricted by roles, only visible to " +
+                encode.forHtml(api.roles) +"."%><%}else{%><%=i18n.localize(api.visibility)%><%}%></td>
             </tr>
             <tr>
                 <td class="span3"><%=i18n.localize("context")%></td>
@@ -117,7 +118,7 @@
             </tr>
             <tr>
                 <td><%=i18n.localize("tier")%></td>
-                <td id="tierAvb"><%=api.availableTiersDisplayNames%></td>
+                <td id="tierAvb"><%=encode.forHtml(api.availableTiersDisplayNames)%></td>
             </tr>
             <tr>
                 <td><%=i18n.localize("defaultAPIVersion")%></td>
@@ -133,14 +134,15 @@
             <% if(api.tags!=''){%>
             <tr>
                 <td><%=i18n.localize("tags")%></td>
-                <td id="tags"><%=api.tags%></td>
+                <td id="tags"><%=encode.forHtml(api.tags)%></td>
             </tr>
              <%
             }if(api.bizOwner!=''){%>
              <tr>
                 <td><%=i18n.localize("busiOwner")%></td>
-                <td id="bizOwnerData"><%=api.bizOwner%> <% if(api.bizOwnerMail!=''){%>
-                [<a href="mailto:<%=api.bizOwnerMail%>"><%=api.bizOwnerMail%></a>]
+                <td id="bizOwnerData"><%=encode.forHtml(api.bizOwner)%> <% if(api.bizOwnerMail!=''){%>
+                [<a href="mailto:<%=encode.forHtmlAttribute(api.bizOwnerMail)%>"><%=encode.forHtml(api.bizOwnerMail)%>
+                </a>]
                 <%}%>
                 </td>
             </tr>
@@ -148,8 +150,9 @@
              }if(api.techOwner!=''){%>
              <tr>
                 <td><%=i18n.localize("techOwner")%></td>
-                <td id="techOwnerData"><%=api.techOwner%><% if(api.techOwnerMail!=''){%>
-                [<a href="mailto:<%=api.techOwnerMail%>"><%=api.techOwnerMail%></a>]
+                <td id="techOwnerData"><%=encode.forHtml(api.techOwner)%><% if(api.techOwnerMail!=''){%>
+                [<a href="mailto:<%=encode.forHtmlAttribute(api.techOwnerMail)%>"><%=encode.forHtml(api.techOwnerMail)%>
+                </a>]
                 <%}%>
                 </td>
             </tr>
@@ -182,8 +185,8 @@
 <div class="row-fluid">
     <form id="copyApiForm">   
     <div class="well" id="copy-api">
-        <input type="hidden" id="overviewAPIVersion" value="<%=api.version%>"/>
-        <input type="hidden" id="overviewAPIName" value="<%=api.name%>"/>
+        <input type="hidden" id="overviewAPIVersion" value="<%=encode.forHtmlAttribute(api.version)%>"/>
+        <input type="hidden" id="overviewAPIName" value="<%=encode.forHtmlAttribute(api.name)%>"/>
         <label><%=i18n.localize("toVersion")%></label>
         <input type="text" class="span3 required" id="new-version"/><span class="help-inline"><%=i18n.localize("versionHelpMsg")%></span>
          <a class="icon-question-sign help_popup" help_data="versionCopy_help"></a>
