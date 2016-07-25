@@ -34,6 +34,7 @@
             }
 
             // validating the audience restrictions
+            var assertionConfig=site.ssoConfiguration.audienceRestrictionsEnabled;
             if(typeof(assertionConfig) == "undefined" || assertionConfig !== 'false'){
             var isAudienceRestrictionsValid = ssoRelyingParty.validateAudienceRestrictions(samlResponse);
             if (!Boolean(isAudienceRestrictionsValid)) {
