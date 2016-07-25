@@ -52,7 +52,7 @@
 
                         // validating the audience restrictions
                         var assertionConfig=site.ssoConfiguration.audienceRestrictionsEnabled;
-                        if(typeof(assertionConfig) == "undefined" || assertionConfig !== 'false'){
+                        if(assertionConfig === 'true'){
                         var isAudienceRestrictionsValid = ssoRelyingParty.validateAudienceRestrictions(samlResponse);
                         if (!Boolean(isAudienceRestrictionsValid)) {
                              log.error("SAML response audience restrictions verification is failed.");
@@ -77,7 +77,7 @@
 
                          // validating the saml assertion signature
                           var assertionSignatureConfig=site.ssoConfiguration.assertionSigningEnabled;
-                          if(typeof(assertionSignatureConfig) == "undefined" || assertionSignatureConfig !== 'false'){
+                          if( assertionSignatureConfig === 'true'){
                           if (MultitenantConstants.SUPER_TENANT_DOMAIN_NAME !== domainName) {
                              jagg.module("manager").loadTenantRegistry(String(domainName));
                           }
