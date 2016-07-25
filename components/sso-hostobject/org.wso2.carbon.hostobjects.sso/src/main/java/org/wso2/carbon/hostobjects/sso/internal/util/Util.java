@@ -253,42 +253,6 @@ public class Util {
             KeyStore keyStore;
             java.security.cert.X509Certificate cert;
             if (tenantId != MultitenantConstants.SUPER_TENANT_ID) {
-                try {
-                    SignatureImpl signImpl = (SignatureImpl) signature;
-                    SAMLSignatureProfileValidator signatureProfileValidator = new SAMLSignatureProfileValidator();
-                    signatureProfileValidator.validate(signature);
-                    // Following code segment is taken from org.opensaml.security.SAMLSignatureProfileValidator
-                    // of OpenSAML 2.6.4. This is done to get the latest XSW related fixes.
-                    XMLSignature apacheSig = signImpl.getXMLSignature();
-                    SignableSAMLObject signableObject = (SignableSAMLObject) signature.getParent();
-                    Reference ref = null;
-                    try {
-                        ref = apacheSig.getSignedInfo().item(0);
-                    } catch (XMLSecurityException e) {
-                        // This exception should never occur, because it's already checked
-                        // from the previous call to signatureProfileValidator#validate
-                        log.error("Apache XML Security exception obtaining Reference", e);
-                        return false;
-                    }
-
-                    String uri = ref.getURI();
-
-                    new Util().validateReferenceURI(uri, signableObject);
-                    new Util().validateObjectChildren(apacheSig);
-
-                    // End of OpenSAML 2.6.4 logic
-                    // -----------------------------------------------------------------------------
-
-                } catch (ValidationException ex) {
-                    String logMsg = "Signature do not confirm to SAML signature profile. Possible XML Signature " +
-                            "Wrapping  Attack!";
-                    if (log.isDebugEnabled()) {
-                        log.debug(logMsg, ex);
-                    }
-                    log.error(ex.getMessage(),ex);
-                    return false;
-                }
-
                 // get an instance of the corresponding Key Store Manager instance
                 KeyStoreManager keyStoreManager = KeyStoreManager.getInstance(tenantId);
                 keyStore = keyStoreManager.getKeyStore(generateKSNameFromDomainName(tenantDomain));
@@ -301,6 +265,42 @@ public class Util {
             if (log.isDebugEnabled()) {
                 log.debug("Validating against " + cert.getSubjectDN().getName());
             }
+            try {
+                SignatureImpl signImpl = (SignatureImpl) signature;
+                SAMLSignatureProfileValidator signatureProfileValidator = new SAMLSignatureProfileValidator();
+                signatureProfileValidator.validate(signature);
+                // Following code segment is taken from org.opensaml.security.SAMLSignatureProfileValidator
+                // of OpenSAML 2.6.4. This is done to get the latest XSW related fixes.
+                XMLSignature apacheSig = signImpl.getXMLSignature();
+                SignableSAMLObject signableObject = (SignableSAMLObject) signature.getParent();
+                Reference ref = null;
+                try {
+                    ref = apacheSig.getSignedInfo().item(0);
+                } catch (XMLSecurityException e) {
+                    // This exception should never occur, because it's already checked
+                    // from the previous call to signatureProfileValidator#validate
+                    log.error("Apache XML Security exception obtaining Reference", e);
+                    return false;
+                }
+
+                String uri = ref.getURI();
+
+                new Util().validateReferenceURI(uri, signableObject);
+                new Util().validateObjectChildren(apacheSig);
+
+                // End of OpenSAML 2.6.4 logic
+                // -----------------------------------------------------------------------------
+
+            } catch (ValidationException ex) {
+                String logMsg = "Signature do not confirm to SAML signature profile. Possible XML Signature " +
+                        "Wrapping  Attack!";
+                if (log.isDebugEnabled()) {
+                    log.debug(logMsg, ex);
+                }
+                log.error(ex.getMessage(), ex);
+                return false;
+            }
+
             X509CredentialImpl credentialImpl = new X509CredentialImpl(cert);
             SignatureValidator signatureValidator = new SignatureValidator(credentialImpl);
             signatureValidator.validate(signature);
