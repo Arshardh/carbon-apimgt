@@ -21,13 +21,18 @@ package org.wso2.carbon.hostobjects.sso.internal.util;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.xml.security.exceptions.XMLSecurityException;
+import org.apache.xml.security.signature.Reference;
+import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.utils.IdResolver;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
+import org.opensaml.common.SignableSAMLObject;
 import org.opensaml.saml2.core.NameID;
 import org.opensaml.saml2.core.NameIDPolicy;
-import org.opensaml.saml2.core.Response;
 import org.opensaml.saml2.core.impl.NameIDBuilder;
 import org.opensaml.saml2.core.impl.NameIDPolicyBuilder;
+import org.opensaml.security.SAMLSignatureProfileValidator;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.XMLObjectBuilder;
@@ -35,8 +40,11 @@ import org.opensaml.xml.io.Marshaller;
 import org.opensaml.xml.io.MarshallerFactory;
 import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
+import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureValidator;
+import org.opensaml.xml.signature.impl.SignatureImpl;
 import org.opensaml.xml.util.Base64;
+import org.opensaml.xml.util.DatatypeHelper;
 import org.opensaml.xml.validation.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,12 +64,7 @@ import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -238,18 +241,54 @@ public class Util {
     /**
      * This method validates the signature of the SAML Response.
      *
-     * @param resp SAML Response
+     * @param signature SAML Response
      * @return true, if signature is valid.
      */
-    public static boolean validateSignature(Response resp, String keyStoreName,
+    public static boolean validateSignature(Signature signature, String keyStoreName,
                                             String keyStorePassword, String alias, int tenantId,
                                             String tenantDomain) throws SignatureVerificationException,
                                                                         SignatureVerificationFailure {
-        boolean isSigValid = false;
+        boolean isSigValid;
         try {
-            KeyStore keyStore = null;
-            java.security.cert.X509Certificate cert = null;
+            KeyStore keyStore;
+            java.security.cert.X509Certificate cert;
             if (tenantId != MultitenantConstants.SUPER_TENANT_ID) {
+                try {
+                    SignatureImpl signImpl = (SignatureImpl) signature;
+                    SAMLSignatureProfileValidator signatureProfileValidator = new SAMLSignatureProfileValidator();
+                    signatureProfileValidator.validate(signature);
+                    // Following code segment is taken from org.opensaml.security.SAMLSignatureProfileValidator
+                    // of OpenSAML 2.6.4. This is done to get the latest XSW related fixes.
+                    XMLSignature apacheSig = signImpl.getXMLSignature();
+                    SignableSAMLObject signableObject = (SignableSAMLObject) signature.getParent();
+                    Reference ref = null;
+                    try {
+                        ref = apacheSig.getSignedInfo().item(0);
+                    } catch (XMLSecurityException e) {
+                        // This exception should never occur, because it's already checked
+                        // from the previous call to signatureProfileValidator#validate
+                        log.error("Apache XML Security exception obtaining Reference", e);
+                        return false;
+                    }
+
+                    String uri = ref.getURI();
+
+                    new Util().validateReferenceURI(uri, signableObject);
+                    new Util().validateObjectChildren(apacheSig);
+
+                    // End of OpenSAML 2.6.4 logic
+                    // -----------------------------------------------------------------------------
+
+                } catch (ValidationException ex) {
+                    String logMsg = "Signature do not confirm to SAML signature profile. Possible XML Signature " +
+                            "Wrapping  Attack!";
+                    if (log.isDebugEnabled()) {
+                        log.debug(logMsg, ex);
+                    }
+                    log.error(ex.getMessage(),ex);
+                    return false;
+                }
+
                 // get an instance of the corresponding Key Store Manager instance
                 KeyStoreManager keyStoreManager = KeyStoreManager.getInstance(tenantId);
                 keyStore = keyStoreManager.getKeyStore(generateKSNameFromDomainName(tenantDomain));
@@ -264,34 +303,38 @@ public class Util {
             }
             X509CredentialImpl credentialImpl = new X509CredentialImpl(cert);
             SignatureValidator signatureValidator = new SignatureValidator(credentialImpl);
-            signatureValidator.validate(resp.getSignature());
+            signatureValidator.validate(signature);
             isSigValid = true;
             return isSigValid;
 
         } catch (KeyStoreException e) {
             log.error("Error when getting certificate of tenant " + tenantDomain, e);
-            throw new SignatureVerificationException(e);
+            return false;
         } catch (CertificateException e) {
             log.error("Could not load the keystore " + keyStoreName, e);
-            throw new SignatureVerificationException(e);
+            return false;
         } catch (NoSuchAlgorithmException e) {
             log.error("Could not load the keystore " + keyStoreName, e);
-            throw new SignatureVerificationException(e);
+            return false;
         } catch (FileNotFoundException e) {
             log.error("Could not find the key store file " + keyStoreName, e);
-            throw new SignatureVerificationException(e);
+            return false;
         } catch (IOException e) {
             log.error("Could not load the keystore " + keyStoreName, e);
-            throw new SignatureVerificationException(e);
+            return false;
         } catch (ValidationException e) {
             //Do not log the exception here. Clients of this method use it in a fall back fashion to verify signatures
             //using different public keys. Therefore logging an error would cause unnecessary logs. Throwing an
             //exception is sufficient so that clients can decide what to do with it.
-            throw new SignatureVerificationFailure(e);
+            if(log.isDebugEnabled()){
+                log.debug(e.getMessage());
+            }
+            log.error(e.getMessage(), e);
+            return false;
         } catch (Exception e) {
             //keyStoreManager.getKeyStore throws a generic 'Exception'
             log.error("Error when getting key store of tenant " + tenantDomain, e);
-            throw new SignatureVerificationException(e);
+            return false;
         }
     }
 
@@ -379,5 +422,56 @@ public class Util {
         }
         return acsUrl;
     }
+
+    /**
+     * Validate the Signature's Reference URI.
+     * <p/>
+     * First validate the Reference URI against the parent's ID itself.  Then validate that the
+     * URI (if non-empty) resolves to the same Element node as is cached by the SignableSAMLObject.
+     *
+     * @param uri            the Signature Reference URI attribute value
+     * @param signableObject the SignableSAMLObject whose signature is being validated
+     * @throws ValidationException if the URI is invalid or doesn't resolve to the expected DOM node
+     */
+    private void validateReferenceURI(String uri, SignableSAMLObject signableObject) throws ValidationException {
+        if (DatatypeHelper.isEmpty(uri)) {
+            return;
+        }
+
+        String uriID = uri.substring(1);
+
+        Element expected = signableObject.getDOM();
+        if (expected == null) {
+            log.error("SignableSAMLObject does not have a cached DOM Element.");
+            throw new ValidationException("SignableSAMLObject does not have a cached DOM Element.");
+        }
+        Document doc = expected.getOwnerDocument();
+
+        Element resolved = IdResolver.getElementById(doc, uriID);
+        if (resolved == null) {
+            log.error("Apache xmlsec IdResolver could not resolve the Element for id reference: " + uriID);
+            throw new ValidationException("Apache xmlsec IdResolver could not resolve the Element for id reference: "
+                    + uriID);
+        }
+
+        if (!expected.isSameNode(resolved)) {
+            log.error("Signature Reference URI " + uri + " did not resolve to the expected parent Element");
+            throw new ValidationException("Signature Reference URI did not resolve to the expected parent Element");
+        }
+    }
+
+    /**
+     * Validate that the Signature instance does not contain any ds:Object children.
+     *
+     * @param apacheSig the Apache XML Signature instance
+     * @throws ValidationException if the signature contains ds:Object children
+     */
+    private void validateObjectChildren(org.apache.xml.security.signature.XMLSignature apacheSig) throws ValidationException {
+        if (apacheSig.getObjectLength() > 0) {
+            log.error("Signature contained " + apacheSig.getObjectLength() + " ds:Object child element(s)");
+            throw new ValidationException("Signature contained illegal ds:Object children");
+        }
+    }
+
 
 }
