@@ -74,14 +74,21 @@
                                 return;
                             }
                         }
-                        // validating the saml assertion signature
-                        var isAssertionSignatureValid = ssoRelyingParty.validateAssertionSignature(samlResponse);
-                        if(typeof(assertionSignatureConfig) == "undefined" || assertionSignatureConfig !== 'false'){
-                           log.error("SAML assertion signature is verification failed.");
-                           response.sendRedirect("../site/pages/error-pages/401.html");
-                           return;
-                        }
-                        }
+
+                         // validating the saml assertion signature
+                          var assertionSignatureConfig=site.ssoConfiguration.assertionSigningEnabled;
+                          if(typeof(assertionSignatureConfig) == "undefined" || assertionSignatureConfig !== 'false'){
+                          if (MultitenantConstants.SUPER_TENANT_DOMAIN_NAME !== domainName) {
+                             jagg.module("manager").loadTenantRegistry(String(domainName));
+                          }
+                          var isAssertionSignatureValid = ssoRelyingParty.validateAssertionSignature(samlResponse);
+                          if (!Boolean(isAssertionSignatureValid)) {
+                               log.error("SAML assertion signature is verification failed.");
+                               response.sendRedirect("../site/pages/error-pages/401.html");
+                               return;
+                          }
+                          }
+
 
                         ssoRelyingParty.setSessionAuthenticated(sessionId,samlResponse);
                         ssoRelyingParty.addSession(session);
