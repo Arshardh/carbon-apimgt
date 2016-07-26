@@ -554,36 +554,40 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
             // Check for duplicate saml:Response
             NodeList list = samlResponse.getDOM().getElementsByTagNameNS(SAMLConstants.SAML20P_NS, "Response");
             if (list.getLength() > 0) {
-            if(log.isDebugEnabled()){
-               log.debug("Invalid schema for the SAML2 response.");
-            }
-            return null;
-            }
-            List<Assertion> assertions = samlResponse.getAssertions();
-
-            // extract the username
-            if (assertions != null && assertions.size() == 1) {
-                Assertion assertion=assertions.get(0);
-                //Validate assertion validity period
-                boolean isAssertionValid=relyingPartyObject.validateAssertionValidityPeriod(assertion);
-                if(!isAssertionValid){
-                return null;
+                if (log.isDebugEnabled()) {
+                    log.debug("Invalid schema for the SAML2 response.");
                 }
-                Subject subject = assertion.getSubject();
-                if (subject != null) {
-                    if (subject.getNameID() != null) {
-                        username = subject.getNameID().getValue();
-                        if (log.isDebugEnabled()) {
-                            log.debug("Name of authenticated user from SAML response " + username);
-                        }
+                log.error("Invalid schema for the SAML2 response.");
+                return null;
+            }
+            //Check for duplicate saml:assertions
+            NodeList assertionList = samlResponse.getDOM().getElementsByTagNameNS(SAMLConstants.SAML20_NS, "Assertion");
+            if (assertionList.getLength() > 1) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Invalid schema for the SAML2 response. Multiple assertions detected");
+                }
+                log.error("Invalid schema for the SAML2 response. Multiple assertions detected.");
+                return null;
+            }
+
+            Assertion assertion = samlResponse.getAssertions().get(0);
+            //Validate assertion validity period
+            boolean isAssertionValid = relyingPartyObject.validateAssertionValidityPeriod(assertion);
+            if (!isAssertionValid) {
+                log.error("Invalid schema for the SAML2 response. Assertion expiration time is expired.");
+                return null;
+            }
+            // extract the username
+            Subject subject = assertion.getSubject();
+            if (subject != null) {
+                if (subject.getNameID() != null) {
+                    username = subject.getNameID().getValue();
+                    if (log.isDebugEnabled()) {
+                        log.debug("Name of authenticated user from SAML response " + username);
                     }
                 }
-            } else{
-                if(log.isDebugEnabled()){
-                   log.debug("SAML Response contains invalid number of assertions.");
-                }
-                return null;
             }
+
         }
         if (username == null) {
             throw new Exception("Failed to get subject assertion from SAML response.");
