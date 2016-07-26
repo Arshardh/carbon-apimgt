@@ -560,6 +560,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
                 log.error("Invalid schema for the SAML2 response.");
                 return null;
             }
+            //Check for duplicate saml:assertions
             NodeList assertionList = samlResponse.getDOM().getElementsByTagNameNS(SAMLConstants.SAML20_NS, "Assertion");
             if (assertionList.getLength() > 1) {
                 if (log.isDebugEnabled()) {
