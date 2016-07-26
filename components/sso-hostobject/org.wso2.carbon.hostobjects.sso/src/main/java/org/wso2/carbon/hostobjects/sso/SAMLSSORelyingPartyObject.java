@@ -151,9 +151,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
             boolean sigValid = false;
             Signature signature = samlResponse.getSignature();
             if (signature == null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("SAMLResponse signing is enabled, but signature element not found in SAML Response element.");
-                }
+                log.error("SAMLResponse signing is enabled, but signature element not found in SAML Response element.");
                 return false;
             }
 
@@ -554,18 +552,12 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
             // Check for duplicate saml:Response
             NodeList list = samlResponse.getDOM().getElementsByTagNameNS(SAMLConstants.SAML20P_NS, "Response");
             if (list.getLength() > 0) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Invalid schema for the SAML2 response.");
-                }
                 log.error("Invalid schema for the SAML2 response.");
                 return null;
             }
             //Check for duplicate saml:assertions
             NodeList assertionList = samlResponse.getDOM().getElementsByTagNameNS(SAMLConstants.SAML20_NS, "Assertion");
             if (assertionList.getLength() > 1) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Invalid schema for the SAML2 response. Multiple assertions detected");
-                }
                 log.error("Invalid schema for the SAML2 response. Multiple assertions detected.");
                 return null;
             }
@@ -1293,23 +1285,18 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
         DateTime validTill = assertion.getConditions().getNotOnOrAfter();
 
         if (validFrom != null && validFrom.isAfterNow()) {
-            if (log.isDebugEnabled()) {
-                log.debug("SAML Response contains invalid number of assertions.");
-            }
+            log.error("SAML Response contains invalid number of assertions.");
             return false;
         }
 
         if (validTill != null && validTill.isBeforeNow()) {
-            if (log.isDebugEnabled()) {
-                log.debug("Failed to meet SAML Assertion Condition 'Not On Or After'");
-            }
+            log.error("Failed to meet SAML Assertion Condition 'Not On Or After'");
             return false;
         }
 
         if (validFrom != null && validTill != null && validFrom.isAfter(validTill)) {
-            if (log.isDebugEnabled()) {
-                log.debug("SAML Assertion Condition 'Not Before' must be less than the value of 'Not On Or After'");
-            }
+            log.error("SAML Assertion Condition 'Not Before' must be less than the value of 'Not On Or After'");
+
             return false;
         }
         return true;
@@ -1387,28 +1374,20 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
                                 }
                             }
                             if (!audienceFound) {
-                                if (log.isDebugEnabled()) {
-                                    log.debug("SAML Assertion Audience Restriction validation failed.");
-                                }
+                                log.error("SAML Assertion Audience Restriction validation failed.");
                                 return false;
                             }
                         } else {
-                            if (log.isDebugEnabled()) {
-                                log.debug("SAML Response's AudienceRestriction doesn't contain Audiences.");
-                            }
+                            log.error("SAML Response's AudienceRestriction doesn't contain Audiences.");
                             return false;
                         }
                     }
                 } else {
-                    if (log.isDebugEnabled()) {
-                        log.debug("SAML Response doesn't contain AudienceRestrictions.");
-                    }
+                    log.error("SAML Response doesn't contain AudienceRestrictions.");
                     return false;
                 }
             } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("SAML Response doesn't contain Conditions.");
-                }
+                log.error("SAML Response doesn't contain Conditions.");
                 return false;
             }
         }
@@ -1447,9 +1426,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
                 Assertion assertion = assertions.get(0);
                 Signature signature = assertion.getSignature();
                 if (signature == null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("SAMLResponse signing is enabled, but signature element not found in SAML Response element.");
-                    }
+                    log.error("SAMLResponse signing is enabled, but signature element not found in SAML Response element.");
                     return false;
                 }
                 try {
