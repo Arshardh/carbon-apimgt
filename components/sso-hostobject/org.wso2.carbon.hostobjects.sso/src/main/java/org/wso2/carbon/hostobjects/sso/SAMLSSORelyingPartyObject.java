@@ -574,6 +574,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
             //Validate assertion validity period
             boolean isAssertionValid = relyingPartyObject.validateAssertionValidityPeriod(assertion);
             if (!isAssertionValid) {
+                log.error("Invalid schema for the SAML2 response. Assertion expiration time is expired.");
                 return null;
             }
             // extract the username
