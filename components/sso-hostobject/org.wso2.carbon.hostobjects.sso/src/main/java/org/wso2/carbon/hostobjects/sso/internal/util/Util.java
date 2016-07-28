@@ -309,32 +309,28 @@ public class Util {
 
         } catch (KeyStoreException e) {
             log.error("Error when getting certificate of tenant " + tenantDomain, e);
-            return false;
+            throw new SignatureVerificationException(e);
         } catch (CertificateException e) {
             log.error("Could not load the keystore " + keyStoreName, e);
-            return false;
+            throw new SignatureVerificationException(e);
         } catch (NoSuchAlgorithmException e) {
             log.error("Could not load the keystore " + keyStoreName, e);
-            return false;
+            throw new SignatureVerificationException(e);
         } catch (FileNotFoundException e) {
             log.error("Could not find the key store file " + keyStoreName, e);
-            return false;
+            throw new SignatureVerificationException(e);
         } catch (IOException e) {
             log.error("Could not load the keystore " + keyStoreName, e);
-            return false;
+            throw new SignatureVerificationException(e);
         } catch (ValidationException e) {
             //Do not log the exception here. Clients of this method use it in a fall back fashion to verify signatures
             //using different public keys. Therefore logging an error would cause unnecessary logs. Throwing an
             //exception is sufficient so that clients can decide what to do with it.
-            if(log.isDebugEnabled()){
-                log.debug(e.getMessage());
-            }
-            log.error(e.getMessage(), e);
-            return false;
+            throw new SignatureVerificationException(e);
         } catch (Exception e) {
             //keyStoreManager.getKeyStore throws a generic 'Exception'
             log.error("Error when getting key store of tenant " + tenantDomain, e);
-            return false;
+            throw new SignatureVerificationException(e);
         }
     }
 
