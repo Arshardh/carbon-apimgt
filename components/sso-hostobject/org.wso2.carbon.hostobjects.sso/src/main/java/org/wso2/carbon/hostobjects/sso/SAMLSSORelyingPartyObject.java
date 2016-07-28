@@ -154,21 +154,32 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
                 log.error("SAMLResponse signing is enabled, but signature element not found in SAML Response element.");
                 return false;
             }
-
-            sigValid = Util.validateSignature(samlResponse.getSignature(),
-                    relyingPartyObject.getSSOProperty(SSOConstants.KEY_STORE_NAME),
-                    relyingPartyObject.getSSOProperty(SSOConstants.KEY_STORE_PASSWORD),
-                    relyingPartyObject.getSSOProperty(SSOConstants.IDP_ALIAS),
-                    MultitenantConstants.SUPER_TENANT_ID, MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-
-
-            //If not success, try and validate the signature using tenant key store.
-            if (!sigValid && !MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(tenantDomain)) {
+            try {
                 sigValid = Util.validateSignature(samlResponse.getSignature(),
                         relyingPartyObject.getSSOProperty(SSOConstants.KEY_STORE_NAME),
                         relyingPartyObject.getSSOProperty(SSOConstants.KEY_STORE_PASSWORD),
                         relyingPartyObject.getSSOProperty(SSOConstants.IDP_ALIAS),
-                        tenantId, tenantDomain);
+                        MultitenantConstants.SUPER_TENANT_ID, MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            } catch (SignatureVerificationFailure e) {
+                //do nothing at this point since we want to verify signature using the tenant key-store as well.
+                if (log.isDebugEnabled()) {
+                    log.error("Signature verification failed with Super-Tenant Key Store", e);
+                }
+            }
+
+            //If not success, try and validate the signature using tenant key store.
+            if (!sigValid && !MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(tenantDomain)) {
+                try {
+                    sigValid = Util.validateSignature(samlResponse.getSignature(),
+                            relyingPartyObject.getSSOProperty(SSOConstants.KEY_STORE_NAME),
+                            relyingPartyObject.getSSOProperty(SSOConstants.KEY_STORE_PASSWORD),
+                            relyingPartyObject.getSSOProperty(SSOConstants.IDP_ALIAS),
+                            tenantId, tenantDomain);
+                } catch (SignatureVerificationFailure e) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Signature Verification Failed using super tenant and tenant key stores", e);
+                    }
+                }
 
             }
             return sigValid;
