@@ -163,7 +163,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
             } catch (SignatureVerificationFailure e) {
                 //do nothing at this point since we want to verify signature using the tenant key-store as well.
                 if (log.isDebugEnabled()) {
-                    log.error("Signature verification failed with Super-Tenant Key Store", e);
+                    log.debug("Signature verification failed with Super-Tenant Key Store", e);
                 }
             }
 
@@ -176,9 +176,8 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
                             relyingPartyObject.getSSOProperty(SSOConstants.IDP_ALIAS),
                             tenantId, tenantDomain);
                 } catch (SignatureVerificationFailure e) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Signature Verification Failed using super tenant and tenant key stores", e);
-                    }
+                    log.error("Signature Verification Failed using super tenant and tenant key stores", e);
+                    return false;
                 }
 
             }
@@ -1296,7 +1295,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
         DateTime validTill = assertion.getConditions().getNotOnOrAfter();
 
         if (validFrom != null && validFrom.isAfterNow()) {
-            log.error("SAML Response contains invalid number of assertions.");
+            log.error("Failed to meet SAML Assertion Condition 'Not Before'");
             return false;
         }
 
