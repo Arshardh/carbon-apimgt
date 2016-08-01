@@ -573,12 +573,6 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
             }
 
             Assertion assertion = samlResponse.getAssertions().get(0);
-            //Validate assertion validity period
-            boolean isAssertionValid = relyingPartyObject.validateAssertionValidityPeriod(assertion);
-            if (!isAssertionValid) {
-                log.error("Invalid schema for the SAML2 response. Assertion expiration time is expired.");
-                return null;
-            }
             // extract the username
             Subject subject = assertion.getSubject();
             if (subject != null) {
@@ -1289,28 +1283,30 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
      * @param assertion SAML Assertion element
      * @throws ScriptException
      */
-    private boolean validateAssertionValidityPeriod(Assertion assertion) throws ScriptException {
-
+    private boolean validateAssertionValidityPeriod(Assertion assertion, int timeStampSkewInSeconds) throws ScriptException {
         DateTime validFrom = assertion.getConditions().getNotBefore();
         DateTime validTill = assertion.getConditions().getNotOnOrAfter();
 
-        if (validFrom != null && validFrom.isAfterNow()) {
+        if (validFrom != null && validFrom.minusSeconds(timeStampSkewInSeconds).isAfterNow()) {
             log.error("Failed to meet SAML Assertion Condition 'Not Before'");
             return false;
         }
 
-        if (validTill != null && validTill.isBeforeNow()) {
+        if (validTill != null && validTill.plusSeconds(timeStampSkewInSeconds).isBeforeNow()) {
             log.error("Failed to meet SAML Assertion Condition 'Not On Or After'");
             return false;
         }
 
         if (validFrom != null && validTill != null && validFrom.isAfter(validTill)) {
-            log.error("SAML Assertion Condition 'Not Before' must be less than the value of 'Not On Or After'");
-
+            log.error(
+                    "SAML Assertion Condition 'Not Before' must be less than the " +
+                            "value of 'Not On Or After'");
             return false;
         }
+
         return true;
     }
+
 
     /* Validate the audience restrictions values in SAML response.
             *
@@ -1477,6 +1473,55 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
         }
         return false;
 
+    }
+
+    /* Validate the assertion validation period in SAML response.
+           *
+           * @param cx
+   * @param thisObj
+   * @param args
+   * @param funObj
+   * @return
+          * @throws Exception
+   */
+    public static boolean jsFunction_validateAssertionValidityPeriod(Context cx, Scriptable thisObj,
+                                                                     Object[] args,
+                                                                     Function funObj)
+            throws Exception {
+        int argLength = args.length;
+        if (argLength != 1 || !(args[0] instanceof String)) {
+            throw new ScriptException("Invalid argument. The SAML response/TimestampSkew is missing.");
+        }
+
+        SAMLSSORelyingPartyObject relyingPartyObject = (SAMLSSORelyingPartyObject) thisObj;
+        String encoded = getSSOSamlEncodingProperty(relyingPartyObject);
+        boolean isEncoded = true;
+        if (encoded != null) {
+            try {
+                isEncoded = Boolean.parseBoolean(encoded);
+            } catch (Exception e) {
+                throw new ScriptException("Invalid property value found for " +
+                        "" + SSOConstants.SAML_ENCODED + " " + encoded);
+            }
+        }
+
+        String decodedString = isEncoded ? Util.decode((String) args[0]) : (String) args[0];
+        XMLObject samlObject = Util.unmarshall(decodedString);
+        String timestampSkewString = relyingPartyObject.getSSOProperty(SSOConstants.TIMESTAMPSKEW_IN_SECONDS);
+        int timestampSkew;
+        if (timestampSkewString == null || !timestampSkewString.isEmpty()) {
+            timestampSkew = 300; //Set default to 5 mins
+        } else {
+            timestampSkew = Integer.parseInt(timestampSkewString);
+        }
+        if (samlObject instanceof Response) {
+            Response samlResponse = (Response) samlObject;
+            //Validate assertion validity period
+            return relyingPartyObject.validateAssertionValidityPeriod(samlResponse.getAssertions().get(0), timestampSkew);
+
+
+        }
+        return false;
     }
 
 
