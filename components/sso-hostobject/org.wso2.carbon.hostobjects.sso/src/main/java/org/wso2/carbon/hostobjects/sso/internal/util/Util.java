@@ -326,7 +326,7 @@ public class Util {
             //Do not log the exception here. Clients of this method use it in a fall back fashion to verify signatures
             //using different public keys. Therefore logging an error would cause unnecessary logs. Throwing an
             //exception is sufficient so that clients can decide what to do with it.
-            throw new SignatureVerificationException(e);
+            throw new SignatureVerificationFailure(e);
         } catch (Exception e) {
             //keyStoreManager.getKeyStore throws a generic 'Exception'
             log.error("Error when getting key store of tenant " + tenantDomain, e);
