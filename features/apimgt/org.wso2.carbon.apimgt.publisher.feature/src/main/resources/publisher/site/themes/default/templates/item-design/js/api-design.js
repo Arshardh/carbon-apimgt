@@ -336,7 +336,7 @@ APIDesigner.prototype.init_controllers = function(){
         var i = $(this).attr('data-index');
         var pn = $(this).attr('data-path-name');
         var op = $(this).attr('data-operation');        
-        jagg.message({content:'Do you want to remove "'+op+' : '+pn+'" resource from list.',type:'confirm',title:"Remove Resource",
+        jagg.message({content:'Do you want to remove "'+op+' : '+ Handlebars.Utils.escapeExpression(pn) +'" resource from list.',type:'confirm',title:"Remove Resource",
         okCallback:function(){
             API_DESIGNER = APIDesigner();
             delete API_DESIGNER.api_doc.paths[pn][op];
