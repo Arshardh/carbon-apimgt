@@ -1509,7 +1509,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
         XMLObject samlObject = Util.unmarshall(decodedString);
         String timestampSkewString = relyingPartyObject.getSSOProperty(SSOConstants.TIMESTAMPSKEW_IN_SECONDS);
         int timestampSkew;
-        if (timestampSkewString == null || !timestampSkewString.isEmpty()) {
+        if (timestampSkewString == null || timestampSkewString.isEmpty()) {
             timestampSkew = 300; //Set default to 5 mins
         } else {
             timestampSkew = Integer.parseInt(timestampSkewString);
