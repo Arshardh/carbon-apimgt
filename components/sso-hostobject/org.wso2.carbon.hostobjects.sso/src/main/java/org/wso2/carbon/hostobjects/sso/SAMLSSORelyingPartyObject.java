@@ -35,7 +35,6 @@ import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.signature.Signature;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.base.MultitenantConstants;
-import org.wso2.carbon.hostobjects.sso.exception.SSOHostObjectException;
 import org.wso2.carbon.hostobjects.sso.internal.SSOConstants;
 import org.wso2.carbon.hostobjects.sso.internal.SSOHostObjectDataHolder;
 import org.wso2.carbon.hostobjects.sso.internal.SessionInfo;
