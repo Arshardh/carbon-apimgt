@@ -20,6 +20,7 @@ import org.apache.axis2.clustering.ClusteringAgent;
 import org.apache.axis2.clustering.ClusteringFault;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jaggeryjs.hostobjects.web.SessionHostObject;
@@ -1193,7 +1194,7 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
         }
     }
 
-    public void handleLogoutBySessionId(String sessionId) throws SSOHostObjectException {
+    public void handleLogoutBySessionId(String sessionId) {
         clearSessionDataFromSessionId(sessionId);
 
         if (log.isDebugEnabled()) {
@@ -1222,70 +1223,102 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
         }
     }
 
-    private void clearSessionData(String sessionIndex){
-        try {
-            ssho.invalidateSessionBySessionIndex(sessionIndex);
-            // this is to invalidate relying party object after user log out. To release memory allocations.
-            invalidateRelyingPartyObject(ssho.getSSOProperty(SSOConstants.ISSUER_ID));
-            if (sessionIndexMap != null && sessionIndex != null) {
-                Set<SessionHostObject> sessionList = sessionIndexMap.get(sessionIndex);
+    private String getLoggedInUserFromSessionIndex(String sessionIndex) {
+        if (sessionIndex != null && sessionIndexMap != null) {
+            Set<SessionHostObject> sessionSet = sessionIndexMap.get(sessionIndex);
+            for (SessionHostObject sessionHostObject : sessionSet) {
                 Object[] args = new Object[0];
-                if (sessionList != null) {
-                    for (SessionHostObject session : sessionList) {
+                try {
+                    String sessionId = SessionHostObject.jsFunction_getId(null, sessionHostObject, args, null);
+                    if (sessionId != null && sessionIdMap != null) {
+                        SessionInfo sessionInfo = sessionIdMap.get(sessionId);
+                        if (sessionInfo != null && !StringUtils.isBlank(sessionInfo.getLoggedInUser())) {
+                            return sessionInfo.getLoggedInUser();
+                        }
+                    }
+                } catch (Exception e) {
+                    //catches generic exception since we do not need to stop the process due to a failure in
+                    // one single session. Add a warning and continues since this does not brake the flow.
+                    log.warn("Could not retrieve details for some sessions linked with session index " + sessionIndex,
+                            e);
+                }
+            }
+        }
+        return null;
+    }
+
+    private void clearSessionData(String sessionIndex) {
+        String loggedInUser = getLoggedInUserFromSessionIndex(sessionIndex);
+        if (loggedInUser != null) {
+            SAMLSSORelyingPartyObject.sho.remove(loggedInUser);
+        }
+
+        ssho.invalidateSessionBySessionIndex(sessionIndex);
+        // this is to invalidate relying party object after user log out. To release memory allocations.
+        invalidateRelyingPartyObject(ssho.getSSOProperty(SSOConstants.ISSUER_ID));
+        if (sessionIndexMap != null && sessionIndex != null) {
+            Set<SessionHostObject> sessionList = sessionIndexMap.get(sessionIndex);
+            Object[] args = new Object[0];
+            if (sessionList != null) {
+                for (SessionHostObject session : sessionList) {
+                    try {
                         if (SessionHostObject.jsFunction_getId(null, session, args, null) != null) {
                             try {
                                 SessionHostObject.jsFunction_invalidate(null, session, args, null);
-                            } catch (Exception ex){
-                                if(ex.getMessage().contains("Session already invalidated")){ // can be ignored
+                            } catch (Exception ex) {
+                                //catches generic exception since we do not need to stop the
+                                // process due to invalidating one single session
+                                if (ex.getMessage().contains("Session already invalidated")) { // can be ignored
                                     log.info(ex.getMessage());
                                 } else {
-                                    throw ex;
+                                    //log the error and continues since this does not brake the flow.
+                                    log.error("Error while invalidating the session index " + sessionIndex, ex);
                                 }
                             }
                         }
+                    } catch (Exception ex) {
+                        //catches generic exception since we do not need to stop the
+                        // process due to failure in clearing one single session
+                        log.error("Could not retrieve details for some sessionIds linked with session index "
+                                + sessionIndex, ex);
                     }
                 }
             }
-            removeSession(sessionIndex);
-            clearSessionsSet();
-        } catch (Exception ignored) {
-            if (log.isDebugEnabled()) {
-	        log.debug(ignored.getMessage());
-            }
-            removeSession(sessionIndex);
-            clearSessionsSet();
         }
+        removeSession(sessionIndex);
         if (log.isDebugEnabled()) {
             log.debug("Cleared authenticated session index:" + sessionIndex + "in handle logout method");
         }
     }
     
-    private void clearSessionDataFromSessionId(String sessionIdToClear)
-        throws SSOHostObjectException {
+    private void clearSessionDataFromSessionId(String sessionIdToClear) {
         SessionInfo sessionInfo = sessionIdMap.get(sessionIdToClear);
-        String loggedInUser = sessionInfo.getLoggedInUser();
-        if (loggedInUser != null) {
-            try {
-                Object[] args = new Object[0];
-                Set<SessionHostObject> sessionSet = SAMLSSORelyingPartyObject.sho
-                        .get(sessionInfo.getLoggedInUser());
-                if (sessionSet != null) {
-                    for (SessionHostObject session : sessionSet) {
-                        String sessionId = SessionHostObject.jsFunction_getId(null, session, args, null);
-                        if (sessionId != null && sessionId.equals(sessionIdToClear)) {
-                            SessionHostObject.jsFunction_invalidate(null, session, args, null);
+        if (sessionInfo != null) {
+            String loggedInUser = sessionInfo.getLoggedInUser();
+            if (loggedInUser != null) {
+                try {
+                    Object[] args = new Object[0];
+                    Set<SessionHostObject> sessionSet = SAMLSSORelyingPartyObject.sho
+                            .get(sessionInfo.getLoggedInUser());
+                    if (sessionSet != null) {
+                        for (SessionHostObject session : sessionSet) {
+                            String sessionId = SessionHostObject.jsFunction_getId(null, session, args, null);
+                            if (sessionId != null && sessionId.equals(sessionIdToClear)) {
+                                SessionHostObject.jsFunction_invalidate(null, session, args, null);
+                            }
                         }
                     }
-                }
-            } catch (org.jaggeryjs.scriptengine.exceptions.ScriptException ex) {
-                if (ex.getMessage().contains("Session already invalidated")) { // can be ignored
-                    log.info(ex.getMessage());
-                } else {
-                    throw new SSOHostObjectException("Error while invalidating the session " + sessionIdToClear,
-                            ex);
+                } catch (Exception ex) {
+                    //catches generic exception since we do not need to stop the
+                    // process due to invalidating one single session
+                    if (ex.getMessage().contains("Session already invalidated")) { // can be ignored
+                        log.info(ex.getMessage());
+                    } else {
+                        //log the error and continues since this does not brake the flow.
+                        log.error("Error while invalidating the session " + sessionIdToClear, ex);
+                    }
                 }
             }
-
         }
         ssho.invalidateSessionBySessionId(sessionIdToClear);
         // this is to invalidate relying party object after user log out. To release memory allocations.
