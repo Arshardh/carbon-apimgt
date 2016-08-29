@@ -1141,9 +1141,11 @@ class APIProviderImpl extends AbstractAPIManager implements APIProvider {
                             failedGateways.put("UNPUBLISHED", Collections.<String,String>emptyMap());
                             failedGateways.put("PUBLISHED", failedToPublishEnvironments);
                         }
-                    } else { // API Status : RETIRED
+                    } else { // API Status : RETIRED or CREATED
                         Map<String, String> failedToRemoveEnvironments = removeFromGateway(api);
-                        apiMgtDAO.removeAllSubscriptions(api.getId());
+                        if(!APIStatus.CREATED.equals(status)){
+                            apiMgtDAO.removeAllSubscriptions(api.getId());
+                        }
                         if (!failedToRemoveEnvironments.isEmpty()) {
                             Set<String> publishedEnvironments = new HashSet<String>(api.getEnvironments());
                             publishedEnvironments.addAll(failedToRemoveEnvironments.keySet());
@@ -1292,7 +1294,9 @@ class APIProviderImpl extends AbstractAPIManager implements APIProvider {
                             }
                         } else { // API Status : RETIRED or CREATED
                             Map<String, String> failedToRemoveEnvironments = failedGatewaysMap;
-                            apiMgtDAO.removeAllSubscriptions(api.getId());
+                            if(!newStatus.equals(APIStatus.CREATED)) {
+                                apiMgtDAO.removeAllSubscriptions(api.getId());
+                            }
                             if (!failedToRemoveEnvironments.isEmpty()) {
                                 Set<String> publishedEnvironments = new HashSet<String>(api.getEnvironments());
                                 publishedEnvironments.addAll(failedToRemoveEnvironments.keySet());
