@@ -96,7 +96,7 @@ paths:
         - $ref : "#/parameters/Accept"
         - $ref : "#/parameters/If-None-Match"
       tags:
-        - apisAPI
+        - API (Collection)
       responses:
         200:
           description: |
@@ -145,7 +145,7 @@ paths:
         - $ref: '#/parameters/If-Modified-Since'
         - $ref: '#/parameters/requestedTenant'
       tags:
-        - API (individual)
+        - API (Individual)
       responses:
         200:
           description: |
@@ -203,7 +203,7 @@ paths:
         - $ref: '#/parameters/If-Modified-Since'
         - $ref: '#/parameters/requestedTenant'
       tags:
-        - API (individual)
+        - API (Individual)
       responses:
         200:
           description: |
@@ -263,7 +263,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - API (individual)
+        - Document (Collection)
       responses:
         200:
           description: |
@@ -320,7 +320,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - API (individual)
+        - Document (Individual)
       responses:
         200:
           description: |
@@ -385,7 +385,7 @@ paths:
           - $ref: '#/parameters/If-None-Match'
           - $ref: '#/parameters/If-Modified-Since'
         tags:
-          - API (individual)
+          - Document (Individual)
         responses:
           200:
             description: |
@@ -465,7 +465,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - Application Collection
+        - Application (Collection)
       responses:
         200:
           description: |
@@ -522,7 +522,7 @@ paths:
             $ref: '#/definitions/Application'
         - $ref: '#/parameters/Content-Type'
       tags:
-        - Application (individual)
+        - Application (Collection)
       responses:
         201:
           description: |
@@ -585,7 +585,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - Application (individual)
+        - Application (Individual)
       responses:
         200:
           description: |
@@ -649,7 +649,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - Application (individual)
+        - Application (Individual)
       responses:
         200:
           description: |
@@ -710,7 +710,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - Application (individual)
+        - Application (Individual)
       responses:
         200:
           description: |
@@ -759,7 +759,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - Application (individual)
+        - Application (Individual)
       responses:
         200:
           description: |
@@ -828,7 +828,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - Subscription Collection
+        - Subscription (Collection)
       responses:
         200:
           description: |
@@ -878,7 +878,7 @@ paths:
             $ref: '#/definitions/Subscription'
         - $ref: '#/parameters/Content-Type'
       tags:
-        - Subscription (individual)
+        - Subscription (Collection)
       responses:
         201:
           description: |
@@ -932,7 +932,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - Subscription (individual)
+        - Subscription (Individual)
       responses:
         200:
           description: |
@@ -977,7 +977,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - Subscription (individual)
+        - Subscription (Individual)
       responses:
         200:
           description: |
@@ -1019,7 +1019,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - Tier Collection
+        - Throttling Tier (Collection)
       responses:
         200:
           description: |
@@ -1072,7 +1072,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - Tier (individual)
+        - Throttling Tier (Individual)
       responses:
         200:
           description: |
@@ -1134,7 +1134,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - Tag Collection
+        - Tag (Collection)
       responses:
         200:
           description: |
