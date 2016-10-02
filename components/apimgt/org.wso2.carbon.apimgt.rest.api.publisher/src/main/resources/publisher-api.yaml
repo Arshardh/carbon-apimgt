@@ -117,7 +117,7 @@ paths:
         - $ref : "#/parameters/Accept"
         - $ref : "#/parameters/If-None-Match"
       tags:
-        - API Collection
+        - API (Collection)
       responses:
         200:
           description: |
@@ -165,7 +165,7 @@ paths:
             $ref: '#/definitions/API'
         - $ref: '#/parameters/Content-Type'
       tags:
-        - API Collection
+        - API (Collection)
       responses:
         201:
           description: |
@@ -221,7 +221,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - API Collection
+        - API (Individual)
       responses:
         200:
           description: |
@@ -284,7 +284,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - API Collection
+        - API (Individual)
       responses:
         200:
           description: |
@@ -350,7 +350,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - API Collection
+        - API (Individual)
       responses:
         200:
           description: |
@@ -392,7 +392,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - API Collection
+        - API (Individual)
       responses:
         200:
           description: |
@@ -453,7 +453,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - API Collection
+        - API (Individual)
       responses:
         200:
           description: |
@@ -525,7 +525,7 @@ paths:
           required: true
         - $ref: '#/parameters/apiId-Q'
       tags:
-        - API Collection
+        - API (Individual)
       responses:
         201:
           description: |
@@ -596,7 +596,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - API Collection
+        - API (Individual)
       responses:
         200:
           description: |
@@ -653,7 +653,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - API Document
+        - Document (Collection)
       responses:
         200:
           description: |
@@ -709,7 +709,7 @@ paths:
             $ref: '#/definitions/Document'
         - $ref: '#/parameters/Content-Type'
       tags:
-        - API Document
+        - Document (Collection)
       responses:
         201:
           description: |
@@ -764,7 +764,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - API Document
+        - Document (Individual)
       responses:
         200:
           description: |
@@ -829,7 +829,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - API Document
+        - Document (Individual)
       responses:
         200:
           description: |
@@ -891,7 +891,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - API Document
+        - Document (Individual)
       responses:
         200:
           description: |
@@ -933,7 +933,7 @@ paths:
           - $ref: '#/parameters/If-None-Match'
           - $ref: '#/parameters/If-Modified-Since'
         tags:
-          - API Document
+          - Document (Individual)
         responses:
           200:
             description: |
@@ -1012,7 +1012,7 @@ paths:
           - $ref: '#/parameters/If-Match'
           - $ref: '#/parameters/If-Unmodified-Since'
         tags:
-          - API Document
+          - Document (Individual)
         responses:
           200:
             description: |
@@ -1079,7 +1079,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - Application
+        - Application (Individual)
       responses:
         200:
           description: |
@@ -1142,7 +1142,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - Subscriptions
+        - Subscription (Collection)
       responses:
         200:
           description: |
@@ -1191,7 +1191,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - Subscriptions
+        - Subscription (Individual)
       responses:
         200:
           description: |
@@ -1249,7 +1249,7 @@ paths:
       description: |
         Block a subscription.
       tags:
-        - Subscriptions
+        - Subscription (Individual)
       responses:
         200:
           description: |
@@ -1305,7 +1305,7 @@ paths:
       description: |
         Unblock a subscription.
       tags:
-        - Subscriptions
+        - Subscription (Individual)
       responses:
         200:
           description: |
@@ -1363,7 +1363,7 @@ paths:
         - $ref: '#/parameters/Accept'
         - $ref: '#/parameters/If-None-Match'
       tags:
-        - Tiers
+        - Throttling Tier (Collection)
       responses:
         200:
           description: |
@@ -1413,7 +1413,7 @@ paths:
         - $ref: '#/parameters/tierLevel'
         - $ref: '#/parameters/Content-Type'
       tags:
-        - Tiers
+        - Throttling Tier (Collection)
       responses:
         201:
           description: |
@@ -1468,7 +1468,7 @@ paths:
         - $ref: '#/parameters/If-None-Match'
         - $ref: '#/parameters/If-Modified-Since'
       tags:
-        - Tiers
+        - Throttling Tier (Individual)
       responses:
         200:
           description: |
@@ -1533,7 +1533,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - Tiers
+        - Throttling Tier (Individual)
       responses:
         200:
           description: |
@@ -1595,7 +1595,7 @@ paths:
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
-        - Tiers
+        - Throttling Tier (Individual)
       responses:
         200:
           description: |
@@ -1640,7 +1640,7 @@ paths:
           schema:
             $ref: '#/definitions/TierPermission'
       tags:
-        - Tiers
+        - Throttling Tier (Individual)
       responses:
         200:
           description: |
@@ -1709,7 +1709,7 @@ paths:
             Will return environment list for the provided API.
           type: string
       tags:
-        - Environments
+        - Environment (Collection)
       responses:
         200:
           description: |
