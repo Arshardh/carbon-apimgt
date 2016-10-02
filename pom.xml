@@ -801,6 +801,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.wso2.orbit.io.swagger</groupId>
+                <artifactId>swagger-codegen</artifactId>
+                <version>${swagger.codegen.version}</version>
+            </dependency>
+            
+            <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
@@ -920,6 +926,7 @@
         <spring-web.version>4.1.6.RELEASE</spring-web.version>
         <hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
         <swagger-jaxrs.version>1.5.2</swagger-jaxrs.version>
+        <swagger.codegen.version>2.2.0.wso2v1</swagger.codegen.version>
         <junit.version>4.12</junit.version>
         <opensaml2.version>2.4.1.wso2v1</opensaml2.version>
 
