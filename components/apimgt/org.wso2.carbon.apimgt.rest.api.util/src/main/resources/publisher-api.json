@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "0.9.0",
-    "title": "WSO2 API Manager - Publisher",
-    "description": "This document specifies a **RESTful API** for WSO2 **API Manager** - Publisher.\n\nIt is written with [swagger 2](http://swagger.io/).\n",
+    "title": "WSO2 API Manager - Publisher API",
+    "description": "This document specifies a **RESTful API** for WSO2 **API Manager** - Publisher.\nIt is written with [swagger 2](http://swagger.io/).\n",
     "contact": {
       "name": "WSO2",
       "url": "http://wso2.com/products/api-manager/",
@@ -77,8 +77,11 @@
     "/apis": {
       "get": {
         "x-scope": "apim:api_view",
-        "summary": "Retrieving APIs\n",
-        "description": "Get a list of available APIs qualifying under a given search condition.\n",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/apis\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/apis",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"previous\": \"\",\n   \"list\":    [\n            {\n         \"provider\": \"admin\",\n         \"version\": \"1.0.0\",\n         \"description\": \"This sample API provides Account Status Validation\",\n         \"name\": \"AccountVal\",\n         \"context\": \"/account\",\n         \"id\": \"2e81f147-c8a8-4f68-b4f0-69e0e7510b01\",\n         \"status\": \"PUBLISHED\"\n      },\n            {\n         \"provider\": \"admin\",\n         \"version\": \"1.0.0\",\n         \"description\": null,\n         \"name\": \"api1\",\n         \"context\": \"/api1\",\n         \"id\": \"3e22d2fb-277a-4e9e-8c7e-1c0f7f73960e\",\n         \"status\": \"PUBLISHED\"\n      }\n   ],\n   \"next\": \"\",\n   \"count\": 2\n}",
+        "summary": "Get all APIs\n",
+        "description": "This operation provides you a list of available APIs qualifying under a given search condition.\n\nEach retrieved API is represented with a minimal amount of attributes. If you want to get complete details of an API, you need to use **Get API details** operation.\n",
         "parameters": [
           {
             "$ref": "#/parameters/limit"
@@ -89,7 +92,7 @@
           {
             "name": "query",
             "in": "query",
-            "description": "**Search condition**.\n\nYou can search in attributes by using an **\"attribute:\"** modifier.\n\nEg. \"provider:wso2\" will match an API if the provider of the API contains \"wso2\".\n\nSupported attribute modifiers are [**version, context, status,\ndescription, subcontext, doc, provider, tag **]\n\nIf no advanced attribute modifier has been specified, search will match the\ngiven query string against API Name.\n",
+            "description": "**Search condition**.\n\nYou can search in attributes by using an **\"<attribute>:\"** modifier.\n\nEg.\n\"provider:wso2\" will match an API if the provider of the API is exactly \"wso2\".\n\nAdditionally you can use wildcards.\n\nEg.\n\"provider:wso2*\" will match an API if the provider of the API starts with \"wso2\".\n\nSupported attribute modifiers are [**version, context, status,\ndescription, subcontext, doc, provider**]\n\nIf no advanced attribute modifier has been specified, search will match the\ngiven query string against API Name.\n",
             "type": "string"
           },
           {
@@ -100,12 +103,11 @@
           }
         ],
         "tags": [
-          "API Collection",
-          "Retrieve"
+          "API (Collection)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nList of qualifying APIs is returned.\n",
+            "description": "OK.\nList of qualifying APIs is returned.\n",
             "schema": {
               "$ref": "#/definitions/APIList"
             },
@@ -121,10 +123,10 @@
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -133,7 +135,11 @@
       },
       "post": {
         "x-scope": "apim:api_create",
-        "description": "Create a new API\n",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer 40e486e50ce43407181fb4c570d2cac7\" -H \"Content-Type: application/json\" -X POST -d @data.json https://127.0.0.1:9443/api/am/publisher/v0.9/apis",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/apis\nAuthorization: Bearer 40e486e50ce43407181fb4c570d2cac7\nContent-Type: application/json\n\n{\n   \"sequences\": [],\n   \"tiers\":    [\n      \"Bronze\",\n      \"Gold\"\n   ],\n   \"thumbnailUrl\": null,\n   \"visibility\": \"PUBLIC\",\n   \"visibleRoles\": [],\n   \"visibleTenants\": [],\n   \"cacheTimeout\": 300,\n   \"endpointConfig\": \"{\\\"production_endpoints\\\":{\\\"url\\\":\\\" http://ws.cdyne.com/phoneverify/phoneverify.asmx\\\",\\\"config\\\":null},\\\"endpoint_type\\\":\\\"http\\\"}\",\n   \"subscriptionAvailability\": null,\n   \"subscriptionAvailableTenants\": [],\n   \"destinationStatsEnabled\": \"Disabled\",\n   \"apiDefinition\": \"{\\\"paths\\\":{\\\"\\/*\\\":{\\\"get\\\":{\\\"x-auth-type\\\":\\\"Application\\\",\\\"x-throttling-tier\\\":\\\"Unlimited\\\",\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"OK\\\"}}}}},\\\"x-wso2-security\\\":{\\\"apim\\\":{\\\"x-wso2-scopes\\\":[]}},\\\"swagger\\\":\\\"2.0\\\",\\\"info\\\":{\\\"title\\\":\\\"PhoneVerification\\\",\\\"description\\\":\\\"Verify a phone number\\\",\\\"contact\\\":{\\\"email\\\":\\\"xx@ee.com\\\",\\\"name\\\":\\\"xx\\\"},\\\"version\\\":\\\"1.0.0\\\"}}\",\n   \"responseCaching\": \"Disabled\",\n   \"isDefaultVersion\": true,\n   \"gatewayEnvironments\": \"Production and Sandbox\",\n   \"businessInformation\":    {\n      \"technicalOwner\": \"xx\",\n      \"technicalOwnerEmail\": \"ggg@ww.com\",\n      \"businessOwner\": \"xx\",\n      \"businessOwnerEmail\": \"xx@ee.com\"\n   },\n   \"transport\":    [\n      \"http\",\n      \"https\"\n   ],\n   \"tags\":    [\n      \"phone\",\n      \"multimedia\",\n      \"mobile\"\n   ],\n   \"provider\": \"admin\",\n   \"version\": \"1.0.0\",\n   \"description\": \"Verify a phone number\",\n   \"name\": \"PhoneVerification\",\n   \"context\": \"/phoneverify\"\n}",
+        "x-wso2-response": "HTTP/1.1 201 Created\nLocation: https://localhost:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b\nContent-Type: application/json\n\n{\n   \"sequences\": [],\n   \"tiers\":    [\n      \"Bronze\",\n      \"Gold\"\n   ],\n   \"thumbnailUrl\": null,\n   \"visibility\": \"PUBLIC\",\n   \"visibleRoles\": [],\n   \"visibleTenants\": [],\n   \"cacheTimeout\": 300,\n   \"endpointConfig\": \"{\\\"production_endpoints\\\":{\\\"url\\\":\\\" http://ws.cdyne.com/phoneverify/phoneverify.asmx\\\",\\\"config\\\":null},\\\"endpoint_type\\\":\\\"http\\\"}\",\n   \"subscriptionAvailability\": null,\n   \"subscriptionAvailableTenants\": [],\n   \"destinationStatsEnabled\": \"Disabled\",\n   \"apiDefinition\": \"{\\\"paths\\\":{\\\"\\/*\\\":{\\\"get\\\":{\\\"x-auth-type\\\":\\\"Application\\\",\\\"x-throttling-tier\\\":\\\"Unlimited\\\",\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"OK\\\"}}}}},\\\"x-wso2-security\\\":{\\\"apim\\\":{\\\"x-wso2-scopes\\\":[]}},\\\"swagger\\\":\\\"2.0\\\",\\\"info\\\":{\\\"title\\\":\\\"PhoneVerification\\\",\\\"description\\\":\\\"Verify a phone number\\\",\\\"contact\\\":{\\\"email\\\":\\\"xx@ee.com\\\",\\\"name\\\":\\\"xx\\\"},\\\"version\\\":\\\"1.0.0\\\"}}\",\n   \"responseCaching\": \"Disabled\",\n   \"isDefaultVersion\": true,\n   \"gatewayEnvironments\": \"Production and Sandbox\",\n   \"businessInformation\":    {\n      \"technicalOwner\": \"xx\",\n      \"technicalOwnerEmail\": \"ggg@ww.com\",\n      \"businessOwner\": \"xx\",\n      \"businessOwnerEmail\": \"xx@ee.com\"\n   },\n   \"transport\":    [\n      \"http\",\n      \"https\"\n   ],\n   \"tags\":    [\n      \"phone\",\n      \"multimedia\",\n      \"mobile\"\n   ],\n   \"provider\": \"admin\",\n   \"version\": \"1.0.0\",\n   \"description\": \"Verify a phone number\",\n   \"name\": \"PhoneVerification\",\n   \"context\": \"/phoneverify\",\n   \"id\": \"890a4f4d-09eb-4877-a323-57f6ce2ed79b\",\n   \"status\": \"CREATED\"\n}",
+        "summary": "Create a new API",
+        "description": "This operation can be used to create a new API specifying the details of the API in the payload. The new API will be in `CREATED` state.\n",
         "parameters": [
           {
             "in": "body",
@@ -149,12 +155,11 @@
           }
         ],
         "tags": [
-          "API Collection",
-          "Create"
+          "API (Collection)"
         ],
         "responses": {
           "201": {
-            "description": "Created. \nSuccessful response with the newly created object as entity in the body. \nLocation header contains URL of newly created entity.\n",
+            "description": "Created.\nSuccessful response with the newly created object as entity in the body.\nLocation header contains URL of newly created entity.\n",
             "schema": {
               "$ref": "#/definitions/API"
             },
@@ -174,13 +179,13 @@
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error.\n",
+            "description": "Bad Request.\nInvalid request or validation error.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "415": {
-            "description": "Unsupported Media Type. \nThe entity of the request was in a not supported format.\n",
+            "description": "Unsupported Media Type.\nThe entity of the request was in a not supported format.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -191,6 +196,10 @@
     "/apis/{apiId}": {
       "get": {
         "x-scope": "apim:api_view",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b",
+        "x-wso2-response": "HTTP/1.1 200 OK\nDate: Mon, 22 Feb 2016 13:27:08 GMT\nContent-Type: application/json\nTransfer-Encoding: chunked\nServer: WSO2 Carbon Server\n\n{\n   \"sequences\": [],\n   \"tiers\":    [\n      \"Bronze\",\n      \"Gold\"\n   ],\n   \"thumbnailUrl\": null,\n   \"visibility\": \"PUBLIC\",\n   \"visibleRoles\": [],\n   \"visibleTenants\": [],\n   \"cacheTimeout\": 300,\n   \"endpointConfig\": \"{\\\"production_endpoints\\\":{\\\"url\\\":\\\" http://ws.cdyne.com/phoneverify/phoneverify.asmx\\\",\\\"config\\\":null},\\\"endpoint_type\\\":\\\"http\\\"}\",\n   \"subscriptionAvailability\": null,\n   \"subscriptionAvailableTenants\": [],\n   \"destinationStatsEnabled\": \"Disabled\",\n   \"apiDefinition\": \"{\\\"paths\\\":{\\\"\\/*\\\":{\\\"get\\\":{\\\"x-auth-type\\\":\\\"Application\\\",\\\"x-throttling-tier\\\":\\\"Unlimited\\\",\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"OK\\\"}}}}},\\\"x-wso2-security\\\":{\\\"apim\\\":{\\\"x-wso2-scopes\\\":[]}},\\\"swagger\\\":\\\"2.0\\\",\\\"info\\\":{\\\"title\\\":\\\"PhoneVerification\\\",\\\"description\\\":\\\"Verify a phone number\\\",\\\"contact\\\":{\\\"email\\\":\\\"xx@ee.com\\\",\\\"name\\\":\\\"xx\\\"},\\\"version\\\":\\\"1.0.0\\\"}}\",\n   \"responseCaching\": \"Disabled\",\n   \"isDefaultVersion\": false,\n   \"gatewayEnvironments\": \"Production and Sandbox\",\n   \"businessInformation\":    {\n      \"technicalOwner\": \"xx\",\n      \"technicalOwnerEmail\": \"ggg@ww.com\",\n      \"businessOwner\": \"xx\",\n      \"businessOwnerEmail\": \"xx@ee.com\"\n   },\n   \"transport\":    [\n      \"http\",\n      \"https\"\n   ],\n   \"tags\":    [\n      \"phone\",\n      \"multimedia\",\n      \"mobile\"\n   ],\n   \"provider\": \"admin\",\n   \"version\": \"1.0.0\",\n   \"description\": \"Verify a phone number\",\n   \"name\": \"PhoneVerification\",\n   \"context\": \"/phoneverify\",\n   \"id\": \"890a4f4d-09eb-4877-a323-57f6ce2ed79b\",\n   \"status\": \"PUBLISHED\"\n}",
+        "summary": "Get API details",
         "description": "Get details of an API\n",
         "parameters": [
           {
@@ -207,12 +216,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Retrieve"
+          "API (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nRequested API is returned\n",
+            "description": "OK.\nRequested API is returned\n",
             "headers": {
               "Content-Type": {
                 "description": "The content type of the body.\n",
@@ -223,7 +231,7 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             },
@@ -232,16 +240,16 @@
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested API does not exist.\n",
+            "description": "Not Found.\nRequested API does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -250,7 +258,11 @@
       },
       "put": {
         "x-scope": "apim:api_create",
-        "description": "Update an existing API\n",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -H \"Content-Type: application/json\" -X PUT -d @data.json https://127.0.0.1:9443/api/am/publisher/v0.9/apis/6fb74674-4ab8-4b52-9886-f9a376985060",
+        "x-wso2-request": "PUT https://127.0.0.1:9443/api/am/publisher/v0.9/apis/6fb74674-4ab8-4b52-9886-f9a376985060\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\nContent-Type: application/json\n\n{\n   \"sequences\": [],\n   \"tiers\":    [\n      \"Bronze\",\n      \"Gold\"\n   ],\n   \"thumbnailUrl\": null,\n   \"visibility\": \"PUBLIC\",\n   \"visibleRoles\": [],\n   \"visibleTenants\": [],\n   \"cacheTimeout\": 300,\n   \"endpointConfig\": \"{\\\"production_endpoints\\\":{\\\"url\\\":\\\" http://ws.cdyne.com/phoneverify/phoneverify.asmx\\\",\\\"config\\\":null},\\\"endpoint_type\\\":\\\"http\\\"}\",\n   \"subscriptionAvailability\": null,\n   \"subscriptionAvailableTenants\": [],\n   \"destinationStatsEnabled\": \"Disabled\",\n   \"apiDefinition\": \"{\\\"paths\\\":{\\\"\\/*\\\":{\\\"get\\\":{\\\"x-auth-type\\\":\\\"Application\\\",\\\"x-throttling-tier\\\":\\\"Unlimited\\\",\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"OK\\\"}}}}},\\\"x-wso2-security\\\":{\\\"apim\\\":{\\\"x-wso2-scopes\\\":[]}},\\\"swagger\\\":\\\"2.0\\\",\\\"info\\\":{\\\"title\\\":\\\"PhoneVerification\\\",\\\"description\\\":\\\"Verify a phone number\\\",\\\"contact\\\":{\\\"email\\\":\\\"xx@ee.com\\\",\\\"name\\\":\\\"xx\\\"},\\\"version\\\":\\\"2.0.0\\\"}}\",\n   \"responseCaching\": \"Disabled\",\n   \"isDefaultVersion\": false,\n   \"gatewayEnvironments\": \"Production and Sandbox\",\n   \"businessInformation\":    {\n      \"technicalOwner\": \"xx\",\n      \"technicalOwnerEmail\": \"ggg@ww.com\",\n      \"businessOwner\": \"xx\",\n      \"businessOwnerEmail\": \"xx@ee.com\"\n   },\n   \"transport\":    [\n      \"http\",\n      \"https\"\n   ],\n   \"tags\":    [\n      \"phone\",\n      \"multimedia\",\n      \"verification\",\n      \"mobile\"\n   ],\n   \"provider\": \"admin\",\n   \"version\": \"2.0.0\",\n   \"description\": \"Use this API to verify a phone number\",\n   \"name\": \"PhoneVerification\",\n   \"context\": \"/phoneverify\",\n   \"id\": \"6fb74674-4ab8-4b52-9886-f9a376985060\",\n   \"status\": \"CREATED\"\n}",
+        "x-wso2-response": "HTTP/1.1 200 OK\nDate: Mon, 22 Feb 2016 13:31:35 GMT\nContent-Type: application/json\nTransfer-Encoding: chunked\nServer: WSO2 Carbon Server\n\n{\n   \"sequences\": [],\n   \"tiers\":    [\n      \"Bronze\",\n      \"Gold\"\n   ],\n   \"thumbnailUrl\": null,\n   \"visibility\": \"PUBLIC\",\n   \"visibleRoles\": [],\n   \"visibleTenants\": [],\n   \"cacheTimeout\": 300,\n   \"endpointConfig\": \"{\\\"production_endpoints\\\":{\\\"url\\\":\\\" http://ws.cdyne.com/phoneverify/phoneverify.asmx\\\",\\\"config\\\":null},\\\"endpoint_type\\\":\\\"http\\\"}\",\n   \"subscriptionAvailability\": null,\n   \"subscriptionAvailableTenants\": [],\n   \"destinationStatsEnabled\": \"Disabled\",\n   \"apiDefinition\": \"{\\\"paths\\\":{\\\"\\/*\\\":{\\\"get\\\":{\\\"x-auth-type\\\":\\\"Application\\\",\\\"x-throttling-tier\\\":\\\"Unlimited\\\",\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"OK\\\"}}}}},\\\"x-wso2-security\\\":{\\\"apim\\\":{\\\"x-wso2-scopes\\\":[]}},\\\"swagger\\\":\\\"2.0\\\",\\\"info\\\":{\\\"title\\\":\\\"PhoneVerification\\\",\\\"description\\\":\\\"Verify a phone number\\\",\\\"contact\\\":{\\\"email\\\":\\\"xx@ee.com\\\",\\\"name\\\":\\\"xx\\\"},\\\"version\\\":\\\"2.0.0\\\"}}\",\n   \"responseCaching\": \"Disabled\",\n   \"isDefaultVersion\": false,\n   \"gatewayEnvironments\": \"Production and Sandbox\",\n   \"businessInformation\":    {\n      \"technicalOwner\": \"xx\",\n      \"technicalOwnerEmail\": \"ggg@ww.com\",\n      \"businessOwner\": \"xx\",\n      \"businessOwnerEmail\": \"xx@ee.com\"\n   },\n   \"transport\":    [\n      \"http\",\n      \"https\"\n   ],\n   \"tags\":    [\n      \"phone\",\n      \"multimedia\",\n      \"verification\",\n      \"mobile\"\n   ],\n   \"provider\": \"admin\",\n   \"version\": \"2.0.0\",\n   \"description\": \"Use this API to verify a phone number\",\n   \"name\": \"PhoneVerification\",\n   \"context\": \"/phoneverify\",\n   \"id\": \"6fb74674-4ab8-4b52-9886-f9a376985060\",\n   \"status\": \"CREATED\"\n}",
+        "summary": "Update an existing API",
+        "description": "This operation can be used to update an existing API.\nBut the properties `name`, `version`, `context`, `provider`, `state` will not be changed by this operation.\n",
         "parameters": [
           {
             "$ref": "#/parameters/apiId"
@@ -275,12 +287,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Update"
+          "API (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSuccessful response with updated API object\n",
+            "description": "OK.\nSuccessful response with updated API object\n",
             "schema": {
               "$ref": "#/definitions/API"
             },
@@ -298,31 +309,31 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "403": {
-            "description": "Forbidden. \nThe request must be conditional but no condition has been specified.\n",
+            "description": "Forbidden.\nThe request must be conditional but no condition has been specified.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nThe resource to be updated does not exist.\n",
+            "description": "Not Found.\nThe resource to be updated does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -331,6 +342,10 @@
       },
       "delete": {
         "x-scope": "apim:api_create",
+        "x-wso2-request": "DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/apis/6fb74674-4ab8-4b52-9886-f9a376985060\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -X DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/apis/6fb74674-4ab8-4b52-9886-f9a376985060",
+        "x-wso2-response": "HTTP/1.1 200 OK",
+        "summary": "Delete API",
         "description": "Delete an existing API\n",
         "parameters": [
           {
@@ -344,27 +359,26 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Delete"
+          "API (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nResource successfully deleted.\n"
+            "description": "OK.\nResource successfully deleted.\n"
           },
           "403": {
-            "description": "Forbidden. \nThe request must be conditional but no condition has been specified.\n",
+            "description": "Forbidden.\nThe request must be conditional but no condition has been specified.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nResource to be deleted does not exist.\n",
+            "description": "Not Found.\nResource to be deleted does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -375,7 +389,11 @@
     "/apis/{apiId}/swagger": {
       "get": {
         "x-scope": "apim:api_view",
-        "description": "Get the swagger of an API\n",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/swagger\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/swagger",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\nContent-Length: 329\n\n{\n   \"paths\": {\"/*\": {\"get\":    {\n      \"x-auth-type\": \"Application\",\n      \"x-throttling-tier\": \"Unlimited\",\n      \"responses\": {\"200\": {\"description\": \"OK\"}}\n   }}},\n   \"x-wso2-security\": {\"apim\": {\"x-wso2-scopes\": []}},\n   \"swagger\": \"2.0\",\n   \"info\":    {\n      \"title\": \"PhoneVerification\",\n      \"description\": \"Verify a phone number\",\n      \"contact\":       {\n         \"email\": \"xx@ee.com\",\n         \"name\": \"xx\"\n      },\n      \"version\": \"1.0.0\"\n   }\n}",
+        "summary": "Get API Definition",
+        "description": "Get the swagger definition of an API\n",
         "parameters": [
           {
             "$ref": "#/parameters/apiId"
@@ -391,12 +409,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Retrieve"
+          "API (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nRequested swagger document of the API is returned\n",
+            "description": "OK.\nRequested swagger document of the API is returned\n",
             "headers": {
               "Content-Type": {
                 "description": "The content type of the body.\n",
@@ -407,22 +424,22 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested API does not exist.\n",
+            "description": "Not Found.\nRequested API does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -434,6 +451,10 @@
           "multipart/form-data"
         ],
         "x-scope": "apim:api_create",
+        "x-wso2-curl": "curl -k -H \"Authorization:Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -F apiDefinition=\"{\\\"paths\\\":{\\\"\\/*\\\":{\\\"get\\\":{\\\"x-auth-type\\\":\\\"Application\\\",\\\"x-throttling-tier\\\":\\\"Unlimited\\\",\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"OK\\\"}}}}},\\\"x-wso2-security\\\":{\\\"apim\\\":{\\\"x-wso2-scopes\\\":[]}},\\\"swagger\\\":\\\"2.0\\\",\\\"info\\\":{\\\"title\\\":\\\"PhoneVerification\\\",\\\"description\\\":\\\"Verify a phone number\\\",\\\"contact\\\":{\\\"email\\\":\\\"xx@ee.com\\\",\\\"name\\\":\\\"xx\\\"},\\\"version\\\":\\\"1.0.0\\\"}}\" -X PUT \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/swagger\"",
+        "x-wso2-request": "PUT https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/swagger\nAuthorization:Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\nContent-Length: 477\nContent-Type: multipart/form-data; boundary=------------------------4f51e636c0003d99\n\n--------------------------4f51e636c0003d99\nContent-Disposition: form-data; name=\"apiDefinition\"\n\n{\"paths\":{\"\\/*\":{\"get\":{\"x-auth-type\":\"Application\",\"x-throttling-tier\":\"Unlimited\",\"responses\":{\"200\":{\"description\":\"OK\"}}}}},\"x-wso2-security\":{\"apim\":{\"x-wso2-scopes\":[]}},\"swagger\":\"2.0\",\"info\":{\"title\":\"PhoneVerification\",\"description\":\"Verify a phone number\",\"contact\":{\"email\":\"xx@ee.com\",\"name\":\"xx\"},\"version\":\"1.0.0\"}}\n--------------------------4f51e636c0003d99--\n",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"paths\": {\"/*\": {\"get\":    {\n      \"x-auth-type\": \"Application\",\n      \"x-throttling-tier\": \"Unlimited\",\n      \"responses\": {\"200\": {\"description\": \"OK\"}}\n   }}},\n   \"x-wso2-security\": {\"apim\": {\"x-wso2-scopes\": []}},\n   \"swagger\": \"2.0\",\n   \"info\":    {\n      \"title\": \"PhoneVerification\",\n      \"description\": \"Verify a phone number\",\n      \"contact\":       {\n         \"email\": \"xx@ee.com\",\n         \"name\": \"xx\"\n      },\n      \"version\": \"1.0.0\"\n   }\n}",
+        "summary": "Update API Definition",
         "description": "Update an existing swagger definition of an API\n",
         "parameters": [
           {
@@ -457,12 +478,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Update"
+          "API (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSuccessful response with updated Swagger definition\n",
+            "description": "OK.\nSuccessful response with updated Swagger definition\n",
             "headers": {
               "Location": {
                 "description": "The URL of the newly created resource.\n",
@@ -477,31 +497,31 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "403": {
-            "description": "Forbidden. \nThe request must be conditional but no condition has been specified.\n",
+            "description": "Forbidden.\nThe request must be conditional but no condition has been specified.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nThe resource to be updated does not exist.\n",
+            "description": "Not Found.\nThe resource to be updated does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -512,7 +532,11 @@
     "/apis/copy-api": {
       "post": {
         "x-scope": "apim:api_create",
-        "description": "Create a new API by copying an existing API\n",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/apis/copy-api?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b&newVersion=2.0.0\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -X POST \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/copy-api?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b&newVersion=2.0.0\"",
+        "x-wso2-response": "HTTP/1.1 201 Created\nLocation: https://localhost:9443/api/am/publisher/v0.9/apis/6fb74674-4ab8-4b52-9886-f9a376985060\nContent-Type: application/json\n\n{\n   \"sequences\": [],\n   \"tiers\":    [\n      \"Bronze\",\n      \"Gold\"\n   ],\n   \"thumbnailUrl\": null,\n   \"visibility\": \"PUBLIC\",\n   \"visibleRoles\": [],\n   \"visibleTenants\": [],\n   \"cacheTimeout\": 300,\n   \"endpointConfig\": \"{\\\"production_endpoints\\\":{\\\"url\\\":\\\" http://ws.cdyne.com/phoneverify/phoneverify.asmx\\\",\\\"config\\\":null},\\\"endpoint_type\\\":\\\"http\\\"}\",\n   \"subscriptionAvailability\": null,\n   \"subscriptionAvailableTenants\": [],\n   \"destinationStatsEnabled\": \"Disabled\",\n   \"apiDefinition\": \"{\\\"paths\\\":{\\\"\\/*\\\":{\\\"get\\\":{\\\"x-auth-type\\\":\\\"Application\\\",\\\"x-throttling-tier\\\":\\\"Unlimited\\\",\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"OK\\\"}}}}},\\\"x-wso2-security\\\":{\\\"apim\\\":{\\\"x-wso2-scopes\\\":[]}},\\\"swagger\\\":\\\"2.0\\\",\\\"info\\\":{\\\"title\\\":\\\"PhoneVerification\\\",\\\"description\\\":\\\"Verify a phone number\\\",\\\"contact\\\":{\\\"email\\\":\\\"xx@ee.com\\\",\\\"name\\\":\\\"xx\\\"},\\\"version\\\":\\\"2.0.0\\\"}}\",\n   \"responseCaching\": \"Disabled\",\n   \"isDefaultVersion\": true,\n   \"gatewayEnvironments\": \"Production and Sandbox\",\n   \"businessInformation\":    {\n      \"technicalOwner\": \"xx\",\n      \"technicalOwnerEmail\": \"ggg@ww.com\",\n      \"businessOwner\": \"xx\",\n      \"businessOwnerEmail\": \"xx@ee.com\"\n   },\n   \"transport\":    [\n      \"http\",\n      \"https\"\n   ],\n   \"tags\":    [\n      \"phone\",\n      \"multimedia\",\n      \"mobile\"\n   ],\n   \"provider\": \"admin\",\n   \"version\": \"2.0.0\",\n   \"description\": \"Verify a phone number\",\n   \"name\": \"PhoneVerification\",\n   \"context\": \"/phoneverify\",\n   \"id\": \"6fb74674-4ab8-4b52-9886-f9a376985060\",\n   \"status\": \"CREATED\"\n}",
+        "summary": "Copy API",
+        "description": "Create a new API by copying an existing API. The new API will be in `CREATED` state.\n",
         "parameters": [
           {
             "name": "newVersion",
@@ -526,12 +550,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Copy"
+          "API (Individual)"
         ],
         "responses": {
           "201": {
-            "description": "Created. \nSuccessful response with the newly created API as entity in the body. Location header contains URL of newly created API.\n",
+            "description": "Created.\nSuccessful response with the newly created API as entity in the body. Location header contains URL of newly created API.\n",
             "headers": {
               "Location": {
                 "description": "The URL of the newly created API.\n",
@@ -540,13 +563,13 @@
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nAPI to copy does not exist.\n",
+            "description": "Not Found.\nAPI to copy does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -557,11 +580,15 @@
     "/apis/change-lifecycle": {
       "post": {
         "x-scope": "apim:api_publish",
-        "description": "Change the lifecycle of an API\n",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/apis/change-lifecycle?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b&action=Publish\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -X POST \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/change-lifecycle?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b&action=Publish\"",
+        "x-wso2-response": "HTTP/1.1 200 OK",
+        "summary": "Change API Status",
+        "description": "This operation is used to change the lifecycle of an API. Eg: Publish an API which is in `CREATED` state. In order to change the lifecycle, we need to provide the lifecycle `action` as a query parameter.\n\nFor example, to Publish an API, `action` should be `Publish`.\n\nSome actions supports providing additional paramters which should be provided as `lifecycleChecklist` parameter. Please see parameters table for more information.\n",
         "parameters": [
           {
             "name": "action",
-            "description": "The action to demote or promote the state of the API.\n\nSupported actions are [ **Publish, Deploy as a Prototype, Demote to Created, Demote to Prototyped, Block, Deprecate, Re-Publish, Retire **]\n",
+            "description": "The action to demote or promote the state of the API.\nSupported actions are [ **Publish, Deploy as a Prototype, Demote to Created, Demote to Prototyped, Block, Deprecate, Re-Publish, Retire **]\n",
             "in": "query",
             "type": "string",
             "required": true,
@@ -578,7 +605,7 @@
           },
           {
             "name": "lifecycleChecklist",
-            "description": "\nYou can specify additional checklist items by using an **\"attribute:\"** modifier.\n\nEg: \"Deprecate Old Versions:true\" will deprecate older versions of a particular API when it is promoted to \nPublished state from Created state. Multiple checklist items can be given in \"attribute1:true, attribute2:false\"\nformat.\n\nSupported checklist items are as follows.\n1. **Deprecate Old Versions**: Setting this to true will deprecate older versions of a particular API when it is promoted to Published state from Created state.\n2. **Require Re-Subscription**: If you set this to true, users need to re subscribe to the API although they may have subscribed to an older version.\n",
+            "description": "\nYou can specify additional checklist items by using an **\"attribute:\"** modifier.\n\nEg: \"Deprecate Old Versions:true\" will deprecate older versions of a particular API when it is promoted to\nPublished state from Created state. Multiple checklist items can be given in \"attribute1:true, attribute2:false\"\nformat.\n\nSupported checklist items are as follows.\n1. **Deprecate Old Versions**: Setting this to true will deprecate older versions of a particular API when it is promoted to Published state from Created state.\n2. **Require Re-Subscription**: If you set this to true, users need to re subscribe to the API although they may have subscribed to an older version.\n",
             "type": "string",
             "in": "query"
           },
@@ -593,37 +620,36 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Change Lifecycle"
+          "API (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nLifecycle changed successfully.\n",
+            "description": "OK.\nLifecycle changed successfully.\n",
             "headers": {
               "ETag": {
                 "description": "Entity Tag of the changed API. Used by caches, or in conditional request.\n",
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the API lifecycle has been modified the last time. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the API lifecycle has been modified the last time.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nRequested API does not exist.\n",
+            "description": "Not Found.\nRequested API does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -634,6 +660,10 @@
     "/apis/{apiId}/documents": {
       "get": {
         "x-scope": "apim:api_view",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents\"",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"previous\": \"\",\n   \"list\":    [\n            {\n         \"visibility\": \"API_LEVEL\",\n         \"sourceType\": \"INLINE\",\n         \"sourceUrl\": null,\n         \"otherTypeName\": null,\n         \"documentId\": \"0bcb7f05-599d-4e1a-adce-5cb89bfe58d5\",\n         \"summary\": \"This is a sample documentation for v1.0.0\",\n         \"name\": \"PhoneVerification API Documentation\",\n         \"type\": \"HOWTO\"\n      },\n            {\n         \"visibility\": \"API_LEVEL\",\n         \"sourceType\": \"URL\",\n         \"sourceUrl\": \"http://wiki.cdyne.com/index.php/Phone_Verification\",\n         \"otherTypeName\": null,\n         \"documentId\": \"4145df31-04f1-440c-8d08-68952874622c\",\n         \"summary\": \"This is the URL for online documentation\",\n         \"name\": \"Online Documentation\",\n         \"type\": \"SAMPLES\"\n      }\n   ],\n   \"next\": \"\",\n   \"count\": 2\n}",
+        "summary": "Get API Documents",
         "description": "Get a list of documents belonging to an API.\n",
         "parameters": [
           {
@@ -653,12 +683,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Retrieve Documents"
+          "Document (Collection)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nDocument list is returned.\n",
+            "description": "OK.\nDocument list is returned.\n",
             "schema": {
               "$ref": "#/definitions/DocumentList"
             },
@@ -674,16 +703,16 @@
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested API does not exist.\n",
+            "description": "Not Found.\nRequested API does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -692,7 +721,11 @@
       },
       "post": {
         "x-scope": "apim:api_create",
-        "description": "Add a new document to an API\n",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer cdcc8cf6016ed10620edf3a1d3c5ef2b\" -H \"Content-Type: application/json\" -X POST -d @data.json \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/96077508-fd01-4fae-bc64-5de0e2baf43c/documents\"",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/apis/96077508-fd01-4fae-bc64-5de0e2baf43c/documents\nAuthorization: Bearer cdcc8cf6016ed10620edf3a1d3c5ef2b\nContent-Type: application/json\n\n{\n    \"visibility\": \"API_LEVEL\",\n    \"sourceType\": \"INLINE\",\n    \"sourceUrl\": null,\n    \"otherTypeName\": null,\n    \"summary\": \"This is a sample documentation\",\n    \"name\": \"Introduction to PhoneVerification API\",\n    \"type\": \"HOWTO\"\n}",
+        "x-wso2-response": "HTTP/1.1 201 Created\nLocation: https://localhost:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/ffd5790d-b7a9-4cb6-b76a-f8b83ecdd058\nContent-Type: application/json\n\n{\n   \"visibility\": \"API_LEVEL\",\n   \"sourceType\": \"INLINE\",\n   \"sourceUrl\": null,\n   \"otherTypeName\": null,\n   \"documentId\": \"ffd5790d-b7a9-4cb6-b76a-f8b83ecdd058\",\n   \"summary\": \"This is a sample documentation\",\n   \"name\": \"Introduction to PhoneVerification API\",\n   \"type\": \"HOWTO\"\n}",
+        "summary": "Add a new document",
+        "description": "This operation can be used to add a new documentation to an API. This operation only adds the metadata of a document. To add the actual content we need to use **Upload API document content** API once we obtain a document Id by this operation.\n",
         "parameters": [
           {
             "$ref": "#/parameters/apiId"
@@ -711,12 +744,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Add Document"
+          "Document (Collection)"
         ],
         "responses": {
           "201": {
-            "description": "Created. \nSuccessful response with the newly created Document object as entity in the body. \nLocation header contains URL of newly added document.\n",
+            "description": "Created.\nSuccessful response with the newly created Document object as entity in the body.\nLocation header contains URL of newly added document.\n",
             "schema": {
               "$ref": "#/definitions/Document"
             },
@@ -730,19 +762,19 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional request.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional request.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "415": {
-            "description": "Unsupported media type. \nThe entity of the request was in a not supported format.\n"
+            "description": "Unsupported media type.\nThe entity of the request was in a not supported format.\n"
           }
         }
       }
@@ -750,6 +782,10 @@
     "/apis/{apiId}/documents/{documentId}": {
       "get": {
         "x-scope": "apim:api_view",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/0bcb7f05-599d-4e1a-adce-5cb89bfe58d5\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/0bcb7f05-599d-4e1a-adce-5cb89bfe58d5\"",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"visibility\": \"API_LEVEL\",\n   \"sourceType\": \"INLINE\",\n   \"sourceUrl\": null,\n   \"otherTypeName\": null,\n   \"documentId\": \"0bcb7f05-599d-4e1a-adce-5cb89bfe58d5\",\n   \"summary\": \"This is a sample documentation\",\n   \"name\": \"PhoneVerification API Documentation\",\n   \"type\": \"HOWTO\"\n}",
+        "summary": "Get an API Document",
         "description": "Get a particular document associated with an API.\n",
         "parameters": [
           {
@@ -769,12 +805,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Retrieve Document"
+          "Document (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nDocument returned.\n",
+            "description": "OK.\nDocument returned.\n",
             "schema": {
               "$ref": "#/definitions/Document"
             },
@@ -788,22 +823,22 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional reuquests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional reuquests.\n",
                 "type": "string"
               }
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested Document does not exist.\n",
+            "description": "Not Found.\nRequested Document does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -812,6 +847,10 @@
       },
       "put": {
         "x-scope": "apim:api_create",
+        "x-wso2-curl": "curl -k -H \"Authorization:Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -H \"Content-Type: application/json\" -X PUT -d data.json \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/96077508-fd01-4fae-bc64-5de0e2baf43c/documents\"",
+        "x-wso2-request": "PUT https://127.0.0.1:9443/api/am/publisher/v0.9/apis/96077508-fd01-4fae-bc64-5de0e2baf43c/documents\nAuthorization:Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\nContent-Type: application/json\n\n{\n   \"visibility\": \"API_LEVEL\",\n   \"sourceType\": \"INLINE\",\n   \"sourceUrl\": null,\n   \"otherTypeName\": null,\n   \"documentId\": \"0bcb7f05-599d-4e1a-adce-5cb89bfe58d5\",\n   \"summary\": \"This is a sample documentation for v1.0.0\",\n   \"name\": \"PhoneVerification API Documentation\",\n   \"type\": \"HOWTO\"\n}",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"visibility\": \"API_LEVEL\",\n   \"sourceType\": \"INLINE\",\n   \"sourceUrl\": null,\n   \"otherTypeName\": null,\n   \"documentId\": \"0bcb7f05-599d-4e1a-adce-5cb89bfe58d5\",\n   \"summary\": \"This is a sample documentation for v1.0.0\",\n   \"name\": \"PhoneVerification API Documentation\",\n   \"type\": \"HOWTO\"\n}",
+        "summary": "Update an API Document",
         "description": "Update document details.\n",
         "parameters": [
           {
@@ -840,12 +879,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Update Document"
+          "Document (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nDocument updated\n",
+            "description": "OK.\nDocument updated\n",
             "schema": {
               "$ref": "#/definitions/Document"
             },
@@ -859,29 +897,29 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional request.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional request.\n",
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional reuquests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional reuquests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error.\n",
+            "description": "Bad Request.\nInvalid request or validation error.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nThe resource to be updated does not exist.\n",
+            "description": "Not Found.\nThe resource to be updated does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -890,6 +928,10 @@
       },
       "delete": {
         "x-scope": "apim:api_create",
+        "x-wso2-request": "DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/ffd5790d-b7a9-4cb6-b76a-f8b83ecdd058\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -X DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/ffd5790d-b7a9-4cb6-b76a-f8b83ecdd058",
+        "x-wso2-response": "HTTP/1.1 200 OK",
+        "summary": "Delete an API Document",
         "description": "Delete a document of an API\n",
         "parameters": [
           {
@@ -906,21 +948,20 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Delete Document"
+          "Document (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nResource successfully deleted.\n"
+            "description": "OK.\nResource successfully deleted.\n"
           },
           "404": {
-            "description": "Not Found. \nResource to be deleted does not exist.\n",
+            "description": "Not Found.\nResource to be deleted does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -931,7 +972,11 @@
     "/apis/{apiId}/documents/{documentId}/content": {
       "get": {
         "x-scope": "apim:api_view",
-        "description": "Downloads a FILE type document/get the inline content or source url of a certain document.\n",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/daf732d3-bda2-46da-b381-2c39d901ea61/content\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization:Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/daf732d3-bda2-46da-b381-2c39d901ea61/content\" > sample.pdf",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Disposition: attachment; filename=\"sample.pdf\"\nContent-Type: application/octet-stream\nContent-Length: 7802\n\n%PDF-1.4\n%äüöß\n2 0 obj\n<</Length 3 0 R/Filter/FlateDecode>>\nstream\n..\n>>\nstartxref\n7279\n%%EOF",
+        "summary": "Get document content",
+        "description": "This operation can be used to retrive the content of an API's document.\n\nThe document can be of 3 types. In each cases responses are different.\n\n1. **Inline type**:\n   The content of the document will be retrieved in `text/plain` content type\n2. **FILE type**: \n   The file will be downloaded with the related content type (eg. `application/pdf`)\n3. **URL type**:\n    The client will recieve the URL of the document as the Location header with the response with - `303 See Other`\n",
         "parameters": [
           {
             "$ref": "#/parameters/apiId"
@@ -950,12 +995,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Retrieve Document"
+          "Document (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nFile or inline content returned.\n",
+            "description": "OK.\nFile or inline content returned.\n",
             "headers": {
               "Content-Type": {
                 "description": "The content type of the body.\n",
@@ -966,7 +1010,7 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional reuquests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional reuquests.\n",
                 "type": "string"
               }
             }
@@ -981,16 +1025,16 @@
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested Document does not exist.\n",
+            "description": "Not Found.\nRequested Document does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1002,7 +1046,11 @@
           "multipart/form-data"
         ],
         "x-scope": "apim:api_create",
-        "description": "Upload a file to a document or add inline content to the document.\n\nDocument's source type should be **FILE** in order to upload a file to the document using **file** parameter.\nDocument's source type should be **INLINE** in order to add inline content to the document using **inlineContent** parameter.\n\nOnly one of **file** or **inlineContent** can be specified at one time.\n",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/daf732d3-bda2-46da-b381-2c39d901ea61/content\nAuthorization:Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\nContent-Length: 8004\nContent-Type: multipart/form-data; boundary=------------------------7b9a53f1ffa452b9\n\n--------------------------7b9a53f1ffa452b9\nContent-Disposition: form-data; name=\"file\"; filename=\"sample.pdf\"\nContent-Type: application/octet-stream\n\n[file content]\n\n--------------------------7b9a53f1ffa452b9--\n",
+        "x-wso2-curl": "curl -k -H \"Authorization:Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -F file=@\"sample.pdf\" -X POST \"https://127.0.0.1:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/daf732d3-bda2-46da-b381-2c39d901ea61/content\"",
+        "x-wso2-response": "HTTP/1.1 201 Created\nLocation: https://localhost:9443/api/am/publisher/v0.9/apis/890a4f4d-09eb-4877-a323-57f6ce2ed79b/documents/daf732d3-bda2-46da-b381-2c39d901ea61/content\nContent-Type: application/json\n\n{\n    \"visibility\":\"API_LEVEL\",\n    \"sourceType\":\"FILE\",\n    \"sourceUrl\":null,\n    \"otherTypeName\":null,\n    \"documentId\":\"daf732d3-bda2-46da-b381-2c39d901ea61\",\n    \"summary\":\"This is a sample documentation pdf\",\n    \"name\":\"Introduction to PhoneVerification API PDF\",\n    \"type\":\"HOWTO\"\n}",
+        "summary": "Upload API document content",
+        "description": "Thid operation can be used to upload a file or add inline content to an API document.\n\n**IMPORTANT:**\n* Either **file** or **inlineContent** form data parameters should be specified at one time.\n* Document's source type should be **FILE** in order to upload a file to the document using **file** parameter.\n* Document's source type should be **INLINE** in order to add inline content to the document using **inlineContent** parameter.\n",
         "parameters": [
           {
             "$ref": "#/parameters/apiId"
@@ -1035,12 +1083,11 @@
           }
         ],
         "tags": [
-          "API (individual)",
-          "Update Document"
+          "Document (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nDocument updated\n",
+            "description": "OK.\nDocument updated\n",
             "schema": {
               "$ref": "#/definitions/Document"
             },
@@ -1054,29 +1101,29 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional request.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional request.\n",
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional reuquests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional reuquests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error.\n",
+            "description": "Bad Request.\nInvalid request or validation error.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nThe resource to be updated does not exist.\n",
+            "description": "Not Found.\nThe resource to be updated does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1087,6 +1134,10 @@
     "/applications/{applicationId}": {
       "get": {
         "x-scope": "apim:api_create",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/applications/896658a0-b4ee-4535-bbfa-806c894a4015\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/applications/896658a0-b4ee-4535-bbfa-806c894a4015",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"groupId\": \"\",\n   \"subscriber\": \"admin\",\n   \"throttlingTier\": \"Unlimited\",\n   \"applicationId\": \"896658a0-b4ee-4535-bbfa-806c894a4015\",\n   \"description\": null,\n   \"name\": \"DefaultApplication\"\n}",
+        "summary": "Get Application",
         "description": "Get application details\n",
         "parameters": [
           {
@@ -1103,12 +1154,11 @@
           }
         ],
         "tags": [
-          "Application (individual)",
-          "Retrieve"
+          "Application (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nApplication returned.\n",
+            "description": "OK.\nApplication returned.\n",
             "schema": {
               "$ref": "#/definitions/Application"
             },
@@ -1122,13 +1172,13 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional reuquests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional reuquests.\n",
                 "type": "string"
               }
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
             "description": "Not Found.\nRequested application does not exist.\n",
@@ -1137,7 +1187,7 @@
             }
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1148,7 +1198,11 @@
     "/subscriptions": {
       "get": {
         "x-scope": "apim:subscription_view",
-        "description": "Get subscription list.\nThe API Identifier and corresponding Application Identifier\nthe subscriptions of which are to be returned are passed as parameters.\n",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" \"https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b\"",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n \n{\n   \"previous\": \"\",\n   \"list\":    [\n            {\n         \"subscriptionId\": \"64eca60b-2e55-4c38-8603-e9e6bad7d809\",\n         \"tier\": \"Gold\",\n         \"apiIdentifier\": \"admin-PhoneVerification-1.0.0\",\n         \"applicationId\": \"896658a0-b4ee-4535-bbfa-806c894a4015\",\n         \"status\": \"UNBLOCKED\"\n      },\n            {\n         \"subscriptionId\": \"7ac22c34-8745-4cfe-91e0-262c50b2f2e3\",\n         \"tier\": \"Gold\",\n         \"apiIdentifier\": \"admin-PhoneVerification-1.0.0\",\n         \"applicationId\": \"367a2361-8db5-4140-8133-c6c8dc7fa0c4\",\n         \"status\": \"UNBLOCKED\"\n      }\n   ],\n   \"next\": \"\",\n   \"count\": 2\n}",
+        "summary": "Get All Subscriptions",
+        "description": "This operation can be used to retrieve a list of subscriptions of the user associated with the provided access token. This operation is capable of\n\n1. Retrieving all subscriptions for the user's APIs.\n`GET https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions`\n\n2. Retrieving subscriptions for a specific API.\n`GET https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions?apiId=c43a325c-260b-4302-81cb-768eafaa3aed`\n",
         "parameters": [
           {
             "$ref": "#/parameters/apiId-Q"
@@ -1167,12 +1221,11 @@
           }
         ],
         "tags": [
-          "Subscription Collection",
-          "Retrieve"
+          "Subscription (Collection)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSubscription list returned.\n",
+            "description": "OK.\nSubscription list returned.\n",
             "schema": {
               "$ref": "#/definitions/SubscriptionList"
             },
@@ -1182,13 +1235,13 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional requests.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "406": {
             "description": "Not Acceptable. The requested media type is not supported\n",
@@ -1202,6 +1255,10 @@
     "/subscriptions/{subscriptionId}": {
       "get": {
         "x-scope": "apim:subscription_view",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions/64eca60b-2e55-4c38-8603-e9e6bad7d809\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions/64eca60b-2e55-4c38-8603-e9e6bad7d809",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"subscriptionId\": \"64eca60b-2e55-4c38-8603-e9e6bad7d809\",\n   \"tier\": \"Gold\",\n   \"apiIdentifier\": \"admin-PhoneVerification-1.0.0\",\n   \"applicationId\": \"896658a0-b4ee-4535-bbfa-806c894a4015\",\n   \"status\": \"UNBLOCKED\"\n}",
+        "summary": "Get a Subscription",
         "description": "Get subscription details\n",
         "parameters": [
           {
@@ -1218,12 +1275,11 @@
           }
         ],
         "tags": [
-          "Subscription (individual)",
-          "Retrieve"
+          "Subscription (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSubscription returned\n",
+            "description": "OK.\nSubscription returned\n",
             "schema": {
               "$ref": "#/definitions/Subscription"
             },
@@ -1243,10 +1299,10 @@
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested Subscription does not exist.\n",
+            "description": "Not Found.\nRequested Subscription does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1257,6 +1313,10 @@
     "/subscriptions/block-subscription": {
       "post": {
         "x-scope": "apim:subscription_block",
+        "x-wso2-request": "https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions/block-subscription?subscriptionId=64eca60b-2e55-4c38-8603-e9e6bad7d809&blockState=PROD_ONLY_BLOCKED\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -X POST \"https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions/block-subscription?subscriptionId=64eca60b-2e55-4c38-8603-e9e6bad7d809&blockState=PROD_ONLY_BLOCKED\"",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n \n{\n   \"subscriptionId\": \"64eca60b-2e55-4c38-8603-e9e6bad7d809\",\n   \"tier\": \"Gold\",\n   \"apiIdentifier\": \"admin-PhoneVerification-1.0.0\",\n   \"applicationId\": \"896658a0-b4ee-4535-bbfa-806c894a4015\",\n   \"status\": \"PROD_ONLY_BLOCKED\"\n}",
+        "summary": "Block a subscription",
         "parameters": [
           {
             "$ref": "#/parameters/subscriptionId-Q"
@@ -1279,39 +1339,38 @@
             "$ref": "#/parameters/If-Unmodified-Since"
           }
         ],
-        "description": "Block a subscription.\n",
+        "description": "This operation can be used to block a subscription. Along with the request, `blockState` must be specified as a query parameter.\n\n1. `BLOCKED` : Subscription is completely blocked for both Production and Sandbox environments.\n2. `PROD_ONLY_BLOCKED` : Subscription is blocked for Production environment only.\n",
         "tags": [
-          "Subscription (individual)",
-          "Block"
+          "Subscription (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSubscription was blocked successfully.\n",
+            "description": "OK.\nSubscription was blocked successfully.\n",
             "headers": {
               "ETag": {
-                "description": "Entity Tag of the blocked subscription. \nUsed by caches, or in conditional request.\n",
+                "description": "Entity Tag of the blocked subscription.\nUsed by caches, or in conditional request.\n",
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the subscription has been blocked. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the subscription has been blocked.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nRequested subscription does not exist.\n",
+            "description": "Not Found.\nRequested subscription does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1322,6 +1381,10 @@
     "/subscriptions/unblock-subscription": {
       "post": {
         "x-scope": "apim:subscription_block",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions/unblock-subscription?subscriptionId=64eca60b-2e55-4c38-8603-e9e6bad7d809\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -X POST \"https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions/unblock-subscription?subscriptionId=64eca60b-2e55-4c38-8603-e9e6bad7d809\"",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"subscriptionId\": \"64eca60b-2e55-4c38-8603-e9e6bad7d809\",\n   \"tier\": \"Gold\",\n   \"apiIdentifier\": \"admin-PhoneVerification-1.0.0\",\n   \"applicationId\": \"896658a0-b4ee-4535-bbfa-806c894a4015\",\n   \"status\": \"UNBLOCKED\"\n} ",
+        "summary": "Unblock a Subscription",
         "parameters": [
           {
             "$ref": "#/parameters/subscriptionId-Q"
@@ -1333,39 +1396,38 @@
             "$ref": "#/parameters/If-Unmodified-Since"
           }
         ],
-        "description": "Unblock a subscription.\n",
+        "description": "This operation can be used to unblock a subscription specifying the subscription Id. The subscription will be fully unblocked after performing this operation.\n",
         "tags": [
-          "Subscription (individual)",
-          "Unblock Subscription"
+          "Subscription (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSubscription was unblocked successfully.\n",
+            "description": "OK.\nSubscription was unblocked successfully.\n",
             "headers": {
               "ETag": {
-                "description": "Entity Tag of the unblocked subscription. \nUsed by caches, or in conditional request.\n",
+                "description": "Entity Tag of the unblocked subscription.\nUsed by caches, or in conditional request.\n",
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the subscription has been unblocked. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the subscription has been unblocked.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nRequested subscription does not exist.\n",
+            "description": "Not Found.\nRequested subscription does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1376,6 +1438,10 @@
     "/tiers/{tierLevel}": {
       "get": {
         "x-scope": "apim:tier_view",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n\n{\n   \"previous\": \"\",\n   \"list\":    [\n            {\n         \"unitTime\": 60000,\n         \"tierPlan\": \"FREE\",\n         \"tierLevel\": \"api\",\n         \"stopOnQuotaReach\": true,\n         \"requestCount\": 1,\n         \"description\": \"Allows 1 request(s) per minute.\",\n         \"name\": \"Bronze\",\n         \"attributes\": {}\n      },\n            {\n         \"unitTime\": 60000,\n         \"tierPlan\": \"FREE\",\n         \"tierLevel\": \"api\",\n         \"stopOnQuotaReach\": true,\n         \"requestCount\": 20,\n         \"description\": \"Allows 20 request(s) per minute.\",\n         \"name\": \"Gold\",\n         \"attributes\": {}\n      },\n            {\n         \"unitTime\": 60000,\n         \"tierPlan\": \"FREE\",\n         \"tierLevel\": \"api\",\n         \"stopOnQuotaReach\": true,\n         \"requestCount\": 5,\n         \"description\": \"Allows 5 request(s) per minute.\",\n         \"name\": \"Silver\",\n         \"attributes\": {}\n      },\n            {\n         \"unitTime\": 0,\n         \"tierPlan\": null,\n         \"tierLevel\": \"api\",\n         \"stopOnQuotaReach\": true,\n         \"requestCount\": 0,\n         \"description\": \"Allows unlimited requests\",\n         \"name\": \"Unlimited\",\n         \"attributes\": {}\n      }\n   ],\n   \"next\": \"\",\n   \"count\": 4\n}",
+        "summary": "List Tiers",
         "description": "Get available tiers\n",
         "parameters": [
           {
@@ -1395,12 +1461,11 @@
           }
         ],
         "tags": [
-          "Tier Collection",
-          "Retrieve"
+          "Throttling Tier (Collection)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nList of tiers returned.\n",
+            "description": "OK.\nList of tiers returned.\n",
             "schema": {
               "$ref": "#/definitions/TierList"
             },
@@ -1410,16 +1475,16 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional requests.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1428,7 +1493,11 @@
       },
       "post": {
         "x-scope": "apim:tier_manage",
-        "description": "Add a new tier\n",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -H \"Content-Type: application/json\" -X POST -d @data.json \"https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api\"",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\nContent-Type: application/json\n\n{\n    \"unitTime\": 60000,\n    \"tierPlan\": \"FREE\",\n    \"tierLevel\": \"api\",\n    \"stopOnQuotaReach\": true,\n    \"requestCount\": 5,\n    \"description\": \"Allows 5 request(s) per minute.\",\n    \"name\": \"Low\",\n    \"attributes\": {\n            \"a\":10,\n            \"b\":30\n        }\n}",
+        "x-wso2-response": "HTTP/1.1 201 Created\nLocation: https://localhost:9443/api/am/publisher/v0.9/tiers/Low\nContent-Type: application/json\n\n{\n   \"unitTime\": 60000,\n   \"tierPlan\": \"FREE\",\n   \"tierLevel\": \"api\",\n   \"stopOnQuotaReach\": true,\n   \"requestCount\": 5,\n   \"description\": \"Allows 5 request(s) per minute.\",\n   \"name\": \"Low\",\n   \"attributes\":    {\n      \"b\": \"30\",\n      \"a\": \"10\"\n   }\n}",
+        "summary": "Add a new Tier",
+        "description": "This operation can be used to create a new throttling tier. The only supported tier level is `api` tiers.\n`POST https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api`\n",
         "parameters": [
           {
             "in": "body",
@@ -1447,12 +1516,11 @@
           }
         ],
         "tags": [
-          "Tier (individual)",
-          "Create"
+          "Throttling Tier (Collection)"
         ],
         "responses": {
           "201": {
-            "description": "Created. \nSuccessful response with the newly created object as entity in the body. \nLocation header contains URL of newly created entity.\n",
+            "description": "Created.\nSuccessful response with the newly created object as entity in the body.\nLocation header contains URL of newly created entity.\n",
             "schema": {
               "$ref": "#/definitions/Tier"
             },
@@ -1466,19 +1534,19 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional request'\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional request'\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error\n",
+            "description": "Bad Request.\nInvalid request or validation error\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "415": {
-            "description": "Unsupported media type. \nThe entity of the request was in a not supported format.\n"
+            "description": "Unsupported media type.\nThe entity of the request was in a not supported format.\n"
           }
         }
       }
@@ -1486,6 +1554,10 @@
     "/tiers/{tierLevel}/{tierName}": {
       "get": {
         "x-scope": "apim:tier_view",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Bronze\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Bronze",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"unitTime\": 60000,\n   \"tierPlan\": \"FREE\",\n   \"tierLevel\": \"api\",\n   \"stopOnQuotaReach\": true,\n   \"requestCount\": 1,\n   \"description\": \"Allows 1 request(s) per minute.\",\n   \"name\": \"Bronze\",\n   \"attributes\": {}\n}",
+        "summary": "Get a Tier",
         "description": "Get tier details\n",
         "parameters": [
           {
@@ -1505,12 +1577,11 @@
           }
         ],
         "tags": [
-          "Tier (individual)",
-          "Retrieve"
+          "Throttling Tier (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nTier returned\n",
+            "description": "OK.\nTier returned\n",
             "schema": {
               "$ref": "#/definitions/Tier"
             },
@@ -1520,26 +1591,26 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional requests.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional reuquests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional reuquests.\n",
                 "type": "string"
               }
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested Tier does not exist.\n",
+            "description": "Not Found.\nRequested Tier does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "406": {
-            "description": "Not Acceptable. \nThe requested media type is not supported.\n",
+            "description": "Not Acceptable.\nThe requested media type is not supported.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1548,7 +1619,11 @@
       },
       "put": {
         "x-scope": "apim:tier_manage",
-        "description": "Update tier details\n",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -H \"Content-Type: application/json\" -X PUT -d @data.json \"https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low\"",
+        "x-wso2-request": "PUT https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\nContent-Type: application/json\n\n{\n   \"unitTime\": 60000,\n   \"tierPlan\": \"FREE\",\n   \"tierLevel\": \"api\",\n   \"stopOnQuotaReach\": true,\n   \"requestCount\": 10,\n   \"description\": \"Allows 10 request(s) per minute.\",\n   \"name\": \"Low\",\n   \"attributes\":    {\n      \"a\": \"30\",\n      \"b\": \"10\",\n      \"c\": \"20\"\n   }\n}\n",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"unitTime\": 60000,\n   \"tierPlan\": \"FREE\",\n   \"tierLevel\": \"api\",\n   \"stopOnQuotaReach\": true,\n   \"requestCount\": 10,\n   \"description\": \"Allows 10 request(s) per minute.\",\n   \"name\": \"Low\",\n   \"attributes\":    {\n      \"b\": \"10\",\n      \"c\": \"20\",\n      \"a\": \"30\"\n   }\n}",
+        "summary": "Update a Tier",
+        "description": "This operation can be used to update an existing tier. The only supported tier level is `api` tiers.\n`PUT https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low`\n",
         "parameters": [
           {
             "$ref": "#/parameters/tierName"
@@ -1576,12 +1651,11 @@
           }
         ],
         "tags": [
-          "Tier (individual)",
-          "Update"
+          "Throttling Tier (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSubscription updated.\n",
+            "description": "OK.\nSubscription updated.\n",
             "schema": {
               "$ref": "#/definitions/Tier"
             },
@@ -1595,29 +1669,29 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional request.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional request.\n",
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the resource has been modifed the last time. \nUsed by caches, or in conditional reuquests.\n",
+                "description": "Date and time the resource has been modifed the last time.\nUsed by caches, or in conditional reuquests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error.\n",
+            "description": "Bad Request.\nInvalid request or validation error.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nThe resource to be updated does not exist.\n",
+            "description": "Not Found.\nThe resource to be updated does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1626,7 +1700,11 @@
       },
       "delete": {
         "x-scope": "apim:tier_manage",
-        "description": "Remove a tier\n",
+        "x-wso2-request": "DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -X DELETE \"https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low\"",
+        "x-wso2-response": "HTTP/1.1 200 OK",
+        "summary": "Delete a Tier",
+        "description": "This operation can be used to delete an existing tier. The only supported tier level is `api` tiers.\n`DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low`\n",
         "parameters": [
           {
             "$ref": "#/parameters/tierName"
@@ -1642,21 +1720,20 @@
           }
         ],
         "tags": [
-          "Tier (individual)",
-          "Delete"
+          "Throttling Tier (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nResource successfully deleted.\n"
+            "description": "OK.\nResource successfully deleted.\n"
           },
           "404": {
-            "description": "Not Found. \nResource to be deleted does not exist.\n",
+            "description": "Not Found.\nResource to be deleted does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1667,7 +1744,11 @@
     "/tiers/update-permission": {
       "post": {
         "x-scope": "apim:tier_manage",
-        "description": "Update tier permission\n",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" -H \"Content-Type: application/json\" -X POST -d @data.json \"https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/update-permission?tierName=Bronze&tierLevel=api\"",
+        "x-wso2-request": "POST https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/update-permission?tierName=Bronze&tierLevel=api\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\nContent-Type: application/json\n\n{\n    \"permissionType\":\"deny\",\n    \"roles\": [\"Internal/everyone\",\"admin\"]\n}",
+        "x-wso2-response": "HTTP/1.1 200 OK",
+        "summary": "Update Tier Permission",
+        "description": "This operation can be used to update tier permissions which controls access for the particular tier based on the subscribers' roles.\n",
         "parameters": [
           {
             "$ref": "#/parameters/tierName-Q"
@@ -1690,12 +1771,11 @@
           }
         ],
         "tags": [
-          "Tier (individual)",
-          "Update Permission"
+          "Throttling Tier (Individual)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nSuccessfully updated tier permissions\n",
+            "description": "OK.\nSuccessfully updated tier permissions\n",
             "schema": {
               "type": "array",
               "items": {
@@ -1708,31 +1788,31 @@
                 "type": "string"
               },
               "Last-Modified": {
-                "description": "Date and time the tier has been modified. \nUsed by caches, or in conditional requests.\n",
+                "description": "Date and time the tier has been modified.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "400": {
-            "description": "Bad Request. \nInvalid request or validation error.\n",
+            "description": "Bad Request.\nInvalid request or validation error.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "403": {
-            "description": "Forbidden. \nThe request must be conditional but no condition has been specified.\n",
+            "description": "Forbidden.\nThe request must be conditional but no condition has been specified.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "Not Found. \nRequested tier does not exist.\n",
+            "description": "Not Found.\nRequested tier does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "412": {
-            "description": "Precondition Failed. \nThe request has not been performed because one of the preconditions is not met.\n",
+            "description": "Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1743,7 +1823,11 @@
     "/environments": {
       "get": {
         "x-scope": "apim:api_view",
-        "description": "Get a list of gateway environments configured previously.\n",
+        "x-wso2-request": "GET https://127.0.0.1:9443/api/am/publisher/v0.9/environments\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a",
+        "x-wso2-curl": "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" \"https://127.0.0.1:9443/api/am/publisher/v0.9/environments\"",
+        "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"list\": [   {\n      \"showInApiConsole\": true,\n      \"serverUrl\": \"https://192.168.56.1:9444//services/\",\n      \"endpoints\":       {\n         \"http\": \"http://192.168.56.1:8281\",\n         \"https\": \"https://192.168.56.1:8244\"\n      },\n      \"name\": \"Production and Sandbox\",\n      \"type\": \"hybrid\"\n   }],\n   \"count\": 1\n}",
+        "summary": "Get gateway environments",
+        "description": "This operation can be used to retrieve the list of gateway environments available.\n",
         "parameters": [
           {
             "in": "query",
@@ -1753,12 +1837,11 @@
           }
         ],
         "tags": [
-          "Environment Collection",
-          "Retrieve"
+          "Environment (Collection)"
         ],
         "responses": {
           "200": {
-            "description": "OK. \nEnvironment list is returned.\n",
+            "description": "OK.\nEnvironment list is returned.\n",
             "schema": {
               "$ref": "#/definitions/EnvironmentList"
             },
@@ -1768,16 +1851,16 @@
                 "type": "string"
               },
               "ETag": {
-                "description": "Entity Tag of the response resource. \nUsed by caches, or in conditional requests.\n",
+                "description": "Entity Tag of the response resource.\nUsed by caches, or in conditional requests.\n",
                 "type": "string"
               }
             }
           },
           "304": {
-            "description": "Not Modified. \nEmpty body because the client has already the latest version of the requested resource.\n"
+            "description": "Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n"
           },
           "404": {
-            "description": "Not Found. \nRequested API does not exist.\n",
+            "description": "Not Found.\nRequested API does not exist.\n",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1790,28 +1873,28 @@
     "apiId": {
       "name": "apiId",
       "in": "path",
-      "description": "**API ID** consisting of the **UUID** of the API. \nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API ID.\nShould be formatted as **provider-name-version**.\n",
+      "description": "**API ID** consisting of the **UUID** of the API.\nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API ID.\nShould be formatted as **provider-name-version**.\n",
       "required": true,
       "type": "string"
     },
     "apiId-Q": {
       "name": "apiId",
       "in": "query",
-      "description": "**API ID** consisting of the **UUID** of the API. \nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API I.\nShould be formatted as **provider-name-version**.\n",
+      "description": "**API ID** consisting of the **UUID** of the API.\nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API I.\nShould be formatted as **provider-name-version**.\n",
       "required": true,
       "type": "string"
     },
     "documentId": {
       "name": "documentId",
       "in": "path",
-      "description": "**Document Identifier**\n",
+      "description": "Document Identifier\n",
       "required": true,
       "type": "string"
     },
     "applicationId": {
       "name": "applicationId",
       "in": "path",
-      "description": "**Application Identifier** consisting of the UUID of the Application.\n",
+      "description": "Application Identifier consisting of the UUID of the Application.\n",
       "required": true,
       "type": "string"
     },
@@ -1877,7 +1960,7 @@
     "offset": {
       "name": "offset",
       "in": "query",
-      "description": "Starting point within the complete list of items qualified.  \n",
+      "description": "Starting point within the complete list of items qualified.\n",
       "default": 0,
       "type": "integer"
     },
@@ -1905,7 +1988,7 @@
     "If-Modified-Since": {
       "name": "If-Modified-Since",
       "in": "header",
-      "description": "Validator for conditional requests; based on Last Modified header of the \nformerly retrieved variant of the resource.\n",
+      "description": "Validator for conditional requests; based on Last Modified header of the\nformerly retrieved variant of the resource.\n",
       "type": "string"
     },
     "If-Match": {
@@ -1927,15 +2010,18 @@
       "properties": {
         "count": {
           "type": "integer",
-          "description": "Number of APIs returned.\n"
+          "description": "Number of APIs returned.\n",
+          "example": 1
         },
         "next": {
           "type": "string",
-          "description": "Link to the next subset of resources qualified. \nEmpty if no more resources are to be returned.\n"
+          "description": "Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.\n",
+          "example": "/apis?limit=1&offset=2&query="
         },
         "previous": {
           "type": "string",
-          "description": "Link to the previous subset of resources qualified. \nEmpty if current subset is the first subset returned.\n"
+          "description": "Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.\n",
+          "example": "/apis?limit=1&offset=0&query="
         },
         "list": {
           "type": "array",
@@ -1949,26 +2035,33 @@
       "title": "API Info object with basic API details.",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "example": "01234567-0123-0123-0123-012345678901"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "CalculatorAPI"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "example": "A calculator API that supports basic operations"
         },
         "context": {
-          "type": "string"
+          "type": "string",
+          "example": "CalculatorAPI"
         },
         "version": {
-          "type": "string"
+          "type": "string",
+          "example": "1.0.0"
         },
         "provider": {
           "description": "If the provider value is not given, the user invoking the API will be used as the provider.\n",
-          "type": "string"
+          "type": "string",
+          "example": "admin"
         },
         "status": {
-          "type": "string"
+          "type": "string",
+          "example": "CREATED"
         }
       }
     },
@@ -1988,64 +2081,88 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "UUID of the api registry artifact\n"
+          "description": "UUID of the api registry artifact\n",
+          "example": "01234567-0123-0123-0123-012345678901"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "CalculatorAPI"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "example": "A calculator API that supports basic operations"
         },
         "context": {
-          "type": "string"
+          "type": "string",
+          "example": "CalculatorAPI"
         },
         "version": {
-          "type": "string"
+          "type": "string",
+          "example": "1.0.0"
         },
         "provider": {
           "description": "If the provider value is not given user invoking the api will be used as the provider.\n",
-          "type": "string"
+          "type": "string",
+          "example": "admin"
         },
         "apiDefinition": {
           "description": "Swagger definition of the API which contains details about URI templates and scopes\n",
-          "type": "string"
+          "type": "string",
+          "example": "{\"paths\":{\"\\/substract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
         },
         "status": {
-          "type": "string"
+          "type": "string",
+          "example": "CREATED"
         },
         "responseCaching": {
-          "type": "string"
+          "type": "string",
+          "example": "Disabled"
         },
         "cacheTimeout": {
-          "type": "integer"
+          "type": "integer",
+          "example": 300
         },
         "destinationStatsEnabled": {
-          "type": "string"
+          "type": "string",
+          "example": "Disabled"
         },
         "isDefaultVersion": {
-          "type": "boolean"
+          "type": "boolean",
+          "example": false
         },
         "transport": {
           "description": "Supported transports for the API (http and/or https).\n",
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": [
+            "http",
+            "https"
+          ]
         },
         "tags": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": [
+            "substract",
+            "add"
+          ]
         },
         "tiers": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": [
+            "Unlimited"
+          ]
         },
         "thumbnailUrl": {
-          "type": "string"
+          "type": "string",
+          "example": ""
         },
         "visibility": {
           "type": "string",
@@ -2054,32 +2171,38 @@
             "PRIVATE",
             "RESTRICTED",
             "CONTROLLED"
-          ]
+          ],
+          "example": "PUBLIC"
         },
         "visibleRoles": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": []
         },
         "visibleTenants": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": []
         },
         "endpointConfig": {
-          "type": "string"
+          "type": "string",
+          "example": "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/calculator/v1/api\",\"config\":null},\"implementation_status\":\"managed\",\"endpoint_type\":\"http\"}"
         },
         "gatewayEnvironments": {
           "description": "Comma separated list of gateway environments.\n",
-          "type": "string"
+          "type": "string",
+          "example": "Production and Sandbox"
         },
         "sequences": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Sequence"
-          }
+          },
+          "example": []
         },
         "subscriptionAvailability": {
           "type": "string",
@@ -2087,27 +2210,33 @@
             "current_tenant",
             "all_tenants",
             "specific_tenants"
-          ]
+          ],
+          "example": "current_tenant"
         },
         "subscriptionAvailableTenants": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": []
         },
         "businessInformation": {
           "properties": {
             "businessOwner": {
-              "type": "string"
+              "type": "string",
+              "example": "businessowner"
             },
             "businessOwnerEmail": {
-              "type": "string"
+              "type": "string",
+              "example": "businessowner@wso2.com"
             },
             "technicalOwner": {
-              "type": "string"
+              "type": "string",
+              "example": "technicalowner"
             },
             "technicalOwnerEmail": {
-              "type": "string"
+              "type": "string",
+              "example": "technicalowner@wso2.com"
             }
           }
         }
@@ -2121,22 +2250,28 @@
       ],
       "properties": {
         "applicationId": {
-          "type": "string"
+          "type": "string",
+          "example": "01234567-0123-0123-0123-012345678901"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "CalculatorApp"
         },
         "subscriber": {
-          "type": "string"
+          "type": "string",
+          "example": "admin"
         },
         "throttlingTier": {
-          "type": "string"
+          "type": "string",
+          "example": "Unlimited"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "example": "Sample calculator application"
         },
         "groupId": {
-          "type": "string"
+          "type": "string",
+          "example": ""
         }
       }
     },
@@ -2145,15 +2280,18 @@
       "properties": {
         "count": {
           "type": "integer",
-          "description": "Number of Documents returned.\n"
+          "description": "Number of Documents returned.\n",
+          "example": 1
         },
         "next": {
           "type": "string",
-          "description": "Link to the next subset of resources qualified. \nEmpty if no more resources are to be returned.\n"
+          "description": "Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.\n",
+          "example": "/apis/01234567-0123-0123-0123-012345678901/documents?limit=1&offset=2"
         },
         "previous": {
           "type": "string",
-          "description": "Link to the previous subset of resources qualified. \nEmpty if current subset is the first subset returned.\n"
+          "description": "Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.\n",
+          "example": "/apis/01234567-0123-0123-0123-012345678901/documents?limit=1&offset=0"
         },
         "list": {
           "type": "array",
@@ -2173,10 +2311,12 @@
       ],
       "properties": {
         "documentId": {
-          "type": "string"
+          "type": "string",
+          "example": "01234567-0123-0123-0123-012345678901"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "CalculatorDoc"
         },
         "type": {
           "type": "string",
@@ -2188,10 +2328,12 @@
             "API_MESSAGE_FORMAT",
             "SWAGGER_DOC",
             "OTHER"
-          ]
+          ],
+          "example": "HOWTO"
         },
         "summary": {
-          "type": "string"
+          "type": "string",
+          "example": "Summary of Calculator Documentation"
         },
         "sourceType": {
           "type": "string",
@@ -2199,13 +2341,16 @@
             "INLINE",
             "URL",
             "FILE"
-          ]
+          ],
+          "example": "INLINE"
         },
         "sourceUrl": {
-          "type": "string"
+          "type": "string",
+          "example": ""
         },
         "otherTypeName": {
-          "type": "string"
+          "type": "string",
+          "example": ""
         },
         "visibility": {
           "type": "string",
@@ -2213,7 +2358,8 @@
             "OWNER_ONLY",
             "PRIVATE",
             "API_LEVEL"
-          ]
+          ],
+          "example": "API_LEVEL"
         }
       }
     },
@@ -2222,15 +2368,18 @@
       "properties": {
         "count": {
           "type": "integer",
-          "description": "Number of Tiers returned.\n"
+          "description": "Number of Tiers returned.\n",
+          "example": 1
         },
         "next": {
           "type": "string",
-          "description": "Link to the next subset of resources qualified. \nEmpty if no more resources are to be returned.\n"
+          "description": "Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.\n",
+          "example": "/tiers/api?limit=1&offset=2"
         },
         "previous": {
           "type": "string",
-          "description": "Link to the previous subset of resources qualified. \nEmpty if current subset is the first subset returned.\n"
+          "description": "Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.\n",
+          "example": "/tiers/api?limit=1&offset=0"
         },
         "list": {
           "type": "array",
@@ -2251,10 +2400,12 @@
       ],
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "Platinum"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "example": "Allows 50 request(s) per minute."
         },
         "tierLevel": {
           "type": "string",
@@ -2262,23 +2413,27 @@
             "api",
             "application",
             "resource"
-          ]
+          ],
+          "example": "api"
         },
         "attributes": {
           "description": "Custom attributes added to the tier policy\n",
           "type": "object",
           "additionalProperties": {
             "type": "string"
-          }
+          },
+          "example": {}
         },
         "requestCount": {
           "description": "Maximum number of requests which can be sent within a provided unit time\n",
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "example": 50
         },
         "unitTime": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "example": 60000
         },
         "tierPlan": {
           "description": "This attribute declares whether this tier is available under commercial or free\n",
@@ -2286,11 +2441,13 @@
           "enum": [
             "FREE",
             "COMMERCIAL"
-          ]
+          ],
+          "example": "FREE"
         },
         "stopOnQuotaReach": {
-          "description": "By making this attribute to false, you are capabale of sending requests \neven if the request count exceeded within a unit time\n",
-          "type": "boolean"
+          "description": "By making this attribute to false, you are capabale of sending requests\neven if the request count exceeded within a unit time\n",
+          "type": "boolean",
+          "example": true
         }
       }
     },
@@ -2306,13 +2463,17 @@
           "enum": [
             "allow",
             "deny"
-          ]
+          ],
+          "example": "deny"
         },
         "roles": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": [
+            "Internal/everyone"
+          ]
         }
       }
     },
@@ -2321,15 +2482,18 @@
       "properties": {
         "count": {
           "type": "integer",
-          "description": "Number of Subscriptions returned.\n"
+          "description": "Number of Subscriptions returned.\n",
+          "example": 1
         },
         "next": {
           "type": "string",
-          "description": "Link to the next subset of resources qualified. \nEmpty if no more resources are to be returned.\n"
+          "description": "Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.\n",
+          "example": "/subscriptions?limit=1&offset=2&apiId=01234567-0123-0123-0123-012345678901&groupId="
         },
         "previous": {
           "type": "string",
-          "description": "Link to the previous subset of resources qualified. \nEmpty if current subset is the first subset returned.\n"
+          "description": "Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.\n",
+          "example": "/subscriptions?limit=1&offset=0&apiId=01234567-0123-0123-0123-012345678901&groupId="
         },
         "list": {
           "type": "array",
@@ -2348,16 +2512,20 @@
       ],
       "properties": {
         "subscriptionId": {
-          "type": "string"
+          "type": "string",
+          "example": "01234567-0123-0123-0123-012345678901"
         },
         "applicationId": {
-          "type": "string"
+          "type": "string",
+          "example": "01234567-0123-0123-0123-012345678901"
         },
         "apiIdentifier": {
-          "type": "string"
+          "type": "string",
+          "example": "01234567-0123-0123-0123-012345678901"
         },
         "tier": {
-          "type": "string"
+          "type": "string",
+          "example": "Unlimited"
         },
         "status": {
           "type": "string",
@@ -2367,7 +2535,8 @@
             "UNBLOCKED",
             "ON_HOLD",
             "REJECTED"
-          ]
+          ],
+          "example": "UNBLOCKED"
         }
       }
     },
@@ -2378,13 +2547,16 @@
       ],
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "log_in_message"
         },
         "config": {
-          "type": "string"
+          "type": "string",
+          "example": ""
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "example": "in"
         }
       }
     },
@@ -2413,7 +2585,7 @@
         },
         "error": {
           "type": "array",
-          "description": "If there are more than one error list them out. \nFor example, list out validation errors by each field.\n",
+          "description": "If there are more than one error list them out.\nFor example, list out validation errors by each field.\n",
           "items": {
             "$ref": "#/definitions/ErrorListItem"
           }
@@ -2447,16 +2619,20 @@
       ],
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "Production and Sandbox"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "example": "hybrid"
         },
         "serverUrl": {
-          "type": "string"
+          "type": "string",
+          "example": "https://localhost:9443//services/"
         },
         "showInApiConsole": {
-          "type": "boolean"
+          "type": "boolean",
+          "example": true
         },
         "endpoints": {
           "$ref": "#/definitions/EnvironmentEndpoints"
@@ -2468,7 +2644,8 @@
       "properties": {
         "count": {
           "type": "integer",
-          "description": "Number of Environments returned.\n"
+          "description": "Number of Environments returned.\n",
+          "example": 1
         },
         "list": {
           "type": "array",
@@ -2483,11 +2660,13 @@
       "properties": {
         "http": {
           "type": "string",
-          "description": "HTTP environment URL"
+          "description": "HTTP environment URL",
+          "example": "http://localhost:8280"
         },
         "https": {
           "type": "string",
-          "description": "HTTPS environment URL"
+          "description": "HTTPS environment URL",
+          "example": "https://localhost:8244"
         }
       }
     }
