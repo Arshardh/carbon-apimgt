@@ -115,9 +115,11 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
 
         SAMLSSORelyingPartyObject relyingPartyObject = ssoRelyingPartyMap.get((String) args[0]);
         if (relyingPartyObject == null) {
-            relyingPartyObject = new SAMLSSORelyingPartyObject();
-            relyingPartyObject.setSSOProperty(SSOConstants.ISSUER_ID, (String) args[0]);
-            ssoRelyingPartyMap.put((String) args[0], relyingPartyObject);
+            synchronized (SAMLSSORelyingPartyObject.class) {
+                relyingPartyObject = new SAMLSSORelyingPartyObject();
+                relyingPartyObject.setSSOProperty(SSOConstants.ISSUER_ID, (String) args[0]);
+                ssoRelyingPartyMap.put((String) args[0], relyingPartyObject);
+            }
         }
         return relyingPartyObject;
     }
@@ -608,11 +610,17 @@ public class SAMLSSORelyingPartyObject extends ScriptableObject {
         if (argLength != 2 || !(args[0] instanceof String) || !(args[1] instanceof String)) {
             throw new ScriptException("Invalid arguments when setting sso configuration values.");
         }
-        if (log.isDebugEnabled()) {
-            log.debug("SSO key values pair properties that set on relying party object is " + args[0] + " " + args[1]);
-        }
         SAMLSSORelyingPartyObject relyingPartyObject = (SAMLSSORelyingPartyObject) thisObj;
-        relyingPartyObject.setSSOProperty((String) args[0], (String) args[1]);
+        synchronized (SAMLSSORelyingPartyObject.class) {
+            if (StringUtils.isEmpty(relyingPartyObject.getSSOProperty((String) args[0]))) {
+                relyingPartyObject.setSSOProperty((String) args[0], (String) args[1]);
+                if (log.isDebugEnabled()) {
+                    log.debug("Configured SSO relying party object with key : " + args[0] +
+                            " value : " + args[1] + " for issuer : " +
+                            relyingPartyObject.getSSOProperty(SSOConstants.ISSUER_ID));
+                }
+            }
+        }
 
     }
 
