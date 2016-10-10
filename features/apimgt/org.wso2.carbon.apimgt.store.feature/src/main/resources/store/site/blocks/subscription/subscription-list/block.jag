@@ -36,7 +36,13 @@ jagg.block("subscription/subscription-list", {
 		var itemsPerPage = 10; //change this to change the number of items per page.
 		var startIndex = (page-1)*itemsPerPage, endIndex = startIndex + itemsPerPage;
 
-		response = jagg.module("subscription").getAllSubscriptions(user.username, selectedApp, startIndex, endIndex);
+        var subscription = jagg.module("subscription");
+		if(subscription.getAllSubscriptionsOfApplication instanceof Function){
+		    response = subscription.getAllSubscriptionsOfApplication(user.username, selectedApp, startIndex,	endIndex);
+		}
+		else {
+		    response = subscription.getAllSubscriptions(user.username, selectedApp, startIndex, endIndex);
+		}
 
 		applications = response.result.applications;
 		totalLength = response.result.totalLength;
