@@ -37,12 +37,11 @@ jagg.block("subscription/subscription-list", {
 		var startIndex = (page-1)*itemsPerPage, endIndex = startIndex + itemsPerPage;
 
         var subscription = jagg.module("subscription");
-		if(subscription.getAllSubscriptionsOfApplication instanceof Function){
-		    response = subscription.getAllSubscriptionsOfApplication(user.username, selectedApp, startIndex,	endIndex);
-		}
-		else {
-		    response = subscription.getAllSubscriptions(user.username, selectedApp, startIndex, endIndex);
-		}
+        if (subscription.getAllSubscriptionsOfApplication instanceof Function) {
+            response = subscription.getAllSubscriptionsOfApplication(user.username, selectedApp, startIndex, endIndex);
+        } else {
+            response = subscription.getAllSubscriptions(user.username, selectedApp, startIndex, endIndex);
+        }
 
 		applications = response.result.applications;
 		totalLength = response.result.totalLength;
