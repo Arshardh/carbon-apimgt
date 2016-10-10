@@ -2404,8 +2404,22 @@ public class APIStoreHostObject extends ScriptableObject {
 		return prodKeyScope;
 	}
 
-    public static NativeObject jsFunction_getAllSubscriptions(Context cx, Scriptable thisObj, Object[] args, Function funObj)
-            throws ScriptException, APIManagementException, ApplicationNotFoundException {
+    /**
+     * Get Javascript object of all applications and it's subscriptions data
+     *
+     * @param cx {@link Context} object
+     * @param thisObj {@link Scriptable} object
+     * @param args Arguments
+     * @param funObj {@link Function} object
+     * @param isFirstOnly flag
+     * @return {@link NativeObject} object has applications and it's subscription data
+     * @throws ScriptException
+     * @throws APIManagementException
+     * @throws ApplicationNotFoundException
+     */
+    private static NativeObject getAllSubscriptions(Context cx, Scriptable thisObj, Object[] args, Function funObj,
+                                                    boolean isFirstOnly) throws ScriptException, APIManagementException,
+            ApplicationNotFoundException {
 
         if (args == null || args.length == 0 || !isStringArray(args)) {
             return null;
@@ -2464,7 +2478,7 @@ public class APIStoreHostObject extends ScriptableObject {
                     Set<Scope> scopeSet = new LinkedHashSet<Scope>();
                     NativeArray scopesArray = new NativeArray(0);
 
-                    if (((appName == null || appName.isEmpty()) && i == 0) ||
+                    if (((appName == null || appName.isEmpty()) && !(isFirstOnly && i > 0)) ||
                         appName.equals(application.getName())) {
 
                         //get Number of subscriptions for the given application by the subscriber.
@@ -2700,6 +2714,45 @@ public class APIStoreHostObject extends ScriptableObject {
         }
 
         return result;
+    }
+
+    /**
+     * Get javascript object of all applications and it's subscriptions. This method is exposed to the outside and
+     * actual logic implemented in {@link org.wso2.carbon.apimgt.hostobjects.APIStoreHostObject#getAllSubscriptions}
+     *
+     * @param cx {@link Context} object
+     * @param thisObj {@link Scriptable} object
+     * @param args Arguments
+     * @param funObj {@link Function} object
+     * @return {@link NativeObject} object has applications and it's subscription data
+     * @throws ScriptException
+     * @throws APIManagementException
+     * @throws ApplicationNotFoundException
+     */
+    public static NativeObject jsFunction_getAllSubscriptionsOfApplication(Context cx, Scriptable thisObj,
+                                                                           Object[] args, Function funObj)
+            throws ScriptException, APIManagementException, ApplicationNotFoundException {
+        return getAllSubscriptions(cx, thisObj, args, funObj, true);
+    }
+
+    /**
+     * Get javascript object of all applications and it's subscriptions. This method provide backward compatibility
+     * to custom store based on older versions and exposed to the outside and actual logic implemented in
+     * {@link org.wso2.carbon.apimgt.hostobjects.APIStoreHostObject#getAllSubscriptions}
+     *
+     * @param cx {@link Context} object
+     * @param thisObj {@link Scriptable} object
+     * @param args Arguments
+     * @param funObj {@link Function} object
+     * @return {@link NativeObject} object has applications and it's subscription data
+     * @throws ScriptException
+     * @throws APIManagementException
+     * @throws ApplicationNotFoundException
+     */
+    public static NativeObject jsFunction_getAllSubscriptions(Context cx, Scriptable thisObj, Object[] args,
+                                                              Function funObj) throws ScriptException,
+            APIManagementException, ApplicationNotFoundException {
+        return getAllSubscriptions(cx, thisObj, args, funObj, false);
     }
 
     private static void addAPIObj(SubscribedAPI subscribedAPI, NativeArray apisArray,
