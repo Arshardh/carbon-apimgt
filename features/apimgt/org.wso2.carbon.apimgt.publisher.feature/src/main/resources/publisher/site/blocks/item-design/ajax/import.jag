@@ -1,30 +1,47 @@
 <%
 include("/jagg/jagg.jag");
+(function () {
+    if (jagg.getUser() == null) {
+        print({
+            error: true,
+            message: 'timeout'
+        });
+        return;
+    }
 
-if(jagg.getUser() == null){
-    print({
-        error:true,
-        message:'timeout'
-    });
-}
-
-response.contentType = "application/json; charset=UTF-8";
+    response.contentType = "application/json; charset=UTF-8";
 
 //handle startup page imports
-var action = request.getParameter("action");
-if(action == "session"){
-	var swagger = session.get("swagger");
-	session.put("swagger",null);
-	print(swagger);	
-}else{
-	var url = request.getParameter("swagger_url");
-	url = url.trim();
-	//@todo need to validate returned swagger v2
-	var data = { };
-	var content = get(url, data ,"json");
-	var swaggerJson = content.data;
-	print(swaggerJson);
-	//@todo Error reporting
-
-}
+    var action = request.getParameter("action");
+    if (action == "session") {
+        var swagger = session.get("swagger");
+        session.put("swagger", null);
+        print(swagger);
+    } else {
+        var url = request.getParameter("swagger_url");
+        url = url.trim();
+        //@todo need to validate returned swagger v2
+        var data = {};
+        try {
+            var content = get(url, data, "json");
+        } catch (e) {
+            print({
+                error: true,
+                message: 'Invalid swagger definition url'
+            });
+            return;
+        }
+        var swaggerJson = content.data;
+        //Validating swagger definition keys
+        if (swaggerJson.swagger == null || swaggerJson.info == null ||
+                swaggerJson.paths == null || swaggerJson.info.version == null) {
+            print({
+                error: true,
+                message: 'Invalid swagger definition'
+            });
+            return;
+        }
+        print(swaggerJson);
+    }
+}());
 %>
