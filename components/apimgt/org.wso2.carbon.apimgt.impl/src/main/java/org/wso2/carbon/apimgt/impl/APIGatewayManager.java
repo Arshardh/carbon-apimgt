@@ -263,7 +263,7 @@ public class APIGatewayManager {
                             setSecureVaultProperty(api, tenantDomain, environment, operation);
                         }
                     } else {
-                        String fileName = api.getContext().substring(1).replace('/', '-');
+                        String fileName = api.getContext().replace('/', '-');
                         String[] fileNames = new String[2];
                         fileNames[0] = ENDPOINT_PRODUCTION + fileName;
                         fileNames[1] = ENDPOINT_SANDBOX + fileName;
@@ -312,11 +312,11 @@ public class APIGatewayManager {
             String production_endpoint = null;
             String sandbox_endpoint = null;
             JSONObject obj = new JSONObject(api.getEndpointConfig());
-            if (obj.has("production_endpoints")) {
-                production_endpoint = obj.getJSONObject("production_endpoints").getString("url");
+            if (obj.has(APIConstants.API_DATA_PRODUCTION_ENDPOINTS)) {
+                production_endpoint = obj.getJSONObject(APIConstants.API_DATA_PRODUCTION_ENDPOINTS).getString("url");
             }
-            if (obj.has("sandbox_endpoints")) {
-                sandbox_endpoint = obj.getJSONObject("sandbox_endpoints").getString("url");
+            if (obj.has(APIConstants.API_DATA_SANDBOX_ENDPOINTS)) {
+                sandbox_endpoint = obj.getJSONObject(APIConstants.API_DATA_SANDBOX_ENDPOINTS).getString("url");
             }
             OMElement element;
             String context;

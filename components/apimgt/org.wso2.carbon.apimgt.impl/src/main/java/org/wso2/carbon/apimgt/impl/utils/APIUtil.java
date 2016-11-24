@@ -6249,7 +6249,7 @@ public final class APIUtil {
 
     public static boolean isQueryParamDataPublishingEnabled() {
         return ServiceReferenceHolder.getInstance().getAPIManagerConfigurationService().getAPIManagerConfiguration().
-                                                            getThrottleProperties().isEnableQueryParamConditions();
+                getThrottleProperties().isEnableQueryParamConditions();
     }
 
     public static boolean isHeaderDataPublishingEnabled() {
@@ -6275,5 +6275,24 @@ public final class APIUtil {
     public static String getAnalyticsServerPassword() {
         return ServiceReferenceHolder.getInstance().getAPIManagerConfigurationService().getAPIAnalyticsConfiguration().
                 getDasReceiverServerPassword();
+    }
+
+    /**
+     * Create the Cache object from the given parameters
+     * @param cacheManagerName - Name of the Cache Manager
+     * @param cacheName - Name of the Cache
+     * @param modifiedExp - Value of the MODIFIED Expiry Type
+     * @param accessExp - Value of the ACCESSED Expiry Type
+     * @return - The cache object
+     */
+    public static Cache getCache(final String cacheManagerName, final String cacheName, final long modifiedExp,
+                          final long accessExp){
+
+        return Caching.getCacheManager(
+                cacheManagerName).createCacheBuilder(cacheName).
+                setExpiry(CacheConfiguration.ExpiryType.MODIFIED, new CacheConfiguration.Duration(TimeUnit.SECONDS,
+                        modifiedExp)).
+                setExpiry(CacheConfiguration.ExpiryType.ACCESSED, new CacheConfiguration.Duration(TimeUnit.SECONDS,
+                        accessExp)).setStoreByValue(false).build();
     }
 }
