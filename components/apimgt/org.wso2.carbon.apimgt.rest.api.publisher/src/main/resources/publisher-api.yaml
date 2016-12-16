@@ -1489,7 +1489,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Tier'
-        - $ref: '#/parameters/tierLevel'
+        - $ref: '#/parameters/tierLevel-Q'
         - $ref: '#/parameters/Content-Type'
       tags:
         - Throttling Tier (Collection)
@@ -1609,7 +1609,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Tier'
-        - $ref: '#/parameters/tierLevel'
+        - $ref: '#/parameters/tierLevel-Q'
         - $ref: '#/parameters/Content-Type'
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
@@ -1674,7 +1674,7 @@ paths:
         `DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low`
       parameters:
         - $ref: '#/parameters/tierName'
-        - $ref: '#/parameters/tierLevel'
+        - $ref: '#/parameters/tierLevel-Q'
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
@@ -1935,8 +1935,6 @@ parameters:
     type: string
     enum:
       - api
-      - application
-      - resource
     required: true
 
 # Used for pagination:
