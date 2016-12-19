@@ -1538,9 +1538,13 @@ paths:
       x-wso2-request: "GET https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Bronze\nAuthorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a"
       x-wso2-curl: "curl -k -H \"Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a\" https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Bronze"
       x-wso2-response: "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"unitTime\": 60000,\n   \"tierPlan\": \"FREE\",\n   \"tierLevel\": \"api\",\n   \"stopOnQuotaReach\": true,\n   \"requestCount\": 1,\n   \"description\": \"Allows 1 request(s) per minute.\",\n   \"name\": \"Bronze\",\n   \"attributes\": {}\n}"
+      
+
       summary: Get a Tier
-      description: |
-        Get tier details
+      description: >
+        Get tier details.  
+        Note that the scope of the API is mandatory while retreiving the access token with the following cURL command : `curl -k -d \"grant_type=password&username=username&password=password&scope=apim:tier_view\" -H \"Authorization: Basic <token>\" https://127.0.0.1:8243/token`.
+        You will receive the access token as the response, for example `"access_token":"8644c013-7ff1-3217-b150-d7b92cae6be7"`.
       parameters:
         - $ref: '#/parameters/tierName'
         - $ref: '#/parameters/tierLevel'
