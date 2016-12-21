@@ -1489,7 +1489,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Tier'
-        - $ref: '#/parameters/tierLevel-Q'
+        - $ref: '#/parameters/tierLevel-A'
         - $ref: '#/parameters/Content-Type'
       tags:
         - Throttling Tier (Collection)
@@ -1616,7 +1616,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Tier'
-        - $ref: '#/parameters/tierLevel-Q'
+        - $ref: '#/parameters/tierLevel-A'
         - $ref: '#/parameters/Content-Type'
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
@@ -1681,7 +1681,7 @@ paths:
         `DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low`
       parameters:
         - $ref: '#/parameters/tierName'
-        - $ref: '#/parameters/tierLevel-Q'
+        - $ref: '#/parameters/tierLevel-A'
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
       tags:
@@ -1722,7 +1722,7 @@ paths:
         This operation can be used to update tier permissions which controls access for the particular tier based on the subscribers' roles.
       parameters:
         - $ref: '#/parameters/tierName-Q'
-        - $ref: '#/parameters/tierLevel-Q'
+        - $ref: '#/parameters/tierLevel-A'
         - $ref: '#/parameters/If-Match'
         - $ref: '#/parameters/If-Unmodified-Since'
         - in: body
@@ -1933,6 +1933,18 @@ parameters:
     required: true
 
 # Tier Type
+# Specified as part of the path expression
+  tierLevel-A:
+    name: tierLevel
+    in: path
+    description: |
+      List API or Application or Resource type tiers.
+    type: string
+    enum:
+      - api
+    required: true
+
+# Tier Type
 # Specified as part of the query string
   tierLevel-Q:
     name: tierLevel
@@ -1942,6 +1954,8 @@ parameters:
     type: string
     enum:
       - api
+      - application
+      - resource
     required: true
 
 # Used for pagination:
@@ -2131,7 +2145,7 @@ definitions:
         description: |
           Swagger definition of the API which contains details about URI templates and scopes
         type: string
-        example: "{\"paths\":{\"\\/substract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
+        example: "{\"paths\":{\"\\/subtract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
       status:
         type: string
         description: This describes in which status of the lifecycle the API is.
@@ -2160,7 +2174,7 @@ definitions:
         description: Search keywords related to the API 
         items:
           type: string
-        example: ["substract","add"]
+        example: ["subtract","add"]
       tiers:
         type: array
         description: The subscription tiers selected for the particular API
