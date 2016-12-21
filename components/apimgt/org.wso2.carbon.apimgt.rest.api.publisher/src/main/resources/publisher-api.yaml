@@ -1543,8 +1543,11 @@ paths:
       summary: Get a Tier
       description: >
         Get tier details.  
-        Note that the scope of the API is mandatory while retreiving the access token with the following cURL command : `curl -k -d \"grant_type=password&username=username&password=password&scope=apim:tier_view\" -H \"Authorization: Basic <token>\" https://127.0.0.1:8243/token`.
-        You will receive the access token as the response, for example `"access_token":"8644c013-7ff1-3217-b150-d7b92cae6be7"`.
+        
+        
+        **NOTE**
+        * The scope of the API is mandatory while retreiving the access token with the following cURL command : `curl -k -d \"grant_type=password&username=username&password=password&scope=apim:tier_view\" -H \"Authorization: Basic <token>\" https://127.0.0.1:8243/token`.
+        * You will receive the access token as the response, for example `"access_token":"8644c013-7ff1-3217-b150-d7b92cae6be7"`.
       parameters:
         - $ref: '#/parameters/tierName'
         - $ref: '#/parameters/tierLevel'
@@ -2113,9 +2116,11 @@ definitions:
         example: A calculator API that supports basic operations
       context:
         type: string
+        description: A string that represents the context of the user's request
         example: CalculatorAPI
       version:
         type: string
+        description: The version of the API
         example: 1.0.0
       provider:
         description: |
@@ -2129,6 +2134,7 @@ definitions:
         example: "{\"paths\":{\"\\/substract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
       status:
         type: string
+        description: This describes in which status of the lifecycle the API is.
         example: CREATED
       responseCaching:
         type: string
@@ -2151,11 +2157,13 @@ definitions:
         example: ["http","https"]
       tags:
         type: array
+        description: Search keywords related to the API 
         items:
           type: string
         example: ["substract","add"]
       tiers:
         type: array
+        description: The subscription tiers selected for the particular API
         items:
           type: string
         example: ["Unlimited"]
@@ -2172,6 +2180,7 @@ definitions:
         example: PUBLIC
       visibleRoles:
         type: array
+        description: The user roles that are able to access the API
         items:
           type: string
         example: []
