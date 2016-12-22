@@ -12,6 +12,8 @@ Each retrieved API is represented with a minimal amount of attributes. If you wa
 
 This operation supports retriving APIs of other tenants. The required tenant domain need to be specified as a header &#x60;X-WSO2-Tenant&#x60;. If not specified, the user&#39;s tenant associated with the access token will be used.
 
+The optional parameters &#x60;limit&#x60; and &#x60;query&#x60; can be used with the curl command. You have to use both parameters to successfully receive a response. For example, &#x60;curl -k -H &quot;Authorization: Bearer 1773d445d46d4a7312ca7d48d3c58d16&quot; &quot;https://127.0.0.1:9443/api/am/store/v0.9/apis?limit&#x3D;2&amp;query&#x3D;*&quot;&#x60;
+
 **NOTE:**
 * By default, this operation retrieves Published APIs. In order to retrieve Prototyped APIs, you need to use **query** parameter and specify **status:PROTOTYPED**.
 </p>

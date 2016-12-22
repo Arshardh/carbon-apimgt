@@ -79,7 +79,9 @@ paths:
         Each retrieved API is represented with a minimal amount of attributes. If you want to get complete details of an API, you need to use **Get details of API** operation.
         
         This operation supports retriving APIs of other tenants. The required tenant domain need to be specified as a header `X-WSO2-Tenant`. If not specified, the user's tenant associated with the access token will be used.
-
+        
+        The optional parameters `limit` and `query` can be used with the curl command. You have to use both parameters to successfully receive a response. For example, `curl -k -H "Authorization: Bearer 1773d445d46d4a7312ca7d48d3c58d16" "https://127.0.0.1:9443/api/am/store/v0.9/apis?limit=2&query=*"`
+        
         **NOTE:**
         * By default, this operation retrieves Published APIs. In order to retrieve Prototyped APIs, you need to use **query** parameter and specify **status:PROTOTYPED**.
       parameters:
@@ -1504,15 +1506,19 @@ definitions:
         example: 01234567-0123-0123-0123-012345678901
       name:
         type: string
+        description: Name of the API
         example: CalculatorAPI
       description:
         type: string
+        description: A brief description about the API
         example: A calculator API that supports basic operations
       context:
         type: string
+        description: A string that represents the context of the API request
         example: CalculatorAPI
       version:
         type: string
+        description: The version of the API
         example: 1.0.0
       provider:
         description: |
@@ -1523,9 +1529,10 @@ definitions:
         description: |
           Swagger definition of the API which contains details about URI templates and scopes
         type: string
-        example: "{\"paths\":{\"\\/substract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
+        example: "{\"paths\":{\"\\/subtract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
       status:
         type: string
+        description: This describes in which status of the lifecycle the API is.
         example: PUBLISHED
       isDefaultVersion:
         type: boolean
@@ -1539,11 +1546,13 @@ definitions:
         example: ["http","https"]
       tags:
         type: array
+        description: Search keywords related to the API
         items:
           type: string
-        example: ["substract","add"]
+        example: ["subtract","add"]
       tiers:
         type: array
+        description: The subscription tiers selected for the particular API
         items:
           type: string
         example: ["Unlimited"]

@@ -101,10 +101,6 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
 
 <code>api</code>
 
-<code>application</code>
-
-<code>resource</code>
-
                         </td>
                         <td>
                             <span class="param-type">
@@ -222,7 +218,9 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
             <h3 class="operation-heading"><a name="tiersTierLevelTierNameGet"></a>Get a Tier <br><small>GET https://apis.wso2.com/api/am/publisher/v0.9/tiers/{tierLevel}/{tierName}</small></h3>
             <p class="marked"></p>
 
-            <p class="marked">Get tier details
+            <p class="marked">Get tier details.  
+
+**NOTE** * The scope of the API is mandatory while retreiving the access token with the following cURL command : &#x60;curl -k -d \&quot;grant_type&#x3D;password&amp;username&#x3D;username&amp;password&#x3D;password&amp;scope&#x3D;apim:tier_view\&quot; -H \&quot;Authorization: Basic &lt;token&gt;\&quot; https://127.0.0.1:8243/token&#x60;. * You will receive the access token as the response, for example &#x60;&quot;access_token&quot;:&quot;8644c013-7ff1-3217-b150-d7b92cae6be7&quot;&#x60;.
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
@@ -647,10 +645,6 @@ Content-Type: application/json
 
 <code>api</code>
 
-<code>application</code>
-
-<code>resource</code>
-
                         </td>
                         <td>
                             <span class="param-type">
@@ -887,8 +881,8 @@ Content-Type: application/json
                     <tr>
                         <td class="parameter">
                             
-                            <span class="param-in">Query </span>
                             
+                            <span class="param-in">Path </span>
                             
                             
                         </td>
@@ -905,10 +899,6 @@ Content-Type: application/json
                                 <p><b>Accepted values: </b></p>
 
 <code>api</code>
-
-<code>application</code>
-
-<code>resource</code>
 
                         </td>
                         <td>
