@@ -1546,7 +1546,9 @@ paths:
         
         
         **NOTE**
+        
         * The scope of the API is mandatory while retreiving the access token with the following cURL command : `curl -k -d \"grant_type=password&username=username&password=password&scope=apim:tier_view\" -H \"Authorization: Basic <token>\" https://127.0.0.1:8243/token`.
+        
         * You will receive the access token as the response, for example `"access_token":"8644c013-7ff1-3217-b150-d7b92cae6be7"`.
       parameters:
         - $ref: '#/parameters/tierName'
