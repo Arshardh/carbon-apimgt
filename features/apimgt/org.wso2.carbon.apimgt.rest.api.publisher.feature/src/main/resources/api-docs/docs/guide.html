@@ -118,4 +118,9 @@
         to find the required API, obtain an access token as described above and invoke the API with the
         authentication header. If you use a different authentication mechanism, this process may change.
     </p>
+
+    <p>
+         <b>Scopes:</b> When you request an access token, you have to specify the correct scope (e.g. <code>apim:api_view</code>, <code>apim:api_create</code> etc.).
+         If the access token you have requested for a particular API operation does not belong to the corresponding the scope, the API operation will fail.
+    </p>
 </div>
