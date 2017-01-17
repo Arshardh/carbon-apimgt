@@ -124,8 +124,8 @@ paths:
             Supported attribute modifiers are [**version, context, status,
             description, subcontext, doc, provider**]
 
-            If no advanced attribute modifier has been specified, the search 
-            will return all  APIs that contain the entered string
+            If no advanced attribute modifier has been specified, the API names containing 
+            the search term will be returned as a result.
             
           type: string
         - $ref : "#/parameters/Accept"

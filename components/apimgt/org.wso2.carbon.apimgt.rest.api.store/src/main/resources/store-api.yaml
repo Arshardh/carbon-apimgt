@@ -2008,11 +2008,11 @@ definitions:
     properties:
       consumerKey:
         type: string
-        description: The API key associated with the application and identifying the client
+        description: The consumer key associated with the application and identifying the client
         example: vYDoc9s7IgAFdkSyNDaswBX7ejoa
       consumerSecret:
         type: string
-        description: The client password that is used to authenticate the client with the authentication server
+        description: The client secret that is used to authenticate the client with the authentication server
         example: TIDlOFkpzB7WjufO3OJUhy1fsvAa
       supportedGrantTypes:
         type: array
