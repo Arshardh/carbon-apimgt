@@ -2008,24 +2008,24 @@ definitions:
     properties:
       consumerKey:
         type: string
-        description: Consumer key of the application
+        description: The consumer key associated with the application and identifying the client
         example: vYDoc9s7IgAFdkSyNDaswBX7ejoa
       consumerSecret:
         type: string
-        description: Consumer secret of the application
+        description: The client secret that is used to authenticate the client with the authentication server
         example: TIDlOFkpzB7WjufO3OJUhy1fsvAa
       supportedGrantTypes:
         type: array
         items:
           type: string
-        description: Supported grant types for the application
+        description: The grant types that are supported by the application
         example: ["client_credentials","password"]
       keyState:
         type: string
-        description: State of the key generation of the application
+        description: Describes the state of the key generation.
         example: APPROVED
       keyType:
-        description: Key type
+        description: Describes to which endpoint the key belongs
         type: string
         enum:
           - PRODUCTION
