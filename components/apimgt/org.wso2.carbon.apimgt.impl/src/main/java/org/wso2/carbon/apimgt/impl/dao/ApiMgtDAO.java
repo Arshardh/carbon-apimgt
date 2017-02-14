@@ -2435,7 +2435,7 @@ public class ApiMgtDAO {
             accessTokenStoreTable = APIUtil.getAccessTokenStoreTableFromAccessToken(accessToken);
         }
 
-        String getTokenSql = "SELECT IAT.ACCESS_TOKEN,IAT.AUTHZ_USER, IAT.DOMAIN_NAME, ISAT.TOKEN_SCOPE,ICA.CONSUMER_KEY," +
+        String getTokenSql = "SELECT IAT.ACCESS_TOKEN,IAT.AUTHZ_USER, IAT.USER_DOMAIN, ISAT.TOKEN_SCOPE,ICA.CONSUMER_KEY," +
                             "IAT.TIME_CREATED,IAT.VALIDITY_PERIOD " +
                             "FROM " + accessTokenStoreTable  + " IAT, "+
                             tokenScopeAssociationTable + " ISAT, " +
