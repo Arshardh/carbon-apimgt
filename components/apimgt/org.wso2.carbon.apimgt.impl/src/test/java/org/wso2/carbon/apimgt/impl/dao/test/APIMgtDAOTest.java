@@ -31,6 +31,7 @@ import org.wso2.carbon.apimgt.impl.utils.APIMgtDBUtil;
 import org.wso2.carbon.base.MultitenantConstants;
 import org.wso2.carbon.identity.core.util.IdentityConfigParser;
 import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
+import org.wso2.carbon.apimgt.api.model.APIKey;
 
 import java.util.Date;
 import java.util.List;
@@ -77,6 +78,12 @@ public class APIMgtDAOTest extends TestCase {
 		APIInfoDTO[] apis = apiMgtDAO.getSubscribedAPIsOfUser("SUMEDHA");
 		assertNotNull(apis);
 		assertTrue(apis.length > 1);
+	}
+
+	public void testGetAccessTokenData() throws Exception {
+		APIKey apiKey = apiMgtDAO.getAccessTokenData("a1b2c3d4");
+		assertNotNull(apiKey);
+		assertTrue(apiKey.getAuthUser().equals("UDAYANGA"));
 	}
 
     //Commented out due to identity version update and cannot use apiMgtDAO.validateKey to validate anymore
