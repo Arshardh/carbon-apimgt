@@ -23,7 +23,6 @@ urlPrefix = jagg.getTenantURLPrefix("&");
 
    //logged in mode
    if(tenant!=null && user) {
-
     var userDomain = MultitenantUtils.getTenantDomain(user.username);
 
     //check whether logged in domain and store domain is same
