@@ -307,7 +307,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.DAY + "," + APIUsageStatisticsClientConstants.TIME +
                             ",SUM(" + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") " +
                             "AS net_total_requests FROM " + tableName +
-                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? )" +
+                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?)" +
                             " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.API_VERSION + "," +
                             APIUsageStatisticsClientConstants.VERSION + "," + APIUsageStatisticsClientConstants.API_PUBLISHER + "," +
@@ -324,7 +324,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             + APIUsageStatisticsClientConstants.USER_ID + ",SUM("
                             + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS net_total_requests" +
                             " FROM " + tableName +
-                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? )" +
+                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?)" +
                             " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + ','
                             + APIUsageStatisticsClientConstants.USER_ID
@@ -398,7 +398,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                         "consumerKey, api,SUM(" + APIUsageStatisticsClientConstants.TOTAL_FAULT_COUNT
                         + ") AS total_faults " +
                         " FROM " + tableName +
-                        " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? ) " +
+                        " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
                         " AND time BETWEEN ? AND ? " +
                         " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + ","
                         + APIUsageStatisticsClientConstants.API;
@@ -501,7 +501,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.HOST_NAME + "," + APIUsageStatisticsClientConstants.YEAR + "," +
                             APIUsageStatisticsClientConstants.MONTH + "," + APIUsageStatisticsClientConstants.DAY + "," +
                             APIUsageStatisticsClientConstants.TIME + " FROM " + tableName + " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? ) " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
                             " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.VERSION + "," +
                             APIUsageStatisticsClientConstants.API_PUBLISHER + "," + APIUsageStatisticsClientConstants.CONSUMERKEY + "," +
@@ -518,7 +518,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.RESOURCE +
                             " FROM " + tableName +
                             " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? ) " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
                             " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + "," +
                             APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.METHOD + ","
@@ -1963,7 +1963,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        PreparedStatement statement = null;
+        PreparedStatement preparedStatement = null;
         ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
@@ -2018,12 +2018,12 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                 query = mssqlQuery;
             }
 
-            statement = connection.prepareStatement(query);
-            if (fromDate != null && toDate != null) {
-                statement.setString(1, fromDate);
-                statement.setString(2, toDate);
+            preparedStatement = connection.prepareStatement(query);
+            if (query.contains("?")) {
+                preparedStatement.setString(1, fromDate);
+                preparedStatement.setString(2, toDate);
              }
-            rs = statement.executeQuery();
+            rs = preparedStatement.executeQuery();
 
             List<APIUsageByUserName> usageByName = new ArrayList<APIUsageByUserName>();
             String apiName;
@@ -2051,7 +2051,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         } catch (Exception e) {
             throw new APIMgtUsageQueryServiceClientException("Error occurred while querying from JDBC database", e);
         } finally {
-            closeDatabaseLinks(rs, statement, connection);
+            closeDatabaseLinks(rs, preparedStatement, connection);
         }
     }
 
