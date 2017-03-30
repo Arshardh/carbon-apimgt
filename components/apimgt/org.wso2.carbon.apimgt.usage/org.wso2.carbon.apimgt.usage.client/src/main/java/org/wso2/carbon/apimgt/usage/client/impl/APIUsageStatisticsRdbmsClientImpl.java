@@ -285,13 +285,12 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
             int limit) throws APIMgtUsageQueryServiceClientException {
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<AppUsageDTO> topAppUsageDataList = new ArrayList<AppUsageDTO>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             //check whether table exist first
@@ -308,8 +307,8 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.DAY + "," + APIUsageStatisticsClientConstants.TIME +
                             ",SUM(" + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") " +
                             "AS net_total_requests FROM " + tableName +
-                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ")" +
-                            " AND time BETWEEN " + "'" + fromDate + "' AND \'" + toDate + "' " +
+                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?)" +
+                            " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.API_VERSION + "," +
                             APIUsageStatisticsClientConstants.VERSION + "," + APIUsageStatisticsClientConstants.API_PUBLISHER + "," +
                             APIUsageStatisticsClientConstants.CONSUMERKEY + "," + APIUsageStatisticsClientConstants.USER_ID + "," +
@@ -325,14 +324,19 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             + APIUsageStatisticsClientConstants.USER_ID + ",SUM("
                             + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS net_total_requests" +
                             " FROM " + tableName +
-                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ")" +
-                            " AND time BETWEEN " + "'" + fromDate + "' AND \'" + toDate + "' " +
+                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?)" +
+                            " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + ','
                             + APIUsageStatisticsClientConstants.USER_ID
                             + " ORDER BY net_total_requests DESC";
                 }
 
-                resultSet = statement.executeQuery(query);
+                statement = connection.prepareStatement(query);
+                statement.setString(1, keyString);
+                statement.setString(2, fromDate);
+                statement.setString(3, toDate);
+                resultSet = statement.executeQuery();
+
                 AppUsageDTO appUsageDTO;
                 while (resultSet.next()) {
                     String userId = resultSet.getString(APIUsageStatisticsClientConstants.USER_ID);
@@ -379,13 +383,12 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
             int limit) throws APIMgtUsageQueryServiceClientException {
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<FaultCountDTO> falseAppUsageDataList = new ArrayList<FaultCountDTO>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             //check whether table exist first
@@ -395,12 +398,17 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                         "consumerKey, api,SUM(" + APIUsageStatisticsClientConstants.TOTAL_FAULT_COUNT
                         + ") AS total_faults " +
                         " FROM " + tableName +
-                        " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
-                        " AND time BETWEEN " + "'" + fromDate + "' AND \'" + toDate + "' " +
+                        " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
+                        " AND time BETWEEN ? AND ? " +
                         " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + ","
                         + APIUsageStatisticsClientConstants.API;
 
-                resultSet = statement.executeQuery(query);
+                statement = connection.prepareStatement(query);
+                statement.setString(1, keyString);
+                statement.setString(2, fromDate);
+                statement.setString(3, toDate);
+                resultSet = statement.executeQuery();
+
                 FaultCountDTO faultCountDTO;
                 while (resultSet.next()) {
                     String apiName = resultSet.getString(APIUsageStatisticsClientConstants.API);
@@ -472,13 +480,12 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
             String toDate, int limit) throws APIMgtUsageQueryServiceClientException {
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<AppCallTypeDTO> appApiCallTypeList = new ArrayList<AppCallTypeDTO>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             //check whether table exist first
@@ -494,8 +501,8 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.HOST_NAME + "," + APIUsageStatisticsClientConstants.YEAR + "," +
                             APIUsageStatisticsClientConstants.MONTH + "," + APIUsageStatisticsClientConstants.DAY + "," +
                             APIUsageStatisticsClientConstants.TIME + " FROM " + tableName + " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
-                            " AND time BETWEEN " + "'" + fromDate + "' AND '" + toDate + "' " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
+                            " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.VERSION + "," +
                             APIUsageStatisticsClientConstants.API_PUBLISHER + "," + APIUsageStatisticsClientConstants.CONSUMERKEY + "," +
                             APIUsageStatisticsClientConstants.RESOURCE + "," + APIUsageStatisticsClientConstants.CONTEXT + "," +
@@ -511,14 +518,19 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.RESOURCE +
                             " FROM " + tableName +
                             " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
-                            " AND time BETWEEN " + "'" + fromDate + "' AND '" + toDate + "' " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
+                            " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + "," +
                             APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.METHOD + ","
                             + APIUsageStatisticsClientConstants.RESOURCE;
                 }
 
-                resultSet = statement.executeQuery(query);
+                statement = connection.prepareStatement(query);
+                statement.setString(1, keyString);
+                statement.setString(2, fromDate);
+                statement.setString(3, toDate);
+                resultSet = statement.executeQuery();
+
                 AppCallTypeDTO appCallTypeDTO;
                 while (resultSet.next()) {
                     String apiName = resultSet.getString(APIUsageStatisticsClientConstants.API);
@@ -592,13 +604,12 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
             String toDate, int limit) throws APIMgtUsageQueryServiceClientException {
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<PerAppApiCountDTO> perAppUsageDataList = new ArrayList<PerAppApiCountDTO>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             //check whether table exist first
@@ -616,8 +627,8 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.DAY + "," + APIUsageStatisticsClientConstants.TIME + ",SUM(" +
                             APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS total_calls " +
                             " FROM " + APIUsageStatisticsClientConstants.API_REQUEST_SUMMARY + " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
-                            " AND time BETWEEN " + "'" + fromDate + "' AND '" + toDate + "' " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? ) " +
+                            " AND time BETWEEN ? AND ? " +
                             " GROUP BY " +
                             APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.API_VERSION + "," +
                             APIUsageStatisticsClientConstants.VERSION + "," + APIUsageStatisticsClientConstants.API_PUBLISHER + "," +
@@ -634,13 +645,18 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             " SUM(" + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS total_calls " +
                             " FROM " + APIUsageStatisticsClientConstants.API_REQUEST_SUMMARY +
                             " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
-                            " AND time BETWEEN " + "'" + fromDate + "' AND '" + toDate + "' " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? ) " +
+                            " AND time BETWEEN ? AND ? " +
                             " GROUP BY " +
                             APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.CONSUMERKEY;
                 }
 
-                resultSet = statement.executeQuery(query);
+                statement = connection.prepareStatement(query);
+                statement.setString(1, keyString);
+                statement.setString(2, fromDate);
+                statement.setString(3, toDate);
+                resultSet = statement.executeQuery();
+
                 PerAppApiCountDTO apiUsageDTO;
 
                 while (resultSet.next()) {
@@ -738,13 +754,12 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
             throws APIMgtUsageQueryServiceClientException {
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         Collection<APIUsage> usageDataList = new ArrayList<APIUsage>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             //check whether table exist first
@@ -758,6 +773,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             "SUM(" + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS aggregateSum " +
                             " FROM " + tableName + " GROUP BY " + APIUsageStatisticsClientConstants.API + "," +
                             APIUsageStatisticsClientConstants.CONTEXT + "," + APIUsageStatisticsClientConstants.VERSION;
+                    statement = connection.prepareStatement(query);
                 } else {
                     query = "SELECT " +
                             APIUsageStatisticsClientConstants.API + "," +
@@ -766,13 +782,17 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             "SUM(" + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS aggregateSum " +
                             " FROM " + tableName +
                             " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
-                            "\'" + fromDate + "\' AND \'" + toDate + "\'" +
+                            " ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.API + "," +
                             APIUsageStatisticsClientConstants.CONTEXT + "," + APIUsageStatisticsClientConstants.VERSION;
+                            statement = connection.prepareStatement(query);
+                            statement.setString(1, fromDate);
+                            statement.setString(2, toDate);
+
                 }
 
 
-                resultSet = statement.executeQuery(query);
+                resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
                     String apiName = resultSet.getString(APIUsageStatisticsClientConstants.API);
@@ -1052,13 +1072,12 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
             throws APIMgtUsageQueryServiceClientException {
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         Collection<APIResponseTime> responseTimeData = new ArrayList<APIResponseTime>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             if (connection != null && connection.getMetaData().getDatabaseProductName().contains("DB2")) {
@@ -1092,7 +1111,8 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
 
             }
 
-            resultSet = statement.executeQuery(query);
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 String apiName = resultSet.getString(APIUsageStatisticsClientConstants.API_VERSION).split(":v")[0];
@@ -1168,14 +1188,13 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
             throws APIMgtUsageQueryServiceClientException {
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         Collection<APIAccessTime> lastAccessTimeData = new ArrayList<APIAccessTime>();
 
         String tenantDomain = MultitenantUtils.getTenantDomain(providerName);
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
 
             StringBuilder lastAccessQuery = new StringBuilder(
                     "SELECT " + APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.VERSION
@@ -1184,19 +1203,24 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             + APIUsageStatisticsClientConstants.REQUEST_TIME + " FROM "
                             + APIUsageStatisticsClientConstants.API_LAST_ACCESS_TIME_SUMMARY);
 
-            lastAccessQuery.append(" where tenantDomain= \'" + tenantDomain + "\'");
+            lastAccessQuery.append(" where tenantDomain= ?");
 
             if (!providerName.startsWith(APIUsageStatisticsClientConstants.ALL_PROVIDERS)) {
                 lastAccessQuery
-                        .append(" AND (" + APIUsageStatisticsClientConstants.API_PUBLISHER_THROTTLE_TABLE + "= \'"
-                                + providerName + "\' OR "
-                                + APIUsageStatisticsClientConstants.API_PUBLISHER_THROTTLE_TABLE + "= \'" + APIUtil
-                                .getUserNameWithTenantSuffix(providerName) + "\')");
+                        .append(" AND (" + APIUsageStatisticsClientConstants.API_PUBLISHER_THROTTLE_TABLE + "= ? OR "
+                                + APIUsageStatisticsClientConstants.API_PUBLISHER_THROTTLE_TABLE + "= ?)");
             }
 
             lastAccessQuery.append(" order by " + APIUsageStatisticsClientConstants.REQUEST_TIME + " DESC");
 
-            resultSet = statement.executeQuery(lastAccessQuery.toString());
+            statement = connection.prepareStatement(lastAccessQuery.toString());
+            statement.setString(1, tenantDomain);
+            if (!providerName.startsWith(APIUsageStatisticsClientConstants.ALL_PROVIDERS)) {
+                statement.setString(2, providerName);
+                statement.setString(3, APIUtil.getUserNameWithTenantSuffix(providerName));
+            }
+
+            resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 String apiName = resultSet.getString(APIUsageStatisticsClientConstants.API);
@@ -1540,11 +1564,10 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
             StringBuilder returnStringBuilder = new StringBuilder("<omElement><rows>");
             //check whether table exist first
@@ -1552,7 +1575,9 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
 
                 query = "SELECT * FROM  " + tableName;
 
-                rs = statement.executeQuery(query);
+                statement = connection.prepareStatement(query);
+                rs = statement.executeQuery();
+
                 int columnCount = rs.getMetaData().getColumnCount();
 
                 while (rs.next()) {
@@ -1596,21 +1621,24 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
             //TODO: API_FAULT_COUNT need to populate according to match with given time range
             if (!columnFamily.equals(APIUsageStatisticsClientConstants.API_FAULT_SUMMARY)) {
                 query = "SELECT * FROM  " + columnFamily + " WHERE " + APIUsageStatisticsClientConstants.TIME
                         + " BETWEEN " +
-                        "\'" + fromDate + "\' AND \'" + toDate + "\'";
+                        " ? AND ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, fromDate);
+                statement.setString(2, toDate);
             } else {
                 query = "SELECT * FROM  " + columnFamily;
+                statement = connection.prepareStatement(query);
             }
-            rs = statement.executeQuery(query);
+            rs = statement.executeQuery();
             StringBuilder returnStringBuilder = new StringBuilder("<omElement><rows>");
             int columnCount = rs.getMetaData().getColumnCount();
             while (rs.next()) {
@@ -1644,19 +1672,22 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
             //TODO: API_FAULT_COUNT need to populate according to match withQuery given time range
 
-            query = "SELECT * FROM  " + columnFamily + " WHERE " + " API =\'" + apiName + "\' AND " + " requestTime "
-                    + " BETWEEN " +
-                    "\'" + fromDate + "\' AND \'" + toDate + "\' ";
+            query = "SELECT * FROM  " + columnFamily + " WHERE " + " API = ? AND " + " requestTime "
+                    + " BETWEEN  ? AND ?";
 
-            rs = statement.executeQuery(query);
+            statement = connection.prepareStatement(query);
+            statement.setString(1, apiName);
+            statement.setString(2, fromDate);
+            statement.setString(3, toDate);
+
+            rs = statement.executeQuery();
             StringBuilder returnStringBuilder = new StringBuilder("<omElement><rows>");
             int columnCount = rs.getMetaData().getColumnCount();
             while (rs.next()) {
@@ -1691,19 +1722,21 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
             //TODO: API_FAULT_COUNT need to populate according to match with given time range
 
             query = "SELECT DISTINCT API FROM  " + columnFamily + " WHERE TIER<>\'Unauthenticated\' AND"
-                    + " requestTime " + " BETWEEN " +
-                    "\'" + fromDate + "\' AND \'" + toDate + "\' ";
+                    + " requestTime " + " BETWEEN  ? AND ? ";
 
-            rs = statement.executeQuery(query);
+            statement = connection.prepareStatement(query);
+            statement.setString(1, fromDate);
+            statement.setString(2, toDate);
+            rs = statement.executeQuery();
+
             StringBuilder returnStringBuilder = new StringBuilder("<omElement><rows>");
             int columnCount = rs.getMetaData().getColumnCount();
             while (rs.next()) {
@@ -1737,20 +1770,23 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         List<APIResponseFaultCount> faultusage = new ArrayList<APIResponseFaultCount>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             query = "SELECT api,version,apiPublisher,context,SUM(total_fault_count) as total_fault_count FROM  "
                     + tableName + " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
-                    "\'" + fromDate + "\' AND \'" + toDate + "\'" + " GROUP BY api,version,apiPublisher,context";
+                    " ? AND ? " + " GROUP BY api,version,apiPublisher,context";
 
-            rs = statement.executeQuery(query);
+            statement = connection.prepareStatement(query);
+            statement.setString(1, fromDate);
+            statement.setString(2, toDate);
+            rs = statement.executeQuery();
+
             APIResponseFaultCount apiResponseFaultCount;
 
             while (rs.next()) {
@@ -1779,18 +1815,21 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         List<APIUsageByResourcePath> usage = new ArrayList<APIUsageByResourcePath>();
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             query = "SELECT api,version,apiPublisher,context,method,total_request_count,time FROM " + tableName
-                    + " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
-                    "\'" + fromDate + "\' AND \'" + toDate + "\'";
-            rs = statement.executeQuery(query);
+                    + " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN ? AND ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setString(1, fromDate);
+            statement.setString(2, toDate);
+            rs = statement.executeQuery();
+
             APIUsageByResourcePath apiUsageByResourcePath;
 
             while (rs.next()) {
@@ -1820,21 +1859,23 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         List<APIUsageByDestination> usageByResourcePath = new ArrayList<APIUsageByDestination>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
 
             query = "SELECT api,version,apiPublisher,context,destination,SUM(total_request_count) as total_request_count FROM  "
                     + tableName + " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
-                    "\'" + fromDate + "\' AND \'" + toDate + "\'"
-                    + " GROUP BY api,version,apiPublisher,context,destination";
+                    " ? AND ? GROUP BY api,version,apiPublisher,context,destination";
 
-            rs = statement.executeQuery(query);
+            statement = connection.prepareStatement(query);
+            statement.setString(1, fromDate);
+            statement.setString(2, toDate);
+            rs = statement.executeQuery();
+
             APIUsageByDestination apiUsageByDestination;
 
             while (rs.next()) {
@@ -1864,29 +1905,34 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         List<APIUsage> usageDataList = new ArrayList<APIUsage>();
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
             if (fromDate != null && toDate != null) {
                 query = "SELECT api,version,apiPublisher,context,SUM(total_request_count) as total_request_count" +
                         " FROM  " + tableName +
-                        " WHERE api =\'" + apiName + "\' " +
+                        " WHERE api = ? " +
                         " AND " + APIUsageStatisticsClientConstants.TIME +
-                        " BETWEEN " + "\'" + fromDate + "\' " +
-                        " AND \'" + toDate + "\'" +
+                        " BETWEEN ? " +
+                        " AND ? " +
                         " GROUP BY api,version,apiPublisher,context";
+                statement = connection.prepareStatement(query);
+                statement.setString(1,apiName);
+                statement.setString(2,fromDate);
+                statement.setString(3, toDate);
             } else {
                 query = "SELECT api,version,apiPublisher,context,SUM(total_request_count) as total_request_count" +
                         " FROM  " + tableName +
-                        " WHERE api =\'" + apiName + "\' " +
+                        " WHERE api = ? " +
                         " GROUP BY api,version,apiPublisher,context";
+                statement = connection.prepareStatement(query);
+                statement.setString(1,apiName);
             }
-            rs = statement.executeQuery(query);
+            rs = statement.executeQuery();
 
             while (rs.next()) {
                 String context = rs.getString(APIUsageStatisticsClientConstants.CONTEXT);
@@ -1917,11 +1963,10 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         }
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement preparedStatement = null;
         ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
             String query;
             String oracleQuery;
             String mssqlQuery;
@@ -1929,7 +1974,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                 query = "SELECT API, API_VERSION,VERSION, APIPUBLISHER, USERID, SUM(TOTAL_REQUEST_COUNT) AS TOTAL_REQUEST_COUNT, CONTEXT "
                         +
                         "FROM API_REQUEST_SUMMARY" + " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
-                        "\'" + fromDate + "\' AND \'" + toDate + "\'" +
+                        "? AND  ? " +
                         " GROUP BY API, API_VERSION, USERID, VERSION, APIPUBLISHER, CONTEXT ORDER BY TOTAL_REQUEST_COUNT DESC ";
 
                 oracleQuery =
@@ -1937,7 +1982,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                                 +
                                 "FROM API_REQUEST_SUMMARY" + " WHERE " + APIUsageStatisticsClientConstants.TIME
                                 + " BETWEEN " +
-                                "\'" + fromDate + "\' AND \'" + toDate + "\'" +
+                                " ? AND ? " +
                                 " GROUP BY API, API_VERSION, VERSION, USERID, APIPUBLISHER, CONTEXT ORDER BY TOTAL_REQUEST_COUNT DESC";
 
                 mssqlQuery =
@@ -1945,7 +1990,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                                 +
                                 "FROM API_REQUEST_SUMMARY" + " WHERE " + APIUsageStatisticsClientConstants.TIME
                                 + " BETWEEN " +
-                                "\'" + fromDate + "\' AND \'" + toDate + "\'" +
+                                " ? AND ?" +
                                 " GROUP BY API, API_VERSION, USERID, VERSION, APIPUBLISHER, CONTEXT ORDER BY TOTAL_REQUEST_COUNT DESC";
             } else {
                 query = "SELECT API, API_VERSION, VERSION, APIPUBLISHER, USERID, SUM(TOTAL_REQUEST_COUNT) AS TOTAL_REQUEST_COUNT, CONTEXT "
@@ -1973,7 +2018,13 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                 query = mssqlQuery;
             }
 
-            rs = statement.executeQuery(query);
+            preparedStatement = connection.prepareStatement(query);
+            if (query.contains("?")) {
+                preparedStatement.setString(1, fromDate);
+                preparedStatement.setString(2, toDate);
+             }
+            rs = preparedStatement.executeQuery();
+
             List<APIUsageByUserName> usageByName = new ArrayList<APIUsageByUserName>();
             String apiName;
             String apiVersion;
@@ -2000,7 +2051,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
         } catch (Exception e) {
             throw new APIMgtUsageQueryServiceClientException("Error occurred while querying from JDBC database", e);
         } finally {
-            closeDatabaseLinks(rs, statement, connection);
+            closeDatabaseLinks(rs, preparedStatement, connection);
         }
     }
 
