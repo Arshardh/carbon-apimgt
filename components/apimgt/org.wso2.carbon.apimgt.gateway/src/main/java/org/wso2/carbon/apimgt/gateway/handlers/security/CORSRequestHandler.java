@@ -192,7 +192,7 @@ public class CORSRequestHandler extends AbstractHandler implements ManagedLifecy
 
 		//Set the access-Control-Allow-Credentials header in the response only if it is specified to true in the api-manager configuration
 		//and the allowed origin is not the wildcard (*)
-		if (allowCredentials && !allowedOrigin.equals("*")) {
+		if (allowCredentials && !"*".equals(allowedOrigin)) {
 			messageContext.setProperty(APIConstants.CORSHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, true);
 		}
 
