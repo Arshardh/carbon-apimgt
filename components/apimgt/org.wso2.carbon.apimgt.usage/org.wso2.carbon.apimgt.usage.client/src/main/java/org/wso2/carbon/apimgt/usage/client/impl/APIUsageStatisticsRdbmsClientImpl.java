@@ -324,7 +324,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             + APIUsageStatisticsClientConstants.USER_ID + ",SUM("
                             + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS net_total_requests" +
                             " FROM " + tableName +
-                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?)" +
+                            " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ")" +
                             " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + ','
                             + APIUsageStatisticsClientConstants.USER_ID
@@ -332,9 +332,8 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                 }
 
                 statement = connection.prepareStatement(query);
-                statement.setString(1, keyString);
-                statement.setString(2, fromDate);
-                statement.setString(3, toDate);
+                statement.setString(1, fromDate);
+                statement.setString(2, toDate);
                 resultSet = statement.executeQuery();
 
                 AppUsageDTO appUsageDTO;
@@ -398,15 +397,14 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                         "consumerKey, api,SUM(" + APIUsageStatisticsClientConstants.TOTAL_FAULT_COUNT
                         + ") AS total_faults " +
                         " FROM " + tableName +
-                        " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
+                        " WHERE " + APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
                         " AND time BETWEEN ? AND ? " +
                         " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + ","
                         + APIUsageStatisticsClientConstants.API;
 
                 statement = connection.prepareStatement(query);
-                statement.setString(1, keyString);
-                statement.setString(2, fromDate);
-                statement.setString(3, toDate);
+                statement.setString(1, fromDate);
+                statement.setString(2, toDate);
                 resultSet = statement.executeQuery();
 
                 FaultCountDTO faultCountDTO;
@@ -518,7 +516,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             APIUsageStatisticsClientConstants.RESOURCE +
                             " FROM " + tableName +
                             " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (?) " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
                             " AND time BETWEEN ? AND ? " +
                             " GROUP BY " + APIUsageStatisticsClientConstants.CONSUMERKEY + "," +
                             APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.METHOD + ","
@@ -526,9 +524,8 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                 }
 
                 statement = connection.prepareStatement(query);
-                statement.setString(1, keyString);
-                statement.setString(2, fromDate);
-                statement.setString(3, toDate);
+                statement.setString(1, fromDate);
+                statement.setString(2, toDate);
                 resultSet = statement.executeQuery();
 
                 AppCallTypeDTO appCallTypeDTO;
@@ -645,16 +642,15 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                             " SUM(" + APIUsageStatisticsClientConstants.TOTAL_REQUEST_COUNT + ") AS total_calls " +
                             " FROM " + APIUsageStatisticsClientConstants.API_REQUEST_SUMMARY +
                             " WHERE " +
-                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN ( ? ) " +
+                            APIUsageStatisticsClientConstants.CONSUMERKEY + " IN (" + keyString + ") " +
                             " AND time BETWEEN ? AND ? " +
                             " GROUP BY " +
                             APIUsageStatisticsClientConstants.API + "," + APIUsageStatisticsClientConstants.CONSUMERKEY;
                 }
 
                 statement = connection.prepareStatement(query);
-                statement.setString(1, keyString);
-                statement.setString(2, fromDate);
-                statement.setString(3, toDate);
+                statement.setString(1, fromDate);
+                statement.setString(2, toDate);
                 resultSet = statement.executeQuery();
 
                 PerAppApiCountDTO apiUsageDTO;
@@ -2425,8 +2421,8 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                         "AND api = ? " +
                         (provider.startsWith(APIUsageStatisticsClientConstants.ALL_PROVIDERS) ?
                                 "" :
-                                "AND apiPublisher = ?") +
-                        (StringUtils.isEmpty(appName) ? "" : " AND applicationName = ?") +
+                                "AND apiPublisher = ? ") +
+                        (StringUtils.isEmpty(appName) ? "" : " AND applicationName = ? ") +
                         "AND time BETWEEN ? AND ? " +
                         "GROUP BY " + groupByStmt + " " +
                         "ORDER BY " + groupByStmt + " ASC";
@@ -2515,7 +2511,7 @@ public class APIUsageStatisticsRdbmsClientImpl extends APIUsageStatisticsClient 
                         "AND applicationName = ? " +
                         (provider.startsWith(APIUsageStatisticsClientConstants.ALL_PROVIDERS) ?
                                 "" :
-                                "AND apiPublisher = ?") +
+                                "AND apiPublisher = ? ") +
                         "AND time BETWEEN ? AND ? " +
                         "GROUP BY api, apiPublisher " +
                         "ORDER BY api ASC";
