@@ -43,7 +43,7 @@ public class APINameComparator implements Comparator<API>, Serializable {
             }
         } else {
             //only compare provider name
-            return api1.getId().getProviderName().compareToIgnoreCase(api2.getId().getProviderName());
+            return api1.getId().getProviderName().compareTo(api2.getId().getProviderName());
         }
     }
 }
