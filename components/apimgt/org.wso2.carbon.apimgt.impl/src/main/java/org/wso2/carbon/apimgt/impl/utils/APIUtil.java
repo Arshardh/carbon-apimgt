@@ -20,6 +20,7 @@ package org.wso2.carbon.apimgt.impl.utils;
 
 import com.google.gson.Gson;
 
+import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.util.JavaUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -169,6 +170,12 @@ import java.net.SocketException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.rmi.RemoteException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -4815,12 +4822,29 @@ public final class APIUtil {
         SchemeRegistry registry = new SchemeRegistry();
         X509HostnameVerifier hostnameVerifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
         SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
+        String sslValue = null;
+
+        AxisConfiguration axis2Config = ServiceReferenceHolder.getContextService().getServerConfigContext()
+                .getAxisConfiguration();
+        org.apache.axis2.description.Parameter sslVerifyClient = axis2Config.getTransportIn(APIConstants.HTTPS_PROTOCOL)
+                .getParameter(APIConstants.SSL_VERIFY_CLIENT);
+        if (sslVerifyClient != null) {
+            sslValue = (String) sslVerifyClient.getValue();
+        }
         socketFactory.setHostnameVerifier(hostnameVerifier);
         if ("https".equals(protocol)) {
-            if (port >= 0) {
-                registry.register(new Scheme("https", port, socketFactory));
-            } else {
-                registry.register(new Scheme("https", 443, socketFactory));
+            try {
+                if ("require".equals(sslValue)) {
+                    socketFactory = createSocketFactory();
+                    socketFactory.setHostnameVerifier(hostnameVerifier);
+                }
+                if (port >= 0) {
+                    registry.register(new Scheme("https", port, socketFactory));
+                } else {
+                    registry.register(new Scheme("https", 443, socketFactory));
+                }
+            } catch (APIManagementException e) {
+                log.error(e);
             }
         } else if ("http".equals(protocol)) {
             if (port >= 0) {
@@ -4833,6 +4857,36 @@ public final class APIUtil {
         ThreadSafeClientConnManager tcm = new ThreadSafeClientConnManager(registry);
         return new DefaultHttpClient(tcm, params);
 
+    }
+
+    private static SSLSocketFactory createSocketFactory() throws APIManagementException {
+        KeyStore keyStore;
+        String keyStorePath = null;
+        String keyStorePassword;
+        try {
+            keyStorePath = CarbonUtils.getServerConfiguration().getFirstProperty("Security.KeyStore.Location");
+            keyStorePassword = CarbonUtils.getServerConfiguration()
+                    .getFirstProperty("Security.KeyStore.Password");
+            keyStore = KeyStore.getInstance("JKS");
+            keyStore.load(new FileInputStream(keyStorePath), keyStorePassword.toCharArray());
+            SSLSocketFactory sslSocketFactory = new SSLSocketFactory(keyStore, keyStorePassword);
+
+            return sslSocketFactory;
+
+        } catch (KeyStoreException e) {
+            handleException("Failed to read from Key Store", e);
+        } catch (CertificateException e) {
+            handleException("Failed to read Certificate", e);
+        } catch (NoSuchAlgorithmException e) {
+            handleException("Failed to load Key Store from " + keyStorePath, e);
+        } catch (IOException e) {
+            handleException("Key Store not found in " + keyStorePath, e);
+        } catch (UnrecoverableKeyException e) {
+            handleException("Failed to load key from" + keyStorePath, e);
+        } catch (KeyManagementException e) {
+            handleException("Failed to load key from" + keyStorePath, e);
+        }
+        return null;
     }
 
     /**
