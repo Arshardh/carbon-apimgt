@@ -106,6 +106,8 @@ public final class APIConstants {
 
     public static final String API_CATEGORY_PAID = "Paid";
 
+    public static final String SSL_VERIFY_CLIENT = "SSLVerifyClient";
+
     //location for custom url domain mapings. "<tenant-id>" will be replaced by actual tenant name.
     public static final String API_DOMAIN_MAPPINGS = "/customurl/api-cloud/<tenant-id>/urlMapping/<tenant-id>";
     //domain mapping app keys
