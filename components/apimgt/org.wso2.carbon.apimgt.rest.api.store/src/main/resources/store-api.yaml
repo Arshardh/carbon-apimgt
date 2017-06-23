@@ -1254,7 +1254,7 @@ parameters:
     name: apiId
     in: path
     description: |
-      **API ID** consisting of the **UUID** of the API.
+      **API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.
       The combination of the provider of the API, name of the API and the version is also accepted as a valid API ID.
       Should be formatted as **provider-name-version**.
     required: true
@@ -1266,7 +1266,7 @@ parameters:
     name: apiId
     in: query
     description: |
-      **API ID** consisting of the **UUID** of the API.
+      **API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.
       The combination of the provider of the API, name of the API and the version is also accepted as a valid API I.
       Should be formatted as **provider-name-version**.
     required: true

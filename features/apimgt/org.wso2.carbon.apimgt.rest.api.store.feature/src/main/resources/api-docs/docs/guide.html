@@ -33,13 +33,9 @@
     </p>
 
     <p>
-      Before invoking the API with the access token, obtain the consumer key/secret key pair by calling the
-      dynamic client registration endpoint. You can request an access token with the preferred grant type.
-
-      To generate the authorization token, combine the username and password as <code>username:password</code>. Encode the combined string using base64 <a href="http://base64encode.org">(http://base64encode.org)</a>.
-      For example, if the username and password are admin, the encoded string would be <code>YWRtaW46YWRtaW4=</code></br>
-
-      The example request is shown below,
+        Before invoking the API with the access token, obtain the consumer key/secret key pair by calling the
+        dynamic client registration endpoint. You can request an access token with the preferred grant type. An
+        example is shown below,
     </p>
 
     <div class="pre"><code class="bash">curl -X POST -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: application/json" -d @payload.json http://localhost:9763/client-registration/v0.9/register</code></div>
@@ -81,13 +77,9 @@
     <br/>
 
     <p>
-        During the API invocation process request, click the CXF handler first, which calls an introspection API to
-        validate the token. Generate the access token using the already created OAuth application.
-        </br>
-        Combine the clientId and clientSecret from the response as <code>clientId:clientSecret</code> and encode the combined string using
-        base64 <a href="http://base64encode.org">(http://base64encode.org)</a> to request for the access token and the refresh token.
-        </br>
-        A sample call to generate the access token is shown below.
+        During the API invocation process request, invoke the CXF handler first, which calls an introspection API to
+        validate the token. Generate the access token using the already created OAuth application. A sample call to
+        generate the access token is shown below.
     </p>
     <p>
         <b>
@@ -116,10 +108,5 @@
         Now you have a valid access token, which you can use to invoke an API. Navigate through the API descriptions
         to find the required API, obtain an access token as described above and invoke the API with the
         authentication header. If you use a different authentication mechanism, this process may change.
-    </p>
-
-    <p>
-         <b>Scopes:</b> When you request an access token, you have to specify the correct scope (e.g. <code>apim:api_view</code>, <code>apim:api_create</code> etc.).
-         If the access token you have requested for a particular API operation does not belong to the corresponding the scope, the API operation will fail.
     </p>
 </div>
