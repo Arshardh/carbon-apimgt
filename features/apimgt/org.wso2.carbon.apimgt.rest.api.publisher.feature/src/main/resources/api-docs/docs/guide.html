@@ -123,4 +123,9 @@
          <b>Scopes:</b> When you request an access token, you have to specify the correct scope (e.g. <code>apim:api_view</code>, <code>apim:api_create</code> etc.).
          If the access token you have requested for a particular API operation does not belong to the corresponding the scope, the API operation will fail.
     </p>
+    <p>
+        <b>NOTE: </b> In API Manager 1.10.0, the <b>Internal/subscriber</b> role is <b>NOT</b> automatically created when creating a
+        new tenant. In order for tenant users to retrieve the <b>apim:subscribe</b> scope, manually create the
+        <b>Internal/subscriber</b> role and assign it to the particular user.
+    </p>
 </div>
