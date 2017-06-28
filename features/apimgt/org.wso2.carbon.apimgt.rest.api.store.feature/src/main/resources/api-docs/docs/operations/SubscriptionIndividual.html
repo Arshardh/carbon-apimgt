@@ -1,6 +1,8 @@
 <div class="main-content">
     <h1><a name="Subscription (Individual)"></a>Subscription (Individual)</h1>
 
+    
+        
             <hr/>
             <h3 class="operation-heading"><a name="subscriptionsSubscriptionIdDelete"></a>Remove subscription
  <br><small>DELETE https://apis.wso2.com/api/am/store/v0.9/subscriptions/{subscriptionId}</small></h3>
@@ -10,28 +12,44 @@
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:subscribe</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:subscribe' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-subscriptionsSubscriptionIdDelete">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-subscriptionsSubscriptionIdDelete"class="pre collapse in"><code class="json">DELETE https://127.0.0.1:9443/api/am/store/v0.9/subscriptions/5b65808c-cdf2-43e1-a695-de63e3ad0ae9
 Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-subscriptionsSubscriptionIdDelete">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-subscriptionsSubscriptionIdDelete" class="pre collapse in"><code class="json">HTTP/1.1 200 OK</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d&quot; -X DELETE &quot;https://127.0.0.1:9443/api/am/store/v0.9/subscriptions/5b65808c-cdf2-43e1-a695-de63e3ad0ae9&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -51,6 +69,7 @@ Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -69,16 +88,19 @@ Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
                         <td>
                             <p class="param-description marked">Subscription Id
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -97,16 +119,19 @@ Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on ETag.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -125,16 +150,19 @@ Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on Last Modified header.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -153,35 +181,49 @@ Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Resource successfully deleted. </p></td>
+                        <td class="parameter"><p class="marked">OK.\nResource successfully deleted.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
+                                
                                     
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">404</p></td>
-                        <td class="parameter"><p class="marked">Not Found. Resource to be deleted does not exist. </p></td>
+                        <td class="parameter"><p class="marked">Not Found.\nResource to be deleted does not exist.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">412</p></td>
-                        <td class="parameter"><p class="marked">Precondition Failed. The request has not been performed because one of the preconditions is not met. </p></td>
+                        <td class="parameter"><p class="marked">Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
             <hr/>
             <h3 class="operation-heading"><a name="subscriptionsSubscriptionIdGet"></a>Get subscription details
  <br><small>GET https://apis.wso2.com/api/am/store/v0.9/subscriptions/{subscriptionId}</small></h3>
@@ -191,24 +233,35 @@ Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:subscribe</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:subscribe' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-subscriptionsSubscriptionIdGet">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-subscriptionsSubscriptionIdGet"class="pre collapse in"><code class="json">GET https://127.0.0.1:9443/api/am/store/v0.9/subscriptions/5b65808c-cdf2-43e1-a695-de63e3ad0ae9
 Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-subscriptionsSubscriptionIdGet">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-subscriptionsSubscriptionIdGet" class="pre collapse in"><code class="json">HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -219,9 +272,14 @@ Content-Type: application/json
    &quot;applicationId&quot;: &quot;c30f3a6e-ffa4-4ae7-afce-224d1f820524&quot;,
    &quot;status&quot;: &quot;UNBLOCKED&quot;
 }</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d&quot; &quot;https://127.0.0.1:9443/api/am/store/v0.9/subscriptions/5b65808c-cdf2-43e1-a695-de63e3ad0ae9&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -241,6 +299,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -259,16 +318,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Subscription Id
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -287,16 +349,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Media types acceptable for the response. Default is JSON.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">JSON</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -316,16 +381,19 @@ Content-Type: application/json
                             <p class="param-description marked">Validator for conditional requests; based on the ETag of the formerly retrieved
 variant of the resourec.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -345,16 +413,19 @@ variant of the resourec.
                             <p class="param-description marked">Validator for conditional requests; based on Last Modified header of the
 formerly retrieved variant of the resource.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -373,33 +444,48 @@ formerly retrieved variant of the resource.
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Subscription returned </p></td>
+                        <td class="parameter"><p class="marked">OK.\nSubscription returned\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Subscription">Subscription</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">304</p></td>
-                        <td class="parameter"><p class="marked">Not Modified. Empty body because the client has already the latest version of the requested resource. </p></td>
+                        <td class="parameter"><p class="marked">Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
+                                
                                     
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">404</p></td>
-                        <td class="parameter"><p class="marked">Not Found. Requested Subscription does not exist. </p></td>
+                        <td class="parameter"><p class="marked">Not Found.\nRequested Subscription does not exist.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
+    
 </div>

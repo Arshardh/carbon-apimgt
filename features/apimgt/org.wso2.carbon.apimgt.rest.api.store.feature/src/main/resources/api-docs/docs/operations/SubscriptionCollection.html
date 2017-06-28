@@ -1,6 +1,8 @@
 <div class="main-content">
     <h1><a name="Subscription (Collection)"></a>Subscription (Collection)</h1>
 
+    
+        
             <hr/>
             <h3 class="operation-heading"><a name="subscriptionsGet"></a>Get subscription list
  <br><small>GET https://apis.wso2.com/api/am/store/v0.9/subscriptions</small></h3>
@@ -9,34 +11,45 @@
             <p class="marked">This operation can be used to retrieve a list of subscriptions of the user associated with the provided access token. This operation is capable of
 
 1. Retrieving applications which are subscibed to a specific API.
-&#x60;GET https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?apiId&#x3D;c43a325c-260b-4302-81cb-768eafaa3aed&#x60;
+`GET https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?apiId=c43a325c-260b-4302-81cb-768eafaa3aed`
 
 2. Retrieving APIs which are subscribed by a specific application.
-&#x60;GET https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?applicationId&#x3D;c43a325c-260b-4302-81cb-768eafaa3aed&#x60;
+`GET https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?applicationId=c43a325c-260b-4302-81cb-768eafaa3aed`
 
 **IMPORTANT:**
 * It is mandatory to provide either **apiId** or **applicationId**.
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:subscribe</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:subscribe' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-subscriptionsGet">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
-                <div id="request-subscriptionsGet"class="pre collapse in"><code class="json">GET https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?apiId&#x3D;c43a325c-260b-4302-81cb-768eafaa3aed
+            
+                <div id="request-subscriptionsGet"class="pre collapse in"><code class="json">GET https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?apiId=c43a325c-260b-4302-81cb-768eafaa3aed
 Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-subscriptionsGet">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-subscriptionsGet" class="pre collapse in"><code class="json">HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -61,9 +74,14 @@ Content-Type: application/json
    &quot;count&quot;: 2,
    &quot;next&quot;: &quot;&quot;
 }</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
-                <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d&quot; &quot;https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?apiId&#x3D;c43a325c-260b-4302-81cb-768eafaa3aed&quot;</code></div>
+            
+                <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d&quot; &quot;https://127.0.0.1:9443/api/am/store/v0.9/subscriptions?apiId=c43a325c-260b-4302-81cb-768eafaa3aed&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -83,6 +101,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -99,20 +118,23 @@ Content-Type: application/json
                             </p>
                         </td>
                         <td>
-                            <p class="param-description marked">**API ID** consisting of the **UUID** of the API.
+                            <p class="param-description marked">**API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.
 The combination of the provider of the API, name of the API and the version is also accepted as a valid API I.
 Should be formatted as **provider-name-version**.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -131,16 +153,19 @@ Should be formatted as **provider-name-version**.
                         <td>
                             <p class="param-description marked">Application Identifier consisting of the UUID of the Application.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -159,16 +184,19 @@ Should be formatted as **provider-name-version**.
                         <td>
                             <p class="param-description marked">Application Group Id
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -187,16 +215,19 @@ Should be formatted as **provider-name-version**.
                         <td>
                             <p class="param-description marked">Starting point within the complete list of items qualified.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 Integer
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">0</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -215,16 +246,19 @@ Should be formatted as **provider-name-version**.
                         <td>
                             <p class="param-description marked">Maximum size of resource array to return.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 Integer
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">25</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -243,16 +277,19 @@ Should be formatted as **provider-name-version**.
                         <td>
                             <p class="param-description marked">Media types acceptable for the response. Default is JSON.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">JSON</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -272,16 +309,19 @@ Should be formatted as **provider-name-version**.
                             <p class="param-description marked">Validator for conditional requests; based on the ETag of the formerly retrieved
 variant of the resourec.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -300,35 +340,49 @@ variant of the resourec.
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Subscription list returned. </p></td>
+                        <td class="parameter"><p class="marked">OK.\nSubscription list returned.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#SubscriptionList">SubscriptionList</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">304</p></td>
-                        <td class="parameter"><p class="marked">Not Modified. Empty body because the client has already the latest version of the requested resource. </p></td>
+                        <td class="parameter"><p class="marked">Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
+                                
                                     
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">406</p></td>
-                        <td class="parameter"><p class="marked">Not Acceptable. The requested media type is not supported </p></td>
+                        <td class="parameter"><p class="marked">Not Acceptable. The requested media type is not supported\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
             <hr/>
             <h3 class="operation-heading"><a name="subscriptionsPost"></a>Add a new subscription
  <br><small>POST https://apis.wso2.com/api/am/store/v0.9/subscriptions</small></h3>
@@ -338,15 +392,21 @@ variant of the resourec.
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:subscribe</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:subscribe' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-subscriptionsPost">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-subscriptionsPost"class="pre collapse in"><code class="json">POST https://127.0.0.1:9443/api/am/store/v0.9/subscriptions
 Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d
 Content-Type: application/json
@@ -356,13 +416,18 @@ Content-Type: application/json
     &quot;apiIdentifier&quot;: &quot;c43a325c-260b-4302-81cb-768eafaa3aed&quot;,
     &quot;applicationId&quot;: &quot;c30f3a6e-ffa4-4ae7-afce-224d1f820524&quot;
 }</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-subscriptionsPost">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-subscriptionsPost" class="pre collapse in"><code class="json">HTTP/1.1 201 Created
 Location: https://localhost:9443/api/am/store/v0.9/subscriptions/5b65808c-cdf2-43e1-a695-de63e3ad0ae9
 Content-Type: application/json
@@ -374,9 +439,14 @@ Content-Type: application/json
    &quot;applicationId&quot;: &quot;c30f3a6e-ffa4-4ae7-afce-224d1f820524&quot;,
    &quot;status&quot;: &quot;UNBLOCKED&quot;
 }</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d&quot; -H &quot;Content-Type: application/json&quot; -X POST  -d @data.json &quot;https://127.0.0.1:9443/api/am/store/v0.9/subscriptions&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -396,6 +466,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -414,17 +485,21 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Subscription object that should to be added
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 Subscription
+                                
                                     (<a href="#!/models#Subscription">Subscription</a>)
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -443,16 +518,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Media type of the entity in the body. Default is JSON.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">JSON</p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -471,33 +549,48 @@ Content-Type: application/json
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">201</p></td>
-                        <td class="parameter"><p class="marked">Created. Successful response with the newly created object as entity in the body. Location header contains URL of newly created entity. </p></td>
+                        <td class="parameter"><p class="marked">Created.\nSuccessful response with the newly created object as entity in the body.\nLocation header contains URL of newly created entity.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Subscription">Subscription</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">400</p></td>
-                        <td class="parameter"><p class="marked">Bad Request. Invalid request or validation error. </p></td>
+                        <td class="parameter"><p class="marked">Bad Request.\nInvalid request or validation error.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">415</p></td>
-                        <td class="parameter"><p class="marked">Unsupported media type. The entity of the request was in a not supported format. </p></td>
+                        <td class="parameter"><p class="marked">Unsupported media type.\nThe entity of the request was in a not supported format.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
+                                
                                     
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
+    
 </div>

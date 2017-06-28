@@ -1,37 +1,55 @@
 <div class="main-content">
     <h1><a name="Throttling Tier (Individual)"></a>Throttling Tier (Individual)</h1>
 
+    
+        
             <hr/>
             <h3 class="operation-heading"><a name="tiersTierLevelTierNameDelete"></a>Delete a Tier <br><small>DELETE https://apis.wso2.com/api/am/publisher/v0.9/tiers/{tierLevel}/{tierName}</small></h3>
             <p class="marked"></p>
 
-            <p class="marked">This operation can be used to delete an existing tier. The only supported tier level is &#x60;api&#x60; tiers.
-&#x60;DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low&#x60;
+            <p class="marked">This operation can be used to delete an existing tier. The only supported tier level is `api` tiers.
+`DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low`
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:tier_manage</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:tier_manage' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-tiersTierLevelTierNameDelete">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-tiersTierLevelTierNameDelete"class="pre collapse in"><code class="json">DELETE https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low
 Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-tiersTierLevelTierNameDelete">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-tiersTierLevelTierNameDelete" class="pre collapse in"><code class="json">HTTP/1.1 200 OK</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a&quot; -X DELETE &quot;https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -51,6 +69,7 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -69,16 +88,19 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
                         <td>
                             <p class="param-description marked">Tier name
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -97,20 +119,24 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
                         <td>
                             <p class="param-description marked">List API or Application or Resource type tiers.
 </p>
+                            
                                 <p><b>Accepted values: </b></p>
 
 <code>api</code>
 
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -129,16 +155,19 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on ETag.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -157,16 +186,19 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on Last Modified header.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -185,35 +217,49 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Resource successfully deleted. </p></td>
+                        <td class="parameter"><p class="marked">OK.\nResource successfully deleted.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
+                                
                                     
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">404</p></td>
-                        <td class="parameter"><p class="marked">Not Found. Resource to be deleted does not exist. </p></td>
+                        <td class="parameter"><p class="marked">Not Found.\nResource to be deleted does not exist.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">412</p></td>
-                        <td class="parameter"><p class="marked">Precondition Failed. The request has not been performed because one of the preconditions is not met. </p></td>
+                        <td class="parameter"><p class="marked">Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
             <hr/>
             <h3 class="operation-heading"><a name="tiersTierLevelTierNameGet"></a>Get a Tier <br><small>GET https://apis.wso2.com/api/am/publisher/v0.9/tiers/{tierLevel}/{tierName}</small></h3>
             <p class="marked"></p>
@@ -221,29 +267,40 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
             <p class="marked">Get tier details.  
 
 **NOTE**
-* The scope of the API is mandatory while retreiving the access token with the following cURL command : &#x60;curl -k -d \&quot;grant_type&#x3D;password&amp;username&#x3D;username&amp;password&#x3D;password&amp;scope&#x3D;apim:tier_view\&quot; -H \&quot;Authorization: Basic &lt;token&gt;\&quot; https://127.0.0.1:8243/token&#x60;.
-* You will receive the access token as the response, for example &#x60;&quot;access_token&quot;:&quot;8644c013-7ff1-3217-b150-d7b92cae6be7&quot;&#x60;.
+* The scope of the API is mandatory while retreiving the access token with the following cURL command : `curl -k -d \&quot;grant_type=password&amp;username=username&amp;password=password&amp;scope=apim:tier_view\&quot; -H \&quot;Authorization: Basic &lt;token&gt;\&quot; https://127.0.0.1:8243/token`.
+* You will receive the access token as the response, for example `&quot;access_token&quot;:&quot;8644c013-7ff1-3217-b150-d7b92cae6be7&quot;`.
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:tier_view</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:tier_view' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-tiersTierLevelTierNameGet">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-tiersTierLevelTierNameGet"class="pre collapse in"><code class="json">GET https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Bronze
 Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-tiersTierLevelTierNameGet">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-tiersTierLevelTierNameGet" class="pre collapse in"><code class="json">HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -257,9 +314,14 @@ Content-Type: application/json
    &quot;name&quot;: &quot;Bronze&quot;,
    &quot;attributes&quot;: {}
 }</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a&quot; https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Bronze</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -279,6 +341,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -297,16 +360,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Tier name
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -325,6 +391,7 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">List API or Application or Resource type tiers.
 </p>
+                            
                                 <p><b>Accepted values: </b></p>
 
 <code>api</code>
@@ -333,16 +400,19 @@ Content-Type: application/json
 
 <code>resource</code>
 
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -361,16 +431,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Media types acceptable for the response. Default is JSON.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">JSON</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -390,16 +463,19 @@ Content-Type: application/json
                             <p class="param-description marked">Validator for conditional requests; based on the ETag of the formerly retrieved
 variant of the resourec.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -419,16 +495,19 @@ variant of the resourec.
                             <p class="param-description marked">Validator for conditional requests; based on Last Modified header of the
 formerly retrieved variant of the resource.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -447,62 +526,86 @@ formerly retrieved variant of the resource.
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Tier returned </p></td>
+                        <td class="parameter"><p class="marked">OK.\nTier returned\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Tier">Tier</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">304</p></td>
-                        <td class="parameter"><p class="marked">Not Modified. Empty body because the client has already the latest version of the requested resource. </p></td>
+                        <td class="parameter"><p class="marked">Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
+                                
                                     
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">404</p></td>
-                        <td class="parameter"><p class="marked">Not Found. Requested Tier does not exist. </p></td>
+                        <td class="parameter"><p class="marked">Not Found.\nRequested Tier does not exist.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">406</p></td>
-                        <td class="parameter"><p class="marked">Not Acceptable. The requested media type is not supported. </p></td>
+                        <td class="parameter"><p class="marked">Not Acceptable.\nThe requested media type is not supported.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
             <hr/>
             <h3 class="operation-heading"><a name="tiersTierLevelTierNamePut"></a>Update a Tier <br><small>PUT https://apis.wso2.com/api/am/publisher/v0.9/tiers/{tierLevel}/{tierName}</small></h3>
             <p class="marked"></p>
 
-            <p class="marked">This operation can be used to update an existing tier. The only supported tier level is &#x60;api&#x60; tiers.
-&#x60;PUT https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low&#x60;
+            <p class="marked">This operation can be used to update an existing tier. The only supported tier level is `api` tiers.
+`PUT https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low`
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:tier_manage</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:tier_manage' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-tiersTierLevelTierNamePut">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-tiersTierLevelTierNamePut"class="pre collapse in"><code class="json">PUT https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low
 Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a
 Content-Type: application/json
@@ -522,13 +625,18 @@ Content-Type: application/json
    }
 }
 </code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-tiersTierLevelTierNamePut">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-tiersTierLevelTierNamePut" class="pre collapse in"><code class="json">HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -546,9 +654,14 @@ Content-Type: application/json
       &quot;a&quot;: &quot;30&quot;
    }
 }</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a&quot; -H &quot;Content-Type: application/json&quot; -X PUT -d @data.json &quot;https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/api/Low&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -568,6 +681,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -586,16 +700,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Tier name
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -614,17 +731,21 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Tier object that needs to be modified
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 Tier
+                                
                                     (<a href="#!/models#Tier">Tier</a>)
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -643,20 +764,24 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">List API or Application or Resource type tiers.
 </p>
+                            
                                 <p><b>Accepted values: </b></p>
 
 <code>api</code>
 
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -675,16 +800,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Media type of the entity in the body. Default is JSON.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">JSON</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -703,16 +831,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on ETag.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -731,16 +862,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on Last Modified header.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -759,44 +893,62 @@ Content-Type: application/json
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Subscription updated. </p></td>
+                        <td class="parameter"><p class="marked">OK.\nSubscription updated.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Tier">Tier</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">400</p></td>
-                        <td class="parameter"><p class="marked">Bad Request. Invalid request or validation error. </p></td>
+                        <td class="parameter"><p class="marked">Bad Request.\nInvalid request or validation error.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">404</p></td>
-                        <td class="parameter"><p class="marked">Not Found. The resource to be updated does not exist. </p></td>
+                        <td class="parameter"><p class="marked">Not Found.\nThe resource to be updated does not exist.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">412</p></td>
-                        <td class="parameter"><p class="marked">Precondition Failed. The request has not been performed because one of the preconditions is not met. </p></td>
+                        <td class="parameter"><p class="marked">Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
             <hr/>
             <h3 class="operation-heading"><a name="tiersUpdatePermissionPost"></a>Update Tier Permission <br><small>POST https://apis.wso2.com/api/am/publisher/v0.9/tiers/update-permission</small></h3>
             <p class="marked"></p>
@@ -805,16 +957,22 @@ Content-Type: application/json
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:tier_manage</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:tier_manage' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-tiersUpdatePermissionPost">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
-                <div id="request-tiersUpdatePermissionPost"class="pre collapse in"><code class="json">POST https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/update-permission?tierName&#x3D;Bronze&amp;tierLevel&#x3D;api
+            
+                <div id="request-tiersUpdatePermissionPost"class="pre collapse in"><code class="json">POST https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/update-permission?tierName=Bronze&amp;tierLevel=api
 Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a
 Content-Type: application/json
 
@@ -822,17 +980,27 @@ Content-Type: application/json
     &quot;permissionType&quot;:&quot;deny&quot;,
     &quot;roles&quot;: [&quot;Internal/everyone&quot;,&quot;admin&quot;]
 }</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-tiersUpdatePermissionPost">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-tiersUpdatePermissionPost" class="pre collapse in"><code class="json">HTTP/1.1 200 OK</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
-                <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a&quot; -H &quot;Content-Type: application/json&quot; -X POST -d @data.json &quot;https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/update-permission?tierName&#x3D;Bronze&amp;tierLevel&#x3D;api&quot;</code></div>
+            
+                <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a&quot; -H &quot;Content-Type: application/json&quot; -X POST -d @data.json &quot;https://127.0.0.1:9443/api/am/publisher/v0.9/tiers/update-permission?tierName=Bronze&amp;tierLevel=api&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -852,6 +1020,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -870,16 +1039,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Name of the tier
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -898,20 +1070,24 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">List API or Application or Resource type tiers.
 </p>
+                            
                                 <p><b>Accepted values: </b></p>
 
 <code>api</code>
 
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -930,16 +1106,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on ETag.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -958,16 +1137,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Validator for conditional requests; based on Last Modified header.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -985,17 +1167,21 @@ Content-Type: application/json
                         </td>
                         <td>
                             <p class="param-description marked"></p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 TierPermission
+                                
                                     (<a href="#!/models#TierPermission">TierPermission</a>)
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -1014,51 +1200,74 @@ Content-Type: application/json
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Successfully updated tier permissions </p></td>
+                        <td class="parameter"><p class="marked">OK.\nSuccessfully updated tier permissions\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Tier">Tier</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">400</p></td>
-                        <td class="parameter"><p class="marked">Bad Request. Invalid request or validation error. </p></td>
+                        <td class="parameter"><p class="marked">Bad Request.\nInvalid request or validation error.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">403</p></td>
-                        <td class="parameter"><p class="marked">Forbidden. The request must be conditional but no condition has been specified. </p></td>
+                        <td class="parameter"><p class="marked">Forbidden.\nThe request must be conditional but no condition has been specified.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">404</p></td>
-                        <td class="parameter"><p class="marked">Not Found. Requested tier does not exist. </p></td>
+                        <td class="parameter"><p class="marked">Not Found.\nRequested tier does not exist.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">412</p></td>
-                        <td class="parameter"><p class="marked">Precondition Failed. The request has not been performed because one of the preconditions is not met. </p></td>
+                        <td class="parameter"><p class="marked">Precondition Failed.\nThe request has not been performed because one of the preconditions is not met.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
+    
 </div>

@@ -1,6 +1,8 @@
 <div class="main-content">
     <h1><a name="Application (Collection)"></a>Application (Collection)</h1>
 
+    
+        
             <hr/>
             <h3 class="operation-heading"><a name="applicationsGet"></a>Get a list of applications
  <br><small>GET https://apis.wso2.com/api/am/store/v0.9/applications</small></h3>
@@ -10,24 +12,35 @@
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:subscribe</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:subscribe' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-applicationsGet">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-applicationsGet"class="pre collapse in"><code class="json">GET https://127.0.0.1:9443/api/am/store/v0.9/applications
 Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-applicationsGet">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-applicationsGet" class="pre collapse in"><code class="json">HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -56,9 +69,14 @@ Content-Type: application/json
    &quot;count&quot;: 2,
    &quot;next&quot;: &quot;&quot;
 }</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d&quot; &quot;https://127.0.0.1:9443/api/am/store/v0.9/applications&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -78,6 +96,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -96,16 +115,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Application Group Id
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -131,16 +153,19 @@ Eg.
 
 Currently this does not support wildcards. Given name must exactly match the application name.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -159,16 +184,19 @@ Currently this does not support wildcards. Given name must exactly match the app
                         <td>
                             <p class="param-description marked">Maximum size of resource array to return.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 Integer
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">25</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -187,16 +215,19 @@ Currently this does not support wildcards. Given name must exactly match the app
                         <td>
                             <p class="param-description marked">Starting point within the complete list of items qualified.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 Integer
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">0</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -215,16 +246,19 @@ Currently this does not support wildcards. Given name must exactly match the app
                         <td>
                             <p class="param-description marked">Media types acceptable for the response. Default is JSON.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">JSON</p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -244,16 +278,19 @@ Currently this does not support wildcards. Given name must exactly match the app
                             <p class="param-description marked">Validator for conditional requests; based on the ETag of the formerly retrieved
 variant of the resourec.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -272,44 +309,62 @@ variant of the resourec.
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK. Application list returned. </p></td>
+                        <td class="parameter"><p class="marked">OK.\nApplication list returned.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#ApplicationList">ApplicationList</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">304</p></td>
-                        <td class="parameter"><p class="marked">Not Modified. Empty body because the client has already the latest version of the requested resource. </p></td>
+                        <td class="parameter"><p class="marked">Not Modified.\nEmpty body because the client has already the latest version of the requested resource.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
+                                
                                     
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">400</p></td>
-                        <td class="parameter"><p class="marked">Bad Request. Invalid request or validation error. </p></td>
+                        <td class="parameter"><p class="marked">Bad Request.\nInvalid request or validation error.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">406</p></td>
-                        <td class="parameter"><p class="marked">Not Acceptable. The requested media type is not supported. </p></td>
+                        <td class="parameter"><p class="marked">Not Acceptable.\nThe requested media type is not supported.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
             <hr/>
             <h3 class="operation-heading"><a name="applicationsPost"></a>Create a new application
  <br><small>POST https://apis.wso2.com/api/am/store/v0.9/applications</small></h3>
@@ -319,15 +374,21 @@ variant of the resourec.
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
+            
                 <code>apim:subscribe</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:subscribe' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#request-applicationsPost">
                 <h4 class="section-heading">
                     Request
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
 
+            
                 <div id="request-applicationsPost"class="pre collapse in"><code class="json">POST https://127.0.0.1:9443/api/am/store/v0.9/applications
 Content-Type: application/json
 Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d
@@ -340,13 +401,18 @@ Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d
     &quot;status&quot;: &quot;APPROVED&quot;,
     &quot;name&quot;: &quot;sampleapp&quot;
 }</code></div>
+            
+            
 
             <div class="pointer" data-toggle="collapse" data-target="#response-applicationsPost">
                 <h4 class="section-heading">
                     Response
+                    
                         <span class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                    
                 </h4>
             </div>
+            
                 <div id="response-applicationsPost" class="pre collapse in"><code class="json">HTTP/1.1 201 Created
 Location: https://localhost:9443/api/am/store/v0.9/applications/c30f3a6e-ffa4-4ae7-afce-224d1f820524
 Content-Type: application/json
@@ -362,9 +428,14 @@ Content-Type: application/json
    &quot;name&quot;: &quot;sampleapp&quot;,
    &quot;keys&quot;: []
 }</code></div>
+            
+            
 
             <h4 class="section-heading">Sample CURL</h4>
+            
                 <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d&quot; -H &quot;Content-Type: application/json&quot; -X POST -d @data.json &quot;https://127.0.0.1:9443/api/am/store/v0.9/applications&quot;</code></div>
+            
+            
 
             <h4 class="section-heading" id="scroll-to">Parameters</h4>
             <table class="table table-hover">
@@ -384,6 +455,7 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -402,17 +474,21 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Application object that is to be created.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 Application
+                                
                                     (<a href="#!/models#Application">Application</a>)
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked"></p>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter">
                             
@@ -431,16 +507,19 @@ Content-Type: application/json
                         <td>
                             <p class="param-description marked">Media type of the entity in the body. Default is JSON.
 </p>
+                            
                         </td>
                         <td>
                             <span class="param-type">
                                 String
+                                
                             </span>
                         </td>
                         <td>
                             <p class="marked">JSON</p>
                         </td>
                     </tr>
+                
             </table>
 
             <h4 class="section-heading">Responses</h4>
@@ -459,42 +538,61 @@ Content-Type: application/json
                 </tr>
                 </thead>
                 <tbody>
+                
                     <tr>
                         <td class="parameter"><p class="marked">201</p></td>
-                        <td class="parameter"><p class="marked">Created. Successful response with the newly created object as entity in the body. Location header contains URL of newly created entity. </p></td>
+                        <td class="parameter"><p class="marked">Created.\nSuccessful response with the newly created object as entity in the body.\nLocation header contains URL of newly created entity.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Application">Application</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">400</p></td>
-                        <td class="parameter"><p class="marked">Bad Request. Invalid request or validation error </p></td>
+                        <td class="parameter"><p class="marked">Bad Request.\nInvalid request or validation error\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">409</p></td>
-                        <td class="parameter"><p class="marked">Conflict. Application already exists. </p></td>
+                        <td class="parameter"><p class="marked">Conflict.\nApplication already exists.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                     <tr>
                         <td class="parameter"><p class="marked">415</p></td>
-                        <td class="parameter"><p class="marked">Unsupported media type. The entity of the request was in a not supported format. </p></td>
+                        <td class="parameter"><p class="marked">Unsupported media type.\nThe entity of the request was in a not supported format.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
+                                
                                     <a href="#!/models#Error">Error</a>
+                                
+                                
                             </span>
                         </td>
                     </tr>
+                
                 </tbody>
             </table>
+        
+    
 </div>
