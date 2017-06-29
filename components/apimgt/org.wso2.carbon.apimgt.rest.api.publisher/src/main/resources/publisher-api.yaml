@@ -595,7 +595,7 @@ paths:
       description: |
         This operation is used to change the lifecycle of an API. Eg: Publish an API which is in `CREATED` state. In order to change the lifecycle, we need to provide the lifecycle `action` as a query parameter.
         
-        For example, to Publish an API, `action` should be `Publish`.
+        For example, to Publish an API, `action` should be `Publish`. Note that the `Re-publish` action is available only after calling `Block`.
         
         Some actions supports providing additional paramters which should be provided as `lifecycleChecklist` parameter. Please see parameters table for more information.
       parameters:
