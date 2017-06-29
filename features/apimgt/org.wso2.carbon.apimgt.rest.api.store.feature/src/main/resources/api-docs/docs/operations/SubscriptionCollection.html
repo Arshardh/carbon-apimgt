@@ -388,7 +388,15 @@ variant of the resourec.
  <br><small>POST https://apis.wso2.com/api/am/store/v0.9/subscriptions</small></h3>
             <p class="marked"></p>
 
-            <p class="marked">Add a new subscription
+            <p class="marked">Add a new subscription.
+
+**Note** : In a cross-tenant scenario, you must follow a workaround where the &#39;apiIdentifier&#39; parameter must be replaced with the tenant ID in the format provider-apiname-version (replace &#39;@&#39; with &#39;AT&#39;), as shown in the example below. This needes to be done because the `X-WSO2-Tenant` header is not supported for the subscripton-add rest api. As a result, it is not possible to identify the tenant domain based on the alphanumeric value.
+ 
+    {
+        &quot;tier&quot;: &quot;Unlimited&quot;,
+        &quot;apiIdentifier&quot;: &quot;admin-AT-tenant1.com-Tenant1API1-1.0.0&quot;,
+        &quot;applicationId&quot;: &quot;355fa235-c0f5-4728-b85c-9c1e9360d887&quot;
+    }
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
