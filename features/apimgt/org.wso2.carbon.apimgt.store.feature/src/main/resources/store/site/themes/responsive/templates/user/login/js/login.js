@@ -78,7 +78,7 @@ $(document).ready(function () {
 
         $('#messageModal').html($('#login-data').html());
         $('#messageModal').modal('show');
-        $.cookie("goto_url",$(this).attr("href"));
+        $.cookie("goto_url",$(this).attr("href"),{secure:true});
         $('#username').focus();
 
          registerEventsForLogin();
