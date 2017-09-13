@@ -54,15 +54,12 @@ public class APIMgtUsageHandler extends AbstractHandler {
         synapse to enable or disable destination based stat publishing*/
         mc.setProperty("isStatEnabled", Boolean.toString(enabled));
 
-        boolean skipEventReceiverConnection = DataPublisherUtil.getApiManagerAnalyticsConfiguration().
-                isSkipEventReceiverConnection();
-
         String publisherClass = UsageComponent.getAmConfigService().
                 getAPIAnalyticsConfiguration().getPublisherClass();
         try {
             long currentTime = System.currentTimeMillis();
 
-            if (!enabled || skipEventReceiverConnection) {
+            if (!enabled) {
                 return true;
             }
 

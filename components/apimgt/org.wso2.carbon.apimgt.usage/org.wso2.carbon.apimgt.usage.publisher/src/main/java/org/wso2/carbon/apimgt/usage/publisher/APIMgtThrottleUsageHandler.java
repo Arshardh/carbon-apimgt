@@ -37,8 +37,6 @@ public class APIMgtThrottleUsageHandler extends AbstractMediator {
 
     private boolean enabled;
 
-    private boolean skipEventReceiverConnection;
-
     private volatile APIMgtUsageDataPublisher publisher;
 
     public APIMgtThrottleUsageHandler() {
@@ -50,9 +48,8 @@ public class APIMgtThrottleUsageHandler extends AbstractMediator {
     private void initializeDataPublisher() {
 
         enabled = DataPublisherUtil.getApiManagerAnalyticsConfiguration().isAnalyticsEnabled();
-        skipEventReceiverConnection = DataPublisherUtil.getApiManagerAnalyticsConfiguration().
-                isSkipEventReceiverConnection();
-        if (!enabled || skipEventReceiverConnection) {
+
+        if (!enabled) {
             return;
         }
         if (publisher == null) {
@@ -88,7 +85,7 @@ public class APIMgtThrottleUsageHandler extends AbstractMediator {
         }
 
         try {
-            if (!enabled || skipEventReceiverConnection) {
+            if (!enabled) {
                 return true;
             }
             // gets the access token and username

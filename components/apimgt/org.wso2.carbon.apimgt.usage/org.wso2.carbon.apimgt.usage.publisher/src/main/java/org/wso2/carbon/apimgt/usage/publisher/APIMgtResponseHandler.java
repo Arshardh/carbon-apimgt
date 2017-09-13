@@ -36,18 +36,16 @@ import org.wso2.carbon.base.MultitenantConstants;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import javax.xml.stream.XMLStreamException;
 
 /*
 * This mediator is to publish events upon success API invocations
 */
 
 public class APIMgtResponseHandler extends AbstractMediator {
-
-    private boolean skipEventReceiverConnection;
 
     private volatile APIMgtUsageDataPublisher publisher;
 
@@ -59,10 +57,8 @@ public class APIMgtResponseHandler extends AbstractMediator {
 
     private void initializeDataPublisher() {
 
-        skipEventReceiverConnection = DataPublisherUtil.getApiManagerAnalyticsConfiguration().
-                isSkipEventReceiverConnection();
-        if (!DataPublisherUtil.getApiManagerAnalyticsConfiguration().isAnalyticsEnabled() ||
-            skipEventReceiverConnection) {
+
+        if (!DataPublisherUtil.getApiManagerAnalyticsConfiguration().isAnalyticsEnabled()) {
             return;
         }
         if (publisher == null) {
@@ -98,8 +94,7 @@ public class APIMgtResponseHandler extends AbstractMediator {
         }
 
         try {
-            if (!DataPublisherUtil.getApiManagerAnalyticsConfiguration().isAnalyticsEnabled()
-                || skipEventReceiverConnection) {
+            if (!DataPublisherUtil.getApiManagerAnalyticsConfiguration().isAnalyticsEnabled()) {
                 return true;
             }
             long responseSize = 0;
