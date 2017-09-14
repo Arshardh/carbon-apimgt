@@ -56,12 +56,13 @@ public class APIMgtWorkflowDataPublisher {
             getAPIManagerConfigurationService().
             getAPIAnalyticsConfiguration();
     boolean enabled = analyticsConfig.isAnalyticsEnabled();
+    boolean skipEventReceiverConnection = analyticsConfig.isSkipEventReceiverConnection();
     private static String wfStreamName;
     private static String wfStreamVersion;
 
     public APIMgtWorkflowDataPublisher() {
         try {
-            if (!enabled) {
+            if (!enabled || skipEventReceiverConnection) {
                 return;
             }
             if (log.isDebugEnabled()) {
@@ -176,7 +177,7 @@ public class APIMgtWorkflowDataPublisher {
 
     public boolean publishEvent(WorkflowDTO workflowDTO) {
         try {
-            if (!enabled) {
+            if (!enabled || skipEventReceiverConnection) {
                 return true;
             }
 

@@ -18,8 +18,6 @@ public class APIMgtFaultHandler extends AbstractMediator {
 
     private boolean enabled;
 
-    private boolean skipEventReceiverConnection;
-
     private volatile APIMgtUsageDataPublisher publisher;
 
     public APIMgtFaultHandler() {
@@ -31,9 +29,7 @@ public class APIMgtFaultHandler extends AbstractMediator {
     private void initializeDataPublisher() {
 
         enabled = DataPublisherUtil.getApiManagerAnalyticsConfiguration().isAnalyticsEnabled();
-        skipEventReceiverConnection = DataPublisherUtil.getApiManagerAnalyticsConfiguration().
-                isSkipEventReceiverConnection();
-        if (!enabled || skipEventReceiverConnection) {
+        if (!enabled) {
             return;
         }
         if (publisher == null) {
@@ -70,7 +66,7 @@ public class APIMgtFaultHandler extends AbstractMediator {
             this.initializeDataPublisher();
         }
         try {
-            if (!enabled || skipEventReceiverConnection) {
+            if (!enabled) {
                 return true;
             }
             long requestTime = Long.parseLong((String) messageContext.getProperty(APIMgtGatewayConstants.

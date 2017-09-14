@@ -42,16 +42,21 @@ public class APIManagerAnalyticsConfiguration {
 	private String faultStreamVersion;
     private String throttleStreamName;
 	private String throttleStreamVersion;
+	private boolean configFromFile;
     public static APIManagerAnalyticsConfiguration instance = new APIManagerAnalyticsConfiguration();
 	private static Log log = LogFactory.getLog(APIManagerAnalyticsConfiguration.class);
-
+    public static final String GLOBAL_ANALYTICS_ENABLE = "globalAnalyticsEnable";
     private APIManagerAnalyticsConfiguration() {
-        analyticsEnabled = APIUtil.isAnalyticsEnabled();
-        if(analyticsEnabled) {
-            Map<String, String> analyticsConfigs = APIUtil.getAnalyticsConfigFromRegistry();
-            bamServerUrlGroups = analyticsConfigs.get(APIConstants.API_USAGE_BAM_SERVER_URL_GROUPS);
-            bamServerUser = analyticsConfigs.get(APIConstants.API_USAGE_BAM_SERVER_USER);
-            bamServerPassword = analyticsConfigs.get(APIConstants.API_USAGE_BAM_SERVER_PASSWORD);
+        String enableFromFile = System.getProperty(GLOBAL_ANALYTICS_ENABLE);
+        configFromFile = JavaUtils.isTrueExplicitly(enableFromFile);
+        if (!configFromFile) {
+            analyticsEnabled = APIUtil.isAnalyticsEnabled();
+            if (analyticsEnabled) {
+                Map<String, String> analyticsConfigs = APIUtil.getAnalyticsConfigFromRegistry();
+                bamServerUrlGroups = analyticsConfigs.get(APIConstants.API_USAGE_BAM_SERVER_URL_GROUPS);
+                bamServerUser = analyticsConfigs.get(APIConstants.API_USAGE_BAM_SERVER_USER);
+                bamServerPassword = analyticsConfigs.get(APIConstants.API_USAGE_BAM_SERVER_PASSWORD);
+            }
         }
     }
 
@@ -69,6 +74,12 @@ public class APIManagerAnalyticsConfiguration {
         return instance;
     }
     public void setAPIManagerConfiguration(APIManagerConfiguration config){
+        if (configFromFile) {
+            analyticsEnabled = configFromFile;
+            bamServerUrlGroups = config.getFirstProperty(APIConstants.API_USAGE_BAM_SERVER_URL_GROUPS);
+            bamServerUser = config.getFirstProperty(APIConstants.API_USAGE_BAM_SERVER_USER);
+            bamServerPassword = config.getFirstProperty(APIConstants.API_USAGE_BAM_SERVER_PASSWORD);
+        }
         String skipEventReceiverConnStr = config.getFirstProperty(APIConstants.API_USAGE_SKIP_EVENT_RECEIVER_CONN);
         skipEventReceiverConnection = skipEventReceiverConnStr != null &&
                 JavaUtils.isTrueExplicitly(skipEventReceiverConnStr);
