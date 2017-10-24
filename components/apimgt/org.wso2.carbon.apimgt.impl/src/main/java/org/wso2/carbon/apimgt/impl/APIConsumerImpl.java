@@ -2548,25 +2548,13 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         //checking for authorized scopes
         Set<Scope> scopeSet = new LinkedHashSet<Scope>();
         List<Scope> authorizedScopes = new ArrayList<Scope>();
-        String authScopeString;
         if (tokenScope != null && tokenScope.length() != 0 &&
                 !tokenScope.equals(APIConstants.OAUTH2_DEFAULT_SCOPE)) {
             scopeSet.addAll(getScopesByScopeKeys(tokenScope, tenantId));
             authorizedScopes = getAllowedScopesForUserApplication(userId, scopeSet);
         }
 
-        if (!authorizedScopes.isEmpty()) {
-            Set<Scope> authorizedScopeSet = new HashSet<Scope>(authorizedScopes);
-            StringBuilder scopeBuilder = new StringBuilder();
-            for (Scope scope : authorizedScopeSet) {
-                scopeBuilder.append(scope.getKey()).append(" ");
-            }
-            authScopeString = scopeBuilder.toString();
-        } else {
-            authScopeString = APIConstants.OAUTH2_DEFAULT_SCOPE;
-        }
-        //-------------------------------------------------------------------------------
-
+        String authScopeString = getAuthorizedScopeString(authorizedScopes);
 
         try {
             if (tenantDomain != null && !MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(tenantDomain)) {
@@ -3236,6 +3224,27 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         }
 
         return false;
+    }
+
+    /**
+     * Get authorized scopes string
+     * @param authorizedScopes  the list of authorized scopes
+     * @return
+     */
+    protected String getAuthorizedScopeString(List<Scope> authorizedScopes) {
+
+        String authScopeString = null;
+        if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
+            Set<Scope> authorizedScopeSet = new HashSet<Scope>(authorizedScopes);
+            StringBuilder scopeBuilder = new StringBuilder();
+            for (Scope scope : authorizedScopeSet) {
+                scopeBuilder.append(scope.getKey()).append(" ");
+            }
+            authScopeString = scopeBuilder.toString();
+        } else {
+            authScopeString = APIConstants.OAUTH2_DEFAULT_SCOPE;
+        }
+        return authScopeString;
     }
 
 }
