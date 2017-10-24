@@ -16,7 +16,11 @@
           <div class="alert alert-success">
               Theme was uploaded successfully.              
           </div>
-        <% }else{ %>
+        <% }else if(outputs.warning != ""){ %>
+        	 <div class="alert alert-error">
+                    <%= outputs.warning %>
+             </div>
+       <% } else{ %>
           <div class="alert alert-info">
               The theme should be a zip file containing css and images which is complient to API Manager theme format
           </div>
