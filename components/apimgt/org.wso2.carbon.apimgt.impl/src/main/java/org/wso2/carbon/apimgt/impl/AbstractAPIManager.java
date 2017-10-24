@@ -925,6 +925,16 @@ public abstract class AbstractAPIManager implements APIManager {
 
     public void addSubscriber(Subscriber subscriber, String groupingId)
             throws APIManagementException {
+        if(subscriber.getTenantId() == 0 ){ // tenantId will not be set when called from PostAuthenticationInterceptor
+            int tenantId = 0;
+            try {
+                tenantId = ServiceReferenceHolder.getInstance().getRealmService().getTenantManager()
+                        .getTenantId(MultitenantUtils.getTenantDomain(username));
+            } catch (org.wso2.carbon.user.api.UserStoreException e) {
+                handleException("Error while adding the subscriber " + subscriber.getName(), e);
+            }
+            subscriber.setTenantId(tenantId);
+        }
         apiMgtDAO.addSubscriber(subscriber, groupingId);
     }
 
