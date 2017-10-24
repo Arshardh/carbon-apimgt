@@ -24,6 +24,7 @@ import org.wso2.carbon.apimgt.api.APIConsumer;
 import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.model.Subscriber;
 import org.wso2.carbon.apimgt.impl.APIConstants;
+import org.wso2.carbon.apimgt.impl.internal.ServiceReferenceHolder;
 import org.wso2.carbon.apimgt.impl.utils.APIUtil;
 import org.wso2.carbon.apimgt.rest.api.util.exception.InternalServerErrorException;
 import org.wso2.carbon.apimgt.rest.api.util.utils.RestApiUtil;
@@ -60,7 +61,7 @@ public class PostAuthenticationInterceptor extends AbstractPhaseInterceptor{
                 subscriber = new Subscriber(username);
                 subscriber.setSubscribedDate(new Date());
                 subscriber.setEmail("");
-                apiConsumer.addSubscriber(subscriber, null);
+                apiConsumer.addSubscriber(subscriber, null); // we are passing null for groupingId because it is not used in DAO
                 if (logger.isDebugEnabled()) {
                     logger.debug("Subscriber " + username + " added to AM_SUBSCRIBER database");
                 }
