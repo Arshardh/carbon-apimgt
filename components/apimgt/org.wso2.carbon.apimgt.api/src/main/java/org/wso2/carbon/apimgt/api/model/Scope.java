@@ -70,8 +70,8 @@ public class Scope implements Serializable{
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        return obj instanceof Scope && key.equals(((Scope) obj).getKey()) && name.equals(((Scope) obj).getName()) &&
-                roles.equals(((Scope) obj).getRoles()) && description.equals(((Scope) obj).getDescription());
+        return obj instanceof Scope && (key == ((Scope) obj).getKey()) && (name == ((Scope) obj).getName()) &&
+                (roles == ((Scope) obj).getRoles()) && (description == ((Scope) obj).getDescription());
     }
 
     @Override
