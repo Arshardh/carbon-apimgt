@@ -38,7 +38,11 @@ public class TenantManagerHostObjectTest {
         Mockito.when(fileHostObject.getInputStream()).thenReturn(inputStream);
         PowerMockito.whenNew(ZipInputStream.class).withAnyArguments().thenReturn(zipInputStream);
 
-        Assert.assertTrue(tmhostObject.jsFunction_addTenantTheme(null, null, args, null));
+        try {
+            tmhostObject.jsFunction_addTenantTheme(null, null, args, null);
+        } catch (APIManagementException ex) {
+            Assert.assertTrue(ex.getMessage().contains("Unable to create tenant theme directory"));
+        }
     }
 
     @Test
