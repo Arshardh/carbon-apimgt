@@ -855,7 +855,7 @@ $(document).ready(function(){
             if(tagName.match(/[^a-zA-Z0-9_ -]/g)){
                 $tag.val( $tag.val().replace(/[^a-zA-Z0-9_ -]/g, function(str) {
                         $('.add-tags-error').html('');
-                        $('.tags-error').html('The tag "' + tagName + '" contains one or more illegal characters  (~ ! @ #  ; % ^ * + = { } | &lt; &gt;, \' " \\ ) .');
+                        $('.tags-error').html('The tag contains one or more illegal characters  (~ ! @ #  ; % ^ * + = { } | &lt; &gt;, \' " \\ ) .');
                         return '';
                 }));
             }

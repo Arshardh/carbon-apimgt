@@ -339,25 +339,25 @@
                     <div class="control-group">
                         <label class="control-label" for="bizOwner"><%=i18n.localize("busiOwner")%>:</label>
                         <div class="controls">
-                             <input type="text" class="input-xlarge validInput" id="bizOwner" name="bizOwner" value="<%=api.bizOwner%>"/>
+                             <input type="text" class="input-xlarge validInput" id="bizOwner" name="bizOwner" value="<%=encode.forHtmlAttribute(api.bizOwner)%>"/>
                         </div>
                     </div>
                      <div class="control-group">
                         <label class="control-label" for="bizOwnerMail"><%=i18n.localize("busiOwnerMail")%>:</label>
                         <div class="controls">
-                             <input type="text" class="input-xlarge email" id="bizOwnerMail" name="bizOwnerMail" value="<%=api.bizOwnerMail%>"/>
+                             <input type="text" class="input-xlarge email" id="bizOwnerMail" name="bizOwnerMail" value="<%=encode.forHtmlAttribute(api.bizOwnerMail)%>"/>
                         </div>
                     </div>
                      <div class="control-group">
                         <label class="control-label" for="techOwner"><%=i18n.localize("techOwner")%>:</label>
                         <div class="controls">
-                             <input type="text" class="input-xlarge validInput" id="techOwner" name="techOwner" value="<%=api.techOwner%>"/>
+                             <input type="text" class="input-xlarge validInput" id="techOwner" name="techOwner" value="<%=encode.forHtmlAttribute(api.techOwner)%>"/>
                         </div>
                     </div>
                      <div class="control-group">
                         <label class="control-label" for="techOwnerMail"><%=i18n.localize("techOwnerMail")%>:</label>
                         <div class="controls">
-                             <input type="text" class="input-xlarge email" id="techOwnerMail" name="techOwnerMail" value="<%=api.techOwnerMail%>"/>
+                             <input type="text" class="input-xlarge email" id="techOwnerMail" name="techOwnerMail" value="<%=encode.forHtmlAttribute(api.techOwnerMail)%>"/>
                         </div>
                     </div>
                  </div>
