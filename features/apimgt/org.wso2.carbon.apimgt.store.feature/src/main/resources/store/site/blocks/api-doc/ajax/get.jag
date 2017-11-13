@@ -47,9 +47,11 @@ var log = new Log();
             response.sendError(404);
         } else {
         var url = request.getRequestURL();
-        var host = getLocation(url).host;
+        var match = getLocation(url);
+        var host = match.host;
+        host = validateHostName(match, host);
         var port = getLocation(url).port;
-        var accessProtocol = getLocation(url).protocol;
+        var accessProtocol = match.protocol;
         var envName = request.getParameter("envName");
         var tenantDomain = "";
         var tenantID = -1234;
@@ -227,4 +229,22 @@ function getLocation(href) {
         hash: match[7]
     }
 }
+
+function validateHostName(match, host) {
+    var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
+    var carbonUtils = new CarbonUtils();
+    var hostName = carbonUtils.getServerConfiguration().getFirstProperty("HostName");
+    var process = require('process');
+    if ((hostName != null && match.host.split(":")[0].equals(hostName.split(":")[0])) || match.host.split(":")[0].equals(process.getProperty('carbon.local.ip').split(":")[0])) {
+       return host;
+    } else {
+       // Possible HOST Header Attack is identified. Hence, rewritting to defaul host in configuration.
+        if (hostName) {
+            host = hostName + ":" + process.getProperty('mgt.transport.https.port');
+        } else {
+            host = process.getProperty('carbon.local.ip') + ":" + process.getProperty('mgt.transport.https.port');
+        }
+        return match.protocol + "//" + host;
+    }
+};
 %>
