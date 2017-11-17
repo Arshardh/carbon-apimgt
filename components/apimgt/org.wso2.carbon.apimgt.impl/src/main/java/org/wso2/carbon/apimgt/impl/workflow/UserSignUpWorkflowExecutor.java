@@ -63,8 +63,7 @@ public abstract class UserSignUpWorkflowExecutor extends WorkflowExecutor {
 		}
 
 		UserAdminStub userAdminStub = new UserAdminStub(url);
-		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword,
-		                                          true, userAdminStub._getServiceClient());
+		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
 		FlaggedName[] flaggedNames = userAdminStub.getRolesOfUser(userName, "*", -1);
 		List<String> roles = new ArrayList<String>();
 		if (flaggedNames != null) {
@@ -113,8 +112,7 @@ public abstract class UserSignUpWorkflowExecutor extends WorkflowExecutor {
 			}
 
 			UserAdminStub userAdminStub = new UserAdminStub(url);
-			CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, true,
-			                                          userAdminStub._getServiceClient());
+			CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
 			
 			FlaggedName[] flaggedNames = userAdminStub.getRolesOfUser(userName, "*", -1);
 			List<String> roles = new ArrayList<String>();
@@ -160,8 +158,7 @@ public abstract class UserSignUpWorkflowExecutor extends WorkflowExecutor {
 		} 
 
 		UserAdminStub userAdminStub = new UserAdminStub(url);
-		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword,
-		                                          true, userAdminStub._getServiceClient());
+		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
 		userAdminStub.deleteUser(userName);
 
 	}

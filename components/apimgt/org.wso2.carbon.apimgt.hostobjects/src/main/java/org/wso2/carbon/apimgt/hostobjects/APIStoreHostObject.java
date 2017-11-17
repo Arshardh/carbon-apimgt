@@ -3501,8 +3501,7 @@ public class APIStoreHostObject extends ScriptableObject {
 		String adminUsername = signupConfig.getAdminUserName();
 		String adminPassword = signupConfig.getAdminPassword();
 
-		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, true,
-		                                          userAdminStub._getServiceClient());
+		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
 
 		String tenantAwareUserName = MultitenantUtils.getTenantAwareUsername(username);
 		int index = tenantAwareUserName.indexOf(UserCoreConstants.DOMAIN_SEPARATOR);
@@ -3566,8 +3565,7 @@ public class APIStoreHostObject extends ScriptableObject {
 		String adminUsername = config.getFirstProperty(APIConstants.AUTH_MANAGER_USERNAME);
 		String adminPassword = config.getFirstProperty(APIConstants.AUTH_MANAGER_PASSWORD);
 
-		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, true,
-		                                          userAdminStub._getServiceClient());
+		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
 		userAdminStub.deleteUser(username);
 	}
 
@@ -3588,8 +3586,7 @@ public class APIStoreHostObject extends ScriptableObject {
 		String adminUsername = signupConfig.getAdminUserName();
 		String adminPassword = signupConfig.getAdminPassword();
 
-		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, true,
-		                                          userAdminStub._getServiceClient());
+		CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
 		String tenantAwareUserName = MultitenantUtils.getTenantAwareUsername(username);
 		int index = tenantAwareUserName.indexOf(UserCoreConstants.DOMAIN_SEPARATOR);
 		//remove the 'PRIMARY' part from the user name		
@@ -3615,8 +3612,7 @@ public class APIStoreHostObject extends ScriptableObject {
 		boolean status = false;
 		try {
 			UserAdminStub userAdminStub = new UserAdminStub(null, serverURL + "UserAdmin");
-			CarbonUtils.setBasicAccessSecurityHeaders(userName, password, true,
-	                userAdminStub._getServiceClient());
+			CarbonUtils.setBasicAccessSecurityHeaders(userName, password, userAdminStub._getServiceClient());
 			//send a request. if exception occurs, then the credentials are not correct.
 			FlaggedName[] roles = userAdminStub.getRolesOfCurrentUser();
 			status = true;
@@ -3909,8 +3905,7 @@ public class APIStoreHostObject extends ScriptableObject {
             String adminUsername = config.getFirstProperty(APIConstants.AUTH_MANAGER_USERNAME);
             String adminPassword = config.getFirstProperty(APIConstants.AUTH_MANAGER_PASSWORD);
 
-            CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword,
-                    true, userAdminStub._getServiceClient());
+            CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
             
             String tenantDomain = MultitenantUtils.getTenantDomain(APIUtil.replaceEmailDomainBack(userName));
             UserRegistrationConfigDTO signupConfig = SelfSignUpUtil.getSignupConfiguration(tenantDomain);
@@ -4145,8 +4140,7 @@ public class APIStoreHostObject extends ScriptableObject {
         String url = serverURL + "UserAdmin";
 
         UserAdminStub userAdminStub = new UserAdminStub(url);
-        CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword,
-                                                  true, userAdminStub._getServiceClient());
+        CarbonUtils.setBasicAccessSecurityHeaders(adminUsername, adminPassword, userAdminStub._getServiceClient());
         FlaggedName[] flaggedNames = userAdminStub.getRolesOfUser(userName, "*", -1);
         List<String> roles = new ArrayList<String>();
         if (flaggedNames != null) {
