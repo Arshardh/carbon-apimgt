@@ -921,7 +921,16 @@ paths:
       summary: |
         Add a new subscription
       description: |
-        Add a new subscription
+        Add a new subscription.
+        
+        **Note** : In a cross-tenant scenario, you must follow a workaround where the 'apiIdentifier' parameter must be replaced with the tenant ID in the format provider-apiname-version (replace '@' with 'AT'), as shown in the example below. This needes to be done because the `X-WSO2-Tenant` header is not supported for the subscripton-add rest api. As a result, it is not possible to identify the tenant domain based on the alphanumeric value.
+         
+            {
+                "tier": "Unlimited",
+                "apiIdentifier": "admin-AT-tenant1.com-Tenant1API1-1.0.0",
+                "applicationId": "355fa235-c0f5-4728-b85c-9c1e9360d887"
+            }
+        
       parameters:
         - in: body
           name: body
@@ -1254,7 +1263,7 @@ parameters:
     name: apiId
     in: path
     description: |
-      **API ID** consisting of the **UUID** of the API.
+      **API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.
       The combination of the provider of the API, name of the API and the version is also accepted as a valid API ID.
       Should be formatted as **provider-name-version**.
     required: true
@@ -1266,7 +1275,7 @@ parameters:
     name: apiId
     in: query
     description: |
-      **API ID** consisting of the **UUID** of the API.
+      **API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.
       The combination of the provider of the API, name of the API and the version is also accepted as a valid API I.
       Should be formatted as **provider-name-version**.
     required: true

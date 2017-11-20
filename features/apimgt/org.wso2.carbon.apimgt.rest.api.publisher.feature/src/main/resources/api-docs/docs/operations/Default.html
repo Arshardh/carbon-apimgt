@@ -1,28 +1,25 @@
 <div class="main-content">
-    <h1><a name="Subscription (Collection)"></a>Subscription (Collection)</h1>
+    <h1><a name="default"></a>default</h1>
 
     
         
             <hr/>
-            <h3 class="operation-heading"><a name="subscriptionsGet"></a>Get All Subscriptions <br><small>GET https://apis.wso2.com/api/am/publisher/v0.9/subscriptions</small></h3>
+            <h3 class="operation-heading"><a name="apisGet"></a>Get all APIs
+ <br><small>GET https://apis.wso2.com/api/am/publisher/v0.9/apis</small></h3>
             <p class="marked"></p>
 
-            <p class="marked">This operation can be used to retrieve a list of subscriptions of the user associated with the provided access token. This operation is capable of
+            <p class="marked">This operation provides you a list of available APIs qualifying under a given search condition.
 
-1. Retrieving all subscriptions for the user&#39;s APIs.
-`GET https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions`
-
-2. Retrieving subscriptions for a specific API.
-`GET https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions?apiId=c43a325c-260b-4302-81cb-768eafaa3aed`
+Each retrieved API is represented with a minimal amount of attributes. If you want to get complete details of an API, you need to use **Get API details** operation.
 </p>
 
             <h4 class="section-heading">OAuth 2.0 Scope</h4>
             
-                <code>apim:subscription_view</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:subscription_view' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
+                <code>apim:api_view</code><span class="label label-primary" data-toggle="tooltip" title="This resource is secured with an OAuth 2.0 scope. You need to provide an access token which has 'apim:api_view' scope using Authorization header. Please see 'Getting Started' section for more information." style="margin-left: 10px">i</span>
             
             
 
-            <div class="pointer" data-toggle="collapse" data-target="#request-subscriptionsGet">
+            <div class="pointer" data-toggle="collapse" data-target="#request-apisGet">
                 <h4 class="section-heading">
                     Request
                     
@@ -32,12 +29,12 @@
             </div>
 
             
-                <div id="request-subscriptionsGet"class="pre collapse in"><code class="json">GET https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b
+                <div id="request-apisGet"class="pre collapse in"><code class="json">GET https://127.0.0.1:9443/api/am/publisher/v0.9/apis
 Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
             
             
 
-            <div class="pointer" data-toggle="collapse" data-target="#response-subscriptionsGet">
+            <div class="pointer" data-toggle="collapse" data-target="#response-apisGet">
                 <h4 class="section-heading">
                     Response
                     
@@ -46,25 +43,29 @@ Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a</code></div>
                 </h4>
             </div>
             
-                <div id="response-subscriptionsGet" class="pre collapse in"><code class="json">HTTP/1.1 200 OK
+                <div id="response-apisGet" class="pre collapse in"><code class="json">HTTP/1.1 200 OK
 Content-Type: application/json
- 
+
 {
    &quot;previous&quot;: &quot;&quot;,
    &quot;list&quot;:    [
             {
-         &quot;subscriptionId&quot;: &quot;64eca60b-2e55-4c38-8603-e9e6bad7d809&quot;,
-         &quot;tier&quot;: &quot;Gold&quot;,
-         &quot;apiIdentifier&quot;: &quot;admin-PhoneVerification-1.0.0&quot;,
-         &quot;applicationId&quot;: &quot;896658a0-b4ee-4535-bbfa-806c894a4015&quot;,
-         &quot;status&quot;: &quot;UNBLOCKED&quot;
+         &quot;provider&quot;: &quot;admin&quot;,
+         &quot;version&quot;: &quot;1.0.0&quot;,
+         &quot;description&quot;: &quot;This sample API provides Account Status Validation&quot;,
+         &quot;name&quot;: &quot;AccountVal&quot;,
+         &quot;context&quot;: &quot;/account&quot;,
+         &quot;id&quot;: &quot;2e81f147-c8a8-4f68-b4f0-69e0e7510b01&quot;,
+         &quot;status&quot;: &quot;PUBLISHED&quot;
       },
             {
-         &quot;subscriptionId&quot;: &quot;7ac22c34-8745-4cfe-91e0-262c50b2f2e3&quot;,
-         &quot;tier&quot;: &quot;Gold&quot;,
-         &quot;apiIdentifier&quot;: &quot;admin-PhoneVerification-1.0.0&quot;,
-         &quot;applicationId&quot;: &quot;367a2361-8db5-4140-8133-c6c8dc7fa0c4&quot;,
-         &quot;status&quot;: &quot;UNBLOCKED&quot;
+         &quot;provider&quot;: &quot;admin&quot;,
+         &quot;version&quot;: &quot;1.0.0&quot;,
+         &quot;description&quot;: null,
+         &quot;name&quot;: &quot;api1&quot;,
+         &quot;context&quot;: &quot;/api1&quot;,
+         &quot;id&quot;: &quot;3e22d2fb-277a-4e9e-8c7e-1c0f7f73960e&quot;,
+         &quot;status&quot;: &quot;PUBLISHED&quot;
       }
    ],
    &quot;next&quot;: &quot;&quot;,
@@ -75,7 +76,7 @@ Content-Type: application/json
 
             <h4 class="section-heading">Sample CURL</h4>
             
-                <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a&quot; &quot;https://127.0.0.1:9443/api/am/publisher/v0.9/subscriptions?apiId=890a4f4d-09eb-4877-a323-57f6ce2ed79b&quot;</code></div>
+                <div class="pre"><code class="bash">curl -k -H &quot;Authorization: Bearer b0982cd2aacd463ff5f63cd5ebe58f4a&quot; https://127.0.0.1:9443/api/am/publisher/v0.9/apis</code></div>
             
             
 
@@ -97,39 +98,6 @@ Content-Type: application/json
                     <th>Default</th>
                 </tr>
                 </thead>
-                
-                    <tr>
-                        <td class="parameter">
-                            
-                            <span class="param-in">Query </span>
-                            
-                            
-                            
-                        </td>
-                        <td class="param-name">
-                            <p>apiId</p>
-                            <p class="param-required">
-                                required
-                                
-                            </p>
-                        </td>
-                        <td>
-                            <p class="param-description marked">**API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.
-The combination of the provider of the API, name of the API and the version is also accepted as a valid API I.
-Should be formatted as **provider-name-version**.
-</p>
-                            
-                        </td>
-                        <td>
-                            <span class="param-type">
-                                String
-                                
-                            </span>
-                        </td>
-                        <td>
-                            <p class="marked"></p>
-                        </td>
-                    </tr>
                 
                     <tr>
                         <td class="parameter">
@@ -190,6 +158,53 @@ Should be formatted as **provider-name-version**.
                         </td>
                         <td>
                             <p class="marked">0</p>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td class="parameter">
+                            
+                            <span class="param-in">Query </span>
+                            
+                            
+                            
+                        </td>
+                        <td class="param-name">
+                            <p>query</p>
+                            <p class="param-required">
+                                
+                                optional
+                            </p>
+                        </td>
+                        <td>
+                            <p class="param-description marked">**Search condition**.
+
+You can search in attributes by using an **&quot;&lt;attribute&gt;:&quot;** modifier.
+
+Eg.
+&quot;provider:wso2&quot; will match an API if the provider of the API is exactly &quot;wso2&quot;.
+
+Additionally you can use wildcards.
+
+Eg.
+&quot;provider:wso2*&quot; will match an API if the provider of the API starts with &quot;wso2&quot;.
+
+Supported attribute modifiers are [**version, context, status,
+description, subcontext, doc, provider**]
+
+If no advanced attribute modifier has been specified, the API names containing 
+the search term will be returned as a result.
+</p>
+                            
+                        </td>
+                        <td>
+                            <span class="param-type">
+                                String
+                                
+                            </span>
+                        </td>
+                        <td>
+                            <p class="marked"></p>
                         </td>
                     </tr>
                 
@@ -277,11 +292,11 @@ variant of the resourec.
                 
                     <tr>
                         <td class="parameter"><p class="marked">200</p></td>
-                        <td class="parameter"><p class="marked">OK.\nSubscription list returned.\n</p></td>
+                        <td class="parameter"><p class="marked">OK.\nList of qualifying APIs is returned.\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
                                 
-                                    <a href="#!/models#SubscriptionList">SubscriptionList</a>
+                                    <a href="#!/models#APIList">APIList</a>
                                 
                                 
                             </span>
@@ -303,7 +318,7 @@ variant of the resourec.
                 
                     <tr>
                         <td class="parameter"><p class="marked">406</p></td>
-                        <td class="parameter"><p class="marked">Not Acceptable. The requested media type is not supported\n</p></td>
+                        <td class="parameter"><p class="marked">Not Acceptable.\nThe requested media type is not supported\n</p></td>
                         <td class="parameter">
                             <span class="parameter">
                                 
