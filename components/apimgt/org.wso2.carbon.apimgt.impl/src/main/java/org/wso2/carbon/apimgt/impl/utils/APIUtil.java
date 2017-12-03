@@ -141,6 +141,7 @@ import org.wso2.carbon.user.mgt.UserMgtConstants;
 import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.ConfigurationContextService;
 import org.wso2.carbon.utils.FileUtil;
+import org.wso2.carbon.utils.NetworkUtils;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 import org.xml.sax.SAXException;
 
@@ -1322,38 +1323,8 @@ public final class APIUtil {
      * @throws Exception
      */
     private static boolean isWSDL2Document(String url) throws APIManagementException {
-        URL wsdl = null;
-        boolean isWsdl2 = false;
-        try {
-            wsdl = new URL(url);
-        } catch (MalformedURLException e) {
-            throw new APIManagementException("Malformed URL encountered", e);
-        }
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(wsdl.openStream(), Charset.defaultCharset()));
-
-            String inputLine;
-            StringBuilder urlContent = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                String wsdl2NameSpace = "http://www.w3.org/ns/wsdl";
-                urlContent.append(inputLine);
-                isWsdl2 = urlContent.indexOf(wsdl2NameSpace) > 0;
-            }
-            in.close();
-            if (isWsdl2) {
-                WSDLReader wsdlReader20 = null;
-                try {
-                    wsdlReader20 = WSDLFactory.newInstance().newWSDLReader();
-                    wsdlReader20.readWSDL(url);
-                } catch (WSDLException e) {
-                    throw new APIManagementException("Error while reading WSDL Document from " + url, e);
-                }
-            }
-        } catch (IOException e) {
-            throw new APIManagementException("Error Reading Input from Stream from " + url, e);
-        }
-        return isWsdl2;
+        APIMWSDLReader wsdlReader = new APIMWSDLReader(url);
+        return wsdlReader.isWSDL2BaseURI();
     }
 
     /**
@@ -5028,5 +4999,38 @@ public final class APIUtil {
             }
         }
         return false;
+    }
+
+    public static String getServerURL() throws APIManagementException {
+        String hostName = ServerConfiguration.getInstance().getFirstProperty(APIConstants.API_MANAGER_HOSTNAME);
+        try {
+            if (hostName == null) {
+                hostName = NetworkUtils.getLocalHostname();
+            }
+        } catch (SocketException e) {
+            throw new APIManagementException("Error while trying to read hostname.", e);
+        }
+        String mgtTransport = CarbonUtils.getManagementTransport();
+        AxisConfiguration axisConfiguration = ServiceReferenceHolder
+                .getContextService().getServerConfigContext().getAxisConfiguration();
+        int mgtTransportPort = CarbonUtils.getTransportProxyPort(axisConfiguration, mgtTransport);
+        if (mgtTransportPort <= 0) {
+            mgtTransportPort = CarbonUtils.getTransportPort(axisConfiguration, mgtTransport);
+        }
+        String serverUrl = mgtTransport + "://" + hostName.toLowerCase();
+        // If it's well known HTTPS port, skip adding port
+        if (mgtTransportPort != APIConstants.HTTPS_PROTOCOL_PORT) {
+            serverUrl += ":" + mgtTransportPort;
+        }
+        // If ProxyContextPath is defined then append it
+        String proxyContextPath = ServerConfiguration.getInstance().getFirstProperty(APIConstants.PROXY_CONTEXT_PATH);
+        if (proxyContextPath != null && !proxyContextPath.trim().isEmpty()) {
+            if (proxyContextPath.charAt(0) == '/') {
+                serverUrl += proxyContextPath;
+            } else {
+                serverUrl += "/" + proxyContextPath;
+            }
+        }
+        return serverUrl;
     }
 }
