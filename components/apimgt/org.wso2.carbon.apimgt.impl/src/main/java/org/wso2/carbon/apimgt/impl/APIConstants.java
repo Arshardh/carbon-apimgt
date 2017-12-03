@@ -953,7 +953,7 @@ public final class APIConstants {
     public static final String HTTPS_PROTOCOL = "https";
     public static final int HTTPS_PROTOCOL_PORT = 443;
     public static final int HTTP_PROTOCOL_PORT = 80;
-    
+    public static final String PROXY_CONTEXT_PATH = "ProxyContextPath";
 
     public static final long MAX_FILE_SIZE = 1024L;
 
