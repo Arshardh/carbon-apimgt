@@ -111,6 +111,7 @@ var editUrl="info";
     %>
     <script>
         var siteRoot = '<%=jagg.getAbsoluteUrl("/site/themes/"+jagg.getUserTheme().base)%>';
+        var siteContext = '<%=jagg.getAbsoluteUrl("")%>';
     </script>
 
 
