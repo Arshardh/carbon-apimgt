@@ -16,6 +16,9 @@ var getLastAccessTime = function(name) {
     var provider = $("#item-info #spanProvider").text();
     jagg.syncPost("/site/blocks/stats/ajax/stats.jag", { action:"getProviderAPIVersionUserLastAccess",provider:provider,mode:'browse' },
                   function (json) {
+                      if (!json) {
+                        return 0;
+                      }
                       if (!json.error) {
                           var length = json.usage.length;
                           for (var i = 0; i < length; i++) {
@@ -40,6 +43,9 @@ var getResponseTime = function(name) {
     var provider = $("#item-info #spanProvider").text();
     jagg.syncPost("/site/blocks/stats/ajax/stats.jag", { action:"getProviderAPIServiceTime",provider:provider,mode:'browse'},
                   function (json) {
+                      if (!json) {
+                          return 0;
+                      }
                       if (!json.error) {
                           var length = json.usage.length;
                           for (var i = 0; i < length; i++) {
