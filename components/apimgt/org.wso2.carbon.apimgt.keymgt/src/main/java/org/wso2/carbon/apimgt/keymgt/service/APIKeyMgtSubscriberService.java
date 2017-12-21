@@ -18,7 +18,6 @@
 
 package org.wso2.carbon.apimgt.keymgt.service;
 
-import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.util.URL;
 import org.apache.commons.logging.Log;
@@ -31,9 +30,15 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.oltu.oauth2.common.OAuth;
 import org.json.JSONObject;
 import org.wso2.carbon.apimgt.api.APIManagementException;
-import org.wso2.carbon.apimgt.api.model.*;
+import org.wso2.carbon.apimgt.api.model.API;
+import org.wso2.carbon.apimgt.api.model.Application;
+import org.wso2.carbon.apimgt.api.model.ApplicationConstants;
+import org.wso2.carbon.apimgt.api.model.OAuthApplicationInfo;
+import org.wso2.carbon.apimgt.api.model.SubscribedAPI;
+import org.wso2.carbon.apimgt.api.model.Subscriber;
 import org.wso2.carbon.apimgt.handlers.security.stub.types.APIKeyMapping;
 import org.wso2.carbon.apimgt.impl.APIConstants;
 import org.wso2.carbon.apimgt.impl.APIManagerConfiguration;
@@ -56,8 +61,6 @@ import org.wso2.carbon.identity.application.common.model.ServiceProvider;
 import org.wso2.carbon.identity.application.mgt.ApplicationManagementService;
 import org.wso2.carbon.identity.base.IdentityException;
 import org.wso2.carbon.identity.oauth.OAuthAdminService;
-import org.wso2.carbon.identity.oauth.OAuthUtil;
-import org.wso2.carbon.identity.oauth.cache.CacheKey;
 import org.wso2.carbon.identity.oauth.cache.OAuthCache;
 import org.wso2.carbon.identity.oauth.cache.OAuthCacheKey;
 import org.wso2.carbon.identity.oauth.common.OAuthConstants;
@@ -105,6 +108,7 @@ public class APIKeyMgtSubscriberService extends AbstractAdmin {
             return null;
         }
 
+        long start = System.currentTimeMillis();
         String tenantDomain = MultitenantUtils.getTenantDomain(userId);
         String baseUser = CarbonContext.getThreadLocalCarbonContext().getUsername();
         String userName = MultitenantUtils.getTenantAwareUsername(userId);
@@ -134,14 +138,18 @@ public class APIKeyMgtSubscriberService extends AbstractAdmin {
             serviceProvider.setDescription("Service Provider for application " + applicationName);
 
             ApplicationManagementService appMgtService = ApplicationManagementService.getInstance();
+            long createApplicationStartTime = System.currentTimeMillis();
             appMgtService.createApplication(serviceProvider, tenantDomain, userName);
+            log.debug("Time taken to Create Service Provider from Application service : " + (System.currentTimeMillis
+                    () - createApplicationStartTime));
+            long getApplicationExcludingFileBasedSPsStartTime = System.currentTimeMillis();
             ServiceProvider serviceProviderCreated = appMgtService.getApplicationExcludingFileBasedSPs(applicationName, tenantDomain);
+            log.debug("Time taken to get Service Provider from Application service " +
+                    "(getApplicationExcludingFileBasedSPs) : " + (System.currentTimeMillis() -
+                    getApplicationExcludingFileBasedSPsStartTime));
             serviceProviderCreated.setSaasApp(oauthApplicationInfo.getIsSaasApplication());
-            appMgtService.updateApplication(serviceProviderCreated, tenantDomain, userName);
 
-            ServiceProvider createdServiceProvider = appMgtService.getApplicationExcludingFileBasedSPs(applicationName, tenantDomain);
-
-            if (createdServiceProvider == null) {
+            if (serviceProviderCreated == null) {
                 throw new APIKeyMgtException("Couldn't create Service Provider Application " + applicationName);
             }
 
@@ -172,12 +180,19 @@ public class APIKeyMgtSubscriberService extends AbstractAdmin {
 
             oAuthConsumerAppDTO.setOAuthVersion(OAuthConstants.OAuthVersions.VERSION_2);
             log.debug("Creating OAuth App " + applicationName);
+            long registerOAuthApplicationData = System.currentTimeMillis();
             oAuthAdminService.registerOAuthApplicationData(oAuthConsumerAppDTO);
+            log.debug("Time taken to register Oauth Application data from (registerOAuthApplicationData) : " +
+                    (System.currentTimeMillis() - registerOAuthApplicationData));
             // === Finished Creating OAuth App ===
 
             log.debug("Created OAuth App " + applicationName);
+            long getOAuthApplicationDataByAppName = System.currentTimeMillis();
+
             OAuthConsumerAppDTO createdApp = oAuthAdminService.getOAuthApplicationDataByAppName(oAuthConsumerAppDTO
                     .getApplicationName());
+            log.debug("Time taken to get Oauth Application data from (getOAuthApplicationDataByAppName) : " +
+                    (System.currentTimeMillis() - getOAuthApplicationDataByAppName));
             log.debug("Retrieved Details for OAuth App " + createdApp.getApplicationName());
 
             // Set the OAuthApp in InboundAuthenticationConfig
@@ -200,17 +215,20 @@ public class APIKeyMgtSubscriberService extends AbstractAdmin {
 
             inboundAuthenticationRequestConfigs[0] = inboundAuthenticationRequestConfig;
             inboundAuthenticationConfig.setInboundAuthenticationRequestConfigs(inboundAuthenticationRequestConfigs);
-            createdServiceProvider.setInboundAuthenticationConfig(inboundAuthenticationConfig);
+            serviceProviderCreated.setInboundAuthenticationConfig(inboundAuthenticationConfig);
 
             // Update the Service Provider app to add OAuthApp as an Inbound Authentication Config
-            appMgtService.updateApplication(createdServiceProvider,tenantDomain,userName);
+            long updateApplication = System.currentTimeMillis();
 
+            appMgtService.updateApplication(serviceProviderCreated,tenantDomain,userName);
+            log.debug("Time taken to update Service Provider Application data from (getOAuthApplicationDataByAppName)" +
+                    " : " + (System.currentTimeMillis() - updateApplication));
 
             OAuthApplicationInfo oAuthApplicationInfo = new OAuthApplicationInfo();
             oAuthApplicationInfo.setClientId(createdApp.getOauthConsumerKey());
             oAuthApplicationInfo.setCallBackURL(createdApp.getCallbackUrl());
             oAuthApplicationInfo.setClientSecret(createdApp.getOauthConsumerSecret());
-            oAuthApplicationInfo.setIsSaasApplication(createdServiceProvider.isSaasApp());
+            oAuthApplicationInfo.setIsSaasApplication(serviceProviderCreated.isSaasApp());
 
             oAuthApplicationInfo.addParameter(ApplicationConstants.
                     OAUTH_REDIRECT_URIS, createdApp.getCallbackUrl());
@@ -228,6 +246,8 @@ public class APIKeyMgtSubscriberService extends AbstractAdmin {
         } finally {
             PrivilegedCarbonContext.getThreadLocalCarbonContext().endTenantFlow();
             PrivilegedCarbonContext.getThreadLocalCarbonContext().setUsername(baseUser);
+            log.debug("Time taken to retrieve createOAuthApplicationByApplicationInfo : " + (System.currentTimeMillis
+                    () - start));
         }
         return null;
 

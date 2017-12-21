@@ -312,7 +312,10 @@ public class AMDefaultKeyManagerImpl extends AbstractKeyManager {
                 }
             }
             //get default application access token name from config.
-
+            long start = 0;
+            if (log.isDebugEnabled()) {
+                start = System.currentTimeMillis();
+            }
             String applicationTokenScope = ServiceReferenceHolder.getInstance().getAPIManagerConfigurationService().
                                             getAPIManagerConfiguration().getFirstProperty(APIConstants
                                                                             .API_KEY_VALIDATOR_APPLICATION_TOKEN_SCOPE);
@@ -343,6 +346,10 @@ public class AMDefaultKeyManagerImpl extends AbstractKeyManager {
 
             httpTokpost.setEntity(new UrlEncodedFormEntity(tokParams, "UTF-8"));
             HttpResponse tokResponse = tokenEPClient.execute(httpTokpost);
+            if (log.isDebugEnabled()) {
+                log.debug("token endpoint url : " + tokenEndpoint);
+                log.debug("Time taken to call the token endpoint : " + (System.currentTimeMillis() - start));
+            }
             HttpEntity tokEntity = tokResponse.getEntity();
 
             if (tokResponse.getStatusLine().getStatusCode() != 200) {
@@ -396,7 +403,6 @@ public class AMDefaultKeyManagerImpl extends AbstractKeyManager {
                 new OAuth2TokenValidationRequestDTO.TokenValidationContextParam[1];
         contextParams[0] = contextParam;
         requestDTO.setContext(contextParams);
-
         OAuth2ClientApplicationDTO clientApplicationDTO = oAuth2TokenValidationService.findOAuthConsumerIfTokenIsValid
                 (requestDTO);
         OAuth2TokenValidationResponseDTO responseDTO = clientApplicationDTO.getAccessTokenValidationResponse();
