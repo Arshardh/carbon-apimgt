@@ -74,6 +74,10 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
     @Override
     public Response subscriptionsGet(String apiId, String applicationId, String groupId, Integer offset,
             Integer limit, String accept, String ifNoneMatch) {
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         String username = RestApiUtil.getLoggedInUsername();
         String tenantDomain = RestApiUtil.getLoggedInUserTenantDomain();
         Subscriber subscriber = new Subscriber(username);
@@ -92,7 +96,8 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
             APIConsumer apiConsumer = RestApiUtil.getConsumer(username);
             SubscriptionListDTO subscriptionListDTO;
             if (!StringUtils.isEmpty(apiId)) {
-                // this will fail with an authorization failed exception if user does not have permission to access the API
+                // this will fail with an authorization failed exception if user does not have permission to access
+                // the API
                 APIIdentifier apiIdentifier = APIMappingUtil.getAPIIdentifierFromApiIdOrUUID(apiId, tenantDomain);
                 subscriptions = apiConsumer.getSubscribedIdentifiers(subscriber, apiIdentifier, groupId);
                 //sort by application name
@@ -151,6 +156,11 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
                 handleException("Error while getting subscriptions of the user " + username, e);
                 return null;
             }
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("GET /am/subscriptions from User :" + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
         }
     }
 
@@ -163,6 +173,10 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
      */
     @Override
     public Response subscriptionsPost(SubscriptionDTO body, String contentType) {
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         String username = RestApiUtil.getLoggedInUsername();
         String tenantDomain = RestApiUtil.getLoggedInUserTenantDomain();
         APIConsumer apiConsumer;
@@ -220,6 +234,11 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
                         .getApplicationId() + ", tier:" + body.getTier(), e);
                 return null;
             }
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("POST /am/subscriptions from User :" + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
         }
     }
 
@@ -235,6 +254,10 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
     @Override
     public Response subscriptionsSubscriptionIdGet(String subscriptionId, String accept, String ifNoneMatch,
             String ifModifiedSince) {
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         String username = RestApiUtil.getLoggedInUsername();
         APIConsumer apiConsumer;
         try {
@@ -253,6 +276,11 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
         } catch (APIManagementException e) {
             handleException("Error while getting subscription with id " + subscriptionId, e);
             return null;
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("GET /am/subscriptions/{id} from User :" + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
         }
     }
 
@@ -266,6 +294,10 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
      */
     @Override
     public Response subscriptionsSubscriptionIdDelete(String subscriptionId, String ifMatch, String ifUnmodifiedSince) {
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         String username = RestApiUtil.getLoggedInUsername();
         APIConsumer apiConsumer;
         try {
@@ -284,6 +316,12 @@ public class SubscriptionsApiServiceImpl extends SubscriptionsApiService {
         } catch (APIManagementException e) {
             handleException("Error while deleting subscription with id " + subscriptionId, e);
             return null;
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("DELETE /am/subscriptions from User :" + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
+
         }
     }
 

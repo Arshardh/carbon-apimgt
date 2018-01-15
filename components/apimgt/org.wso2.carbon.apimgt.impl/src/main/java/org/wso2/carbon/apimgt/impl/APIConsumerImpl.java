@@ -2551,7 +2551,11 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         if (tokenScope != null && tokenScope.length() != 0 &&
                 !tokenScope.equals(APIConstants.OAUTH2_DEFAULT_SCOPE)) {
             scopeSet.addAll(getScopesByScopeKeys(tokenScope, tenantId));
+            long start = System.currentTimeMillis();
             authorizedScopes = getAllowedScopesForUserApplication(userId, scopeSet);
+            if (log.isDebugEnabled()){
+                log.debug("Time to getAllowedScopesForUserApplication: " + (System.currentTimeMillis() - start));
+            }
         }
 
         String authScopeString = getAuthorizedScopeString(authorizedScopes);
@@ -2570,8 +2574,14 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
             ApplicationKeysDTO appKeysDto = new ApplicationKeysDTO();
 
             // get APIM application by Application Name and userId.
+            long start = 0;
+            if (log.isDebugEnabled()) {
+                start = System.currentTimeMillis();
+            }
             Application application = ApplicationUtils.retrieveApplication(applicationName, userId, groupingId);
-
+            if (log.isDebugEnabled()) {
+                log.debug("Time to retrieveApplication: " + (System.currentTimeMillis() - start));
+            }
             // if its a PRODUCTION application.
             if (APIConstants.API_KEY_TYPE_PRODUCTION.equals(tokenType)) {
                 // initiate workflow type. By default simple work flow will be
@@ -3050,6 +3060,12 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
 			throws APIManagementException {
 		return apiMgtDAO.getApplications(subscriber, groupingId);
 	}
+
+    @Override
+    public Application[] getLightWeightApplications(Subscriber subscriber, String groupingId) throws
+            APIManagementException {
+        return apiMgtDAO.getLightWeightApplications(subscriber, groupingId);
+    }
 
     /**
      * @param userId Subsriber name.
