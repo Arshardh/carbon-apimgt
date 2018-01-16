@@ -21,6 +21,7 @@ package org.wso2.carbon.apimgt.impl.workflow;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.opensaml.xml.signature.P;
 import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.WorkflowResponse;
 import org.wso2.carbon.apimgt.api.model.AccessTokenInfo;
@@ -147,17 +148,34 @@ public abstract class AbstractApplicationRegistrationWorkflowExecutor extends Wo
             workflowDTO.getAppInfoDTO().getOAuthApplicationInfo()
                        .setClientName(applicationNameAfterAppend.toString());
             //createApplication on oAuthorization server.
+            long start = 0;
+            if (log.isDebugEnabled()) {
+                start = System.currentTimeMillis();
+            }
             OAuthApplicationInfo oAuthApplication = keyManager.createApplication(workflowDTO.getAppInfoDTO());
+            if (log.isDebugEnabled()) {
+                log.debug("Time taken to createApplication from Key Manager : " + (System.currentTimeMillis() - start));
+            }
             //Do application mapping with consumerKey.
             //dao.createApplicationRegistrationEntry(workflowDTO, true);
 
             //update associateApplication
             //application.updateAssociateOAuthApp(workflowDTO.getKeyType(), oAuthApplication);
-            ApplicationUtils.updateOAuthAppAssociation(application,workflowDTO.getKeyType(),oAuthApplication);
+            if (log.isDebugEnabled()) {
+                start = System.currentTimeMillis();
+            }
+            ApplicationUtils.updateOAuthAppAssociation(application, workflowDTO.getKeyType(), oAuthApplication);
+            if (log.isDebugEnabled()) {
+                log.debug("Time taken to updateOAuthAppAssociation : " + (System.currentTimeMillis() - start));
+                start = System.currentTimeMillis();
+            }
 
             //change create application status in to completed.
             dao.updateApplicationRegistration(APIConstants.AppRegistrationStatus.REGISTRATION_COMPLETED,
                     workflowDTO.getKeyType(),workflowDTO.getApplication().getId());
+            if (log.isDebugEnabled()) {
+                log.debug("Time taken to updateApplicationRegistration : " + (System.currentTimeMillis() - start));
+            }
 
             workflowDTO.setApplicationInfo(oAuthApplication);
 
@@ -170,8 +188,13 @@ public abstract class AbstractApplicationRegistrationWorkflowExecutor extends Wo
 
 
             AccessTokenRequest tokenRequest = ApplicationUtils.createAccessTokenRequest(oAuthApplication,null);
+            if (log.isDebugEnabled()) {
+                start = System.currentTimeMillis();
+            }
             AccessTokenInfo tokenInfo = keyManager.getNewApplicationAccessToken(tokenRequest);
-
+            if (log.isDebugEnabled()) {
+                log.debug("Time taken to getNewApplicationAccessToken : " + (System.currentTimeMillis() - start));
+            }
             /*
             AccessTokenInfo info = TokenMgtDao.getAccessTokenForConsumerId(tokenRequest.getClientId());
             if (info == null) {

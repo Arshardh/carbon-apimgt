@@ -75,9 +75,6 @@ import org.wso2.carbon.user.core.util.UserCoreUtil;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
-import javax.cache.Cache;
-import javax.cache.Caching;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -1801,11 +1798,12 @@ public class ApiMgtDAO {
                 "   AM_API API " +
                 "WHERE "+ 
                 "   SUB.TENANT_ID = ? " +
+                "   AND SUB.SUBSCRIBER_ID=APP.SUBSCRIBER_ID " +
                 "   AND APP.APPLICATION_ID=SUBS.APPLICATION_ID " +
                 "   AND API.API_ID=SUBS.API_ID" +
                 "   AND APP.NAME= ? " +
-                "   AND SUBS.SUBS_CREATE_STATE = '" +
-                APIConstants.SubscriptionCreatedStatus.SUBSCRIBE + "'";
+                "   AND SUBS.SUBS_CREATE_STATE = '" + APIConstants.SubscriptionCreatedStatus.SUBSCRIBE + "'";
+
 
         String whereClausewithGroupId = " AND (APP.GROUP_ID = ? OR (APP.GROUP_ID = '' AND SUB.USER_ID = ?))" ;
         String whereClausewithGroupIdorceCaseInsensitiveComp = " AND (APP.GROUP_ID = ? OR (APP.GROUP_ID = '' " +
@@ -5270,6 +5268,29 @@ public class ApiMgtDAO {
     }
 
     public Application[] getApplications(Subscriber subscriber, String groupingId) throws APIManagementException {
+        Application[] applications = getLightWeightApplications(subscriber, groupingId);
+        for (Application application : applications) {
+            Set<APIKey> keys = getApplicationKeys(subscriber.getName(), application.getId());
+            Map<String, OAuthApplicationInfo> keyMap = getOAuthApplications(application.getId());
+            for (String keyType : keyMap.keySet()) {
+                application.addOAuthApp(keyType, keyMap.get(keyType));
+            }
+            for (APIKey key : keys) {
+                application.addKey(key);
+            }
+        }
+        return applications;
+    }
+
+    /**
+     * This method retrieve the details of applications which owns the subscriber and group
+     * @param subscriber the subscriber subscribing for the api
+     * @param groupingId Grouping ID
+     * @return Array of Applications
+     * @throws APIManagementException If Database Connection error occurred
+     */
+    public Application[] getLightWeightApplications(Subscriber subscriber, String groupingId) throws
+            APIManagementException {
 
         Connection connection = null;
         PreparedStatement prepStmt = null;
@@ -5295,7 +5316,7 @@ public class ApiMgtDAO {
         String whereClauseWithGroupId;
 
         if(forceCaseInsensitiveComparisons){
-           whereClauseWithGroupId = "   AND "
+            whereClauseWithGroupId = "   AND "
                     +"     (GROUP_ID= ? "
                     + "      OR "
                     + "     (GROUP_ID='' AND LOWER(SUB.USER_ID) = LOWER(?)))";
@@ -5315,24 +5336,24 @@ public class ApiMgtDAO {
                     + " SUB.USER_ID = ?";
         }
 
-       if(groupingId != null && !groupingId.equals("null") && !groupingId.isEmpty())    {
-           sqlQuery += whereClauseWithGroupId;
-       } else   {
-           sqlQuery += whereClause;
-       }
-       try {
-           connection = APIMgtDBUtil.getConnection();
-           prepStmt = connection.prepareStatement(sqlQuery);
-           if(groupingId != null && !groupingId.equals("null") && !groupingId.isEmpty()){
-              prepStmt.setString(1, groupingId);
-              prepStmt.setString(2, subscriber.getName());
-           }else{
-               prepStmt.setString(1, subscriber.getName());
-           }
-           rs = prepStmt.executeQuery();
-           ArrayList<Application> applicationsList = new ArrayList<Application>();
-           Application application;
-           while (rs.next()) {
+        if (StringUtils.isNotEmpty(groupingId) && !("null").equals(groupingId)) {
+            sqlQuery += whereClauseWithGroupId;
+        } else {
+            sqlQuery += whereClause;
+        }
+        try {
+            connection = APIMgtDBUtil.getConnection();
+            prepStmt = connection.prepareStatement(sqlQuery);
+            if (StringUtils.isNotEmpty(groupingId) && !"null".equals(groupingId)) {
+                prepStmt.setString(1, groupingId);
+                prepStmt.setString(2, subscriber.getName());
+            } else {
+                prepStmt.setString(1, subscriber.getName());
+            }
+            rs = prepStmt.executeQuery();
+            ArrayList<Application> applicationsList = new ArrayList<Application>();
+            Application application;
+            while (rs.next()) {
                 application = new Application(rs.getString("NAME"), subscriber);
                 application.setId(rs.getInt("APPLICATION_ID"));
                 application.setTier(rs.getString("APPLICATION_TIER"));
@@ -5341,28 +5362,18 @@ public class ApiMgtDAO {
                 application.setStatus(rs.getString("APPLICATION_STATUS"));
                 application.setGroupId(rs.getString("GROUP_ID"));
                 application.setUUID(rs.getString("UUID"));
+                applicationsList.add(application);
 
-                Set<APIKey> keys = getApplicationKeys(subscriber.getName() , application.getId());
-                Map<String,OAuthApplicationInfo> keyMap = getOAuthApplications(application.getId());
-                    for (String keyType : keyMap.keySet()){
-                            application.addOAuthApp(keyType,keyMap.get(keyType));
-                    }
-
-                    for (APIKey key : keys) {
-                        application.addKey(key);
-                    }
-                    applicationsList.add(application);
-
+            }
+            Collections.sort(applicationsList, new Comparator<Application>() {
+                public int compare(Application o1, Application o2) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
                 }
-                Collections.sort(applicationsList, new Comparator<Application>() {
-                    public int compare(Application o1, Application o2) {
-                        return o1.getName().compareToIgnoreCase(o2.getName());
-                    }
-                });
-                applications = applicationsList.toArray(new Application[applicationsList.size()]);
+            });
+            applications = applicationsList.toArray(new Application[applicationsList.size()]);
         } catch (SQLException e) {
             handleException("Error when reading the application information from" +
-                            " the persistence store.", e);
+                    " the persistence store.", e);
         } finally {
             APIMgtDBUtil.closeAllConnections(prepStmt, connection, rs);
         }

@@ -69,6 +69,10 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
     @Override
     public Response applicationsGet(String groupId, String query, Integer limit, Integer offset, String accept,
             String ifNoneMatch) {
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         String username = RestApiUtil.getLoggedInUsername();
 
         // currently groupId is taken from the user so that groupId coming as a query parameter is not honored.
@@ -83,7 +87,7 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
             APIConsumer apiConsumer = APIManagerFactory.getInstance().getAPIConsumer(username);
             Application[] allMatchedApps = new Application[0];
             if (StringUtils.isBlank(query)) {
-                allMatchedApps = apiConsumer.getApplications(new Subscriber(username), groupId);
+                allMatchedApps = apiConsumer.getLightWeightApplications(new Subscriber(username), groupId);
             } else {
                 Application application = apiConsumer.getApplicationsByName(username, query, groupId);
                 if (application != null) {
@@ -101,6 +105,11 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
         } catch (APIManagementException e) {
             handleException("Error while retrieving applications of the user " + username, e);
             return null;
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("GET /am/applications from user : " + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
         }
     }
 
@@ -114,6 +123,10 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
     @Override
     public Response applicationsPost(ApplicationDTO body, String contentType) {
         String username = RestApiUtil.getLoggedInUsername();
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         try {
             APIConsumer apiConsumer = APIManagerFactory.getInstance().getAPIConsumer(username);
             String tenantDomain = RestApiUtil.getLoggedInUserTenantDomain();
@@ -153,6 +166,11 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
                 handleException("Error while adding a new application for the user " + username, e);
                 return null;
             }
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("POST /am/applications from user : " + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
         }
     }
 
@@ -172,9 +190,13 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
             String contentType, String ifMatch, String ifUnmodifiedSince) {
 
         String username = RestApiUtil.getLoggedInUsername();
+        long start = System.currentTimeMillis();
         try {
             APIConsumer apiConsumer = APIManagerFactory.getInstance().getAPIConsumer(username);
             Application application = apiConsumer.getApplicationByUUID(applicationId);
+            if (log.isDebugEnabled()) {
+                log.debug("Time taken for getApplicationByUUID : " + (System.currentTimeMillis() - start));
+            }
             if (application != null) {
                 if (RestAPIStoreUtils.isUserAccessAllowedForApplication(application)) {
                     String[] accessAllowDomainsArray = body.getAccessAllowDomains().toArray(new String[1]);
@@ -182,11 +204,15 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
                     jsonParamObj.put(ApplicationConstants.OAUTH_CLIENT_USERNAME, username);
                     String jsonParams = jsonParamObj.toString();
                     String tokenScopes = StringUtils.join(body.getScopes(), " ");
-
+                    long start2 = System.currentTimeMillis();
                     Map<String, Object> keyDetails = apiConsumer.requestApprovalForApplicationRegistration(
                             username, application.getName(), body.getKeyType().toString(), body.getCallbackUrl(),
                             accessAllowDomainsArray, body.getValidityTime(), tokenScopes, application.getGroupId(),
                             jsonParams);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Time taken for requestApprovalForApplicationRegistration : " + (System
+                                .currentTimeMillis() - start2));
+                    }
                     ApplicationKeyDTO applicationKeyDTO =
                             ApplicationKeyMappingUtil.fromApplicationKeyToDTO(keyDetails, body.getKeyType().toString());
 
@@ -202,6 +228,11 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
                 throw RestApiUtil.buildConflictException("Keys already generated for the application " + applicationId);
             } else{
                 handleException("Error while generating keys for application " + applicationId, e);
+            }
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("POST /applications/generate-keys?applicationId= from User: " + username + " " + (System
+                        .currentTimeMillis() - start));
             }
         }
         return null;
@@ -219,6 +250,11 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
     @Override
     public Response applicationsApplicationIdGet(String applicationId, String accept, String ifNoneMatch,
             String ifModifiedSince) {
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
+
         String username = RestApiUtil.getLoggedInUsername();
         try {
             APIConsumer apiConsumer = APIManagerFactory.getInstance().getAPIConsumer(username);
@@ -236,6 +272,11 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
         } catch (APIManagementException e) {
             handleException("Error while retrieving application " + applicationId, e);
             return null;
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("GET /applications/{id} from User: " + username + " " + (System
+                        .currentTimeMillis() - startTime));
+            }
         }
     }
 
@@ -253,6 +294,10 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
     public Response applicationsApplicationIdPut(String applicationId, ApplicationDTO body, String contentType,
             String ifMatch, String ifUnmodifiedSince) {
         String username = RestApiUtil.getLoggedInUsername();
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         try {
             APIConsumer apiConsumer = APIManagerFactory.getInstance().getAPIConsumer(username);
             Application oldApplication = apiConsumer.getApplicationByUUID(applicationId);
@@ -282,6 +327,11 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
         } catch (APIManagementException e) {
             handleException("Error while updating application " + applicationId, e);
             return null;
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("PUT /applications/{id} from User: " + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
         }
     }
 
@@ -298,6 +348,10 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
     public Response applicationsApplicationIdDelete(String applicationId, String ifMatch,
             String ifUnmodifiedSince) {
         String username = RestApiUtil.getLoggedInUsername();
+        long startTime = 0;
+        if (log.isDebugEnabled()) {
+            startTime = System.currentTimeMillis();
+        }
         try {
             APIConsumer apiConsumer = APIManagerFactory.getInstance().getAPIConsumer(username);
             Application application = apiConsumer.getApplicationByUUID(applicationId);
@@ -314,6 +368,11 @@ public class ApplicationsApiServiceImpl extends ApplicationsApiService {
         } catch (APIManagementException e) {
             handleException("Error while deleting application " + applicationId, e);
             return null;
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("DELETE /am/applications/{id} from user : " + username + " " + (System.currentTimeMillis() -
+                        startTime));
+            }
         }
     }
 
