@@ -2076,7 +2076,7 @@ public class ApiMgtDAO {
         subscriber.setName(subscribedUserName);
 
         String sqlQuery = "SELECT " +
-                "   SUBS.SUBSCRIPTION_ID" +
+                "   SUBS.SUBSCRIPTION_ID  AS SUBS_ID" +
                 "   ,API.API_PROVIDER AS API_PROVIDER" +
                 "   ,API.API_NAME AS API_NAME" +
                 "   ,API.API_VERSION AS API_VERSION" +
@@ -2099,7 +2099,6 @@ public class ApiMgtDAO {
                 "   AND SUB.SUBSCRIBER_ID=APP.SUBSCRIBER_ID " +
                 "   AND APP.APPLICATION_ID=SUBS.APPLICATION_ID " +
                 "   AND API.API_ID=SUBS.API_ID" +
-                "   AND APP.NAME= ? " +
                 "   AND SUBS.SUBS_CREATE_STATE = '" + APIConstants.SubscriptionCreatedStatus.SUBSCRIBE + "'";
         String whereClause =  " AND  SUB.USER_ID = ? " ;
         String whereClauseCaseInSensitive = " AND  LOWER(SUB.USER_ID) = LOWER(?) ";
