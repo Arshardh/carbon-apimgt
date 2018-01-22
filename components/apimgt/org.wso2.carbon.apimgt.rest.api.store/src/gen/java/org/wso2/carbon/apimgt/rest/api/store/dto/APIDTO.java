@@ -1,15 +1,12 @@
 package org.wso2.carbon.apimgt.rest.api.store.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIBusinessInformationDTO;
+import java.util.*;
 
 import io.swagger.annotations.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
-
 
 
 
@@ -61,9 +58,9 @@ public class APIDTO  {
 
   
   /**
-   * UUID of the api registry artifact\n
+   * UUID of the api registry artifact
    **/
-  @ApiModelProperty(value = "UUID of the api registry artifact\n")
+  @ApiModelProperty(value = "UUID of the api registry artifact")
   @JsonProperty("id")
   public String getId() {
     return id;
@@ -74,8 +71,9 @@ public class APIDTO  {
 
   
   /**
+   * Name of the API
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "Name of the API")
   @JsonProperty("name")
   public String getName() {
     return name;
@@ -86,8 +84,9 @@ public class APIDTO  {
 
   
   /**
+   * A brief description about the API
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "A brief description about the API")
   @JsonProperty("description")
   public String getDescription() {
     return description;
@@ -98,8 +97,9 @@ public class APIDTO  {
 
   
   /**
+   * A string that represents the context of the API request
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "A string that represents the context of the API request")
   @JsonProperty("context")
   public String getContext() {
     return context;
@@ -110,8 +110,9 @@ public class APIDTO  {
 
   
   /**
+   * The version of the API
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "The version of the API")
   @JsonProperty("version")
   public String getVersion() {
     return version;
@@ -122,9 +123,9 @@ public class APIDTO  {
 
   
   /**
-   * If the provider value is not given user invoking the api will be used as the provider.\n
+   * If the provider value is not given user invoking the api will be used as the provider.
    **/
-  @ApiModelProperty(required = true, value = "If the provider value is not given user invoking the api will be used as the provider.\n")
+  @ApiModelProperty(required = true, value = "If the provider value is not given user invoking the api will be used as the provider.")
   @JsonProperty("provider")
   public String getProvider() {
     return provider;
@@ -135,9 +136,9 @@ public class APIDTO  {
 
   
   /**
-   * Swagger definition of the API which contains details about URI templates and scopes\n
+   * Swagger definition of the API which contains details about URI templates and scopes
    **/
-  @ApiModelProperty(required = true, value = "Swagger definition of the API which contains details about URI templates and scopes\n")
+  @ApiModelProperty(required = true, value = "Swagger definition of the API which contains details about URI templates and scopes")
   @JsonProperty("apiDefinition")
   public String getApiDefinition() {
     return apiDefinition;
@@ -148,8 +149,9 @@ public class APIDTO  {
 
   
   /**
+   * This describes in which status of the lifecycle the API is.
    **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "This describes in which status of the lifecycle the API is.")
   @JsonProperty("status")
   public String getStatus() {
     return status;
@@ -184,8 +186,9 @@ public class APIDTO  {
 
   
   /**
+   * Search keywords related to the API
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Search keywords related to the API")
   @JsonProperty("tags")
   public List<String> getTags() {
     return tags;
@@ -196,8 +199,9 @@ public class APIDTO  {
 
   
   /**
+   * The subscription tiers selected for the particular API
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The subscription tiers selected for the particular API")
   @JsonProperty("tiers")
   public List<String> getTiers() {
     return tiers;

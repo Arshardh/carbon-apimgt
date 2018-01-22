@@ -1,15 +1,12 @@
 package org.wso2.carbon.apimgt.rest.api.store.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.wso2.carbon.apimgt.rest.api.store.dto.TokenDTO;
+import java.util.*;
 
 import io.swagger.annotations.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
-
 
 
 
@@ -40,9 +37,9 @@ public class ApplicationKeyDTO  {
 
   
   /**
-   * Consumer key of the application
+   * The consumer key associated with the application and identifying the client
    **/
-  @ApiModelProperty(value = "Consumer key of the application")
+  @ApiModelProperty(value = "The consumer key associated with the application and identifying the client")
   @JsonProperty("consumerKey")
   public String getConsumerKey() {
     return consumerKey;
@@ -53,9 +50,9 @@ public class ApplicationKeyDTO  {
 
   
   /**
-   * Consumer secret of the application
+   * The client secret that is used to authenticate the client with the authentication server
    **/
-  @ApiModelProperty(value = "Consumer secret of the application")
+  @ApiModelProperty(value = "The client secret that is used to authenticate the client with the authentication server")
   @JsonProperty("consumerSecret")
   public String getConsumerSecret() {
     return consumerSecret;
@@ -66,9 +63,9 @@ public class ApplicationKeyDTO  {
 
   
   /**
-   * Supported grant types for the application
+   * The grant types that are supported by the application
    **/
-  @ApiModelProperty(value = "Supported grant types for the application")
+  @ApiModelProperty(value = "The grant types that are supported by the application")
   @JsonProperty("supportedGrantTypes")
   public List<String> getSupportedGrantTypes() {
     return supportedGrantTypes;
@@ -79,9 +76,9 @@ public class ApplicationKeyDTO  {
 
   
   /**
-   * State of the key generation of the application
+   * Describes the state of the key generation.
    **/
-  @ApiModelProperty(value = "State of the key generation of the application")
+  @ApiModelProperty(value = "Describes the state of the key generation.")
   @JsonProperty("keyState")
   public String getKeyState() {
     return keyState;
@@ -92,9 +89,9 @@ public class ApplicationKeyDTO  {
 
   
   /**
-   * Key type
+   * Describes to which endpoint the key belongs
    **/
-  @ApiModelProperty(value = "Key type")
+  @ApiModelProperty(value = "Describes to which endpoint the key belongs")
   @JsonProperty("keyType")
   public KeyTypeEnum getKeyType() {
     return keyType;

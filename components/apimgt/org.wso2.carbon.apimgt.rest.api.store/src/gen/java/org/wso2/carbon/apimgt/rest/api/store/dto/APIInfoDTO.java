@@ -1,12 +1,12 @@
 package org.wso2.carbon.apimgt.rest.api.store.dto;
 
+import org.wso2.carbon.apimgt.rest.api.store.dto.ScopeInfoDTO;
+import java.util.*;
 
 import io.swagger.annotations.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
-
 
 
 
@@ -34,6 +34,9 @@ public class APIInfoDTO  {
   
   
   private String status = null;
+  
+  
+  private List<ScopeInfoDTO> scopes = new ArrayList<ScopeInfoDTO>();
 
   
   /**
@@ -97,9 +100,9 @@ public class APIInfoDTO  {
 
   
   /**
-   * If the provider value is not given, the user invoking the API will be used as the provider.\n
+   * If the provider value is not given, the user invoking the API will be used as the provider.
    **/
-  @ApiModelProperty(value = "If the provider value is not given, the user invoking the API will be used as the provider.\n")
+  @ApiModelProperty(value = "If the provider value is not given, the user invoking the API will be used as the provider.")
   @JsonProperty("provider")
   public String getProvider() {
     return provider;
@@ -121,6 +124,18 @@ public class APIInfoDTO  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("scopes")
+  public List<ScopeInfoDTO> getScopes() {
+    return scopes;
+  }
+  public void setScopes(List<ScopeInfoDTO> scopes) {
+    this.scopes = scopes;
+  }
+
+  
 
   @Override
   public String toString()  {
@@ -134,6 +149,7 @@ public class APIInfoDTO  {
     sb.append("  version: ").append(version).append("\n");
     sb.append("  provider: ").append(provider).append("\n");
     sb.append("  status: ").append(status).append("\n");
+    sb.append("  scopes: ").append(scopes).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
