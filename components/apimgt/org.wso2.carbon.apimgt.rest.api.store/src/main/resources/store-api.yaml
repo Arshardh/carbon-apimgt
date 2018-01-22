@@ -1505,7 +1505,10 @@ definitions:
       status:
         type: string
         example: PUBLISHED
-
+      scopes:
+        type: array
+        items:
+          $ref: '#/definitions/ScopeInfo'
 #-----------------------------------------------------
 # The API resource
 #-----------------------------------------------------
@@ -2089,6 +2092,26 @@ definitions:
           type: string
         description: Allowed scopes for the access token
         example: ["am_application_scope","default"]
+
+#-----------------------------------------------------
+# The Scope Info resource
+#-----------------------------------------------------
+  ScopeInfo:
+    title: API Scope info object with scope details
+    properties:
+      key:
+        type: string
+        example: admin_scope
+      name:
+        type: string
+        example: admin scope
+      roles:
+        type: array
+        items:
+          type: string
+        description: Allowed roles for the scope
+        example: ["manager","developer"]
+
 
 #-----------------------------------------------------
 # END-OF-FILE

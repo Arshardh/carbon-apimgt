@@ -3227,6 +3227,11 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         return getTenantConfigValue(tenantDomain, apiTenantConfig, APIConstants.API_TENANT_CONF_ENABLE_MONITZATION_KEY);
     }
 
+    @Override
+    public Set<Scope> getAPIScopes(APIIdentifier identifier) throws APIManagementException {
+        return apiMgtDAO.getAPIScopes(identifier);
+    }
+
     private boolean getTenantConfigValue(String tenantDomain, JSONObject apiTenantConfig, String configKey) throws APIManagementException {
         if (apiTenantConfig != null) {
             Object value = apiTenantConfig.get(configKey);

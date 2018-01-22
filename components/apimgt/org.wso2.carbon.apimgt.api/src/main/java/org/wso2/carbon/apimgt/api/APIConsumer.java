@@ -608,4 +608,12 @@ public interface APIConsumer extends APIManager {
 	JSONObject resumeWorkflow(Object[] args);
 
     boolean isMonetizationEnabled(String tenantDomain) throws APIManagementException;
+
+    /**
+     * Returns a Set of scopes assigned for the given API
+     * @param identifier API Identifier
+     * @return Set of scopes
+     * @throws APIManagementException
+     */
+    Set<Scope> getAPIScopes(APIIdentifier identifier) throws APIManagementException;
 }

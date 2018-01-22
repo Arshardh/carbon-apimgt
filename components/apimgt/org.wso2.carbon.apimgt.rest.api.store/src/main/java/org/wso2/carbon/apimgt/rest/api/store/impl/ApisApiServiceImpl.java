@@ -24,7 +24,9 @@ import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.model.API;
 import org.wso2.carbon.apimgt.api.model.APIIdentifier;
 import org.wso2.carbon.apimgt.api.model.Documentation;
+import org.wso2.carbon.apimgt.api.model.Scope;
 import org.wso2.carbon.apimgt.impl.APIConstants;
+import org.wso2.carbon.apimgt.impl.dao.ApiMgtDAO;
 import org.wso2.carbon.apimgt.impl.utils.APIUtil;
 import org.wso2.carbon.apimgt.rest.api.store.ApisApiService;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIDTO;
@@ -130,6 +132,13 @@ public class ApisApiServiceImpl extends ApisApiService {
 
             if (apisResult != null) {
                 Set<API> apiSet = (Set) apisResult;
+
+                // setting scopes for API
+                for (API api : apiSet) {
+                    Set<Scope> scopes = apiConsumer.getAPIScopes(api.getId());
+                    api.setScopes(scopes);
+                }
+
                 apiListDTO = APIMappingUtil.fromAPISetToDTO(apiSet);
                 APIMappingUtil.setPaginationParams(apiListDTO, query, offset, limit, size);
 

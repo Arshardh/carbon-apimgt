@@ -22,11 +22,14 @@ import org.wso2.carbon.apimgt.api.APIConsumer;
 import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.model.API;
 import org.wso2.carbon.apimgt.api.model.APIIdentifier;
+import org.wso2.carbon.apimgt.api.model.Scope;
+import org.wso2.carbon.apimgt.impl.dao.ApiMgtDAO;
 import org.wso2.carbon.apimgt.impl.utils.APIUtil;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIBusinessInformationDTO;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIDTO;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIInfoDTO;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIListDTO;
+import org.wso2.carbon.apimgt.rest.api.store.dto.ScopeInfoDTO;
 import org.wso2.carbon.apimgt.rest.api.util.RestApiConstants;
 import org.wso2.carbon.apimgt.rest.api.util.utils.RestApiUtil;
 
@@ -181,6 +184,26 @@ public class APIMappingUtil {
         apiInfoDTO.setStatus(api.getStatus().toString());
         String providerName = api.getId().getProviderName();
         apiInfoDTO.setProvider(APIUtil.replaceEmailDomainBack(providerName));
+        apiInfoDTO.setScopes(getScopeInfoDTO(api.getScopes()));
         return apiInfoDTO;
+    }
+
+    /**
+     * Creates a minimal scope DTO which will be a part of API Object
+     *
+     * @param scopes set
+     * @return Scope DTO
+     */
+    public static List<ScopeInfoDTO> getScopeInfoDTO(Set<Scope> scopes) {
+
+        List<ScopeInfoDTO> scopeDto = new ArrayList<ScopeInfoDTO>();
+        for (Scope scope : scopes) {
+            ScopeInfoDTO scopeInfoDTO = new ScopeInfoDTO();
+            scopeInfoDTO.setKey(scope.getKey());
+            scopeInfoDTO.setName(scope.getName());
+            scopeInfoDTO.setRoles(Arrays.asList(scope.getRoles().split(",")));
+            scopeDto.add(scopeInfoDTO);
+        }
+        return scopeDto;
     }
 }
