@@ -86,9 +86,9 @@ public class TiersApiServiceImpl extends TiersApiService {
                     // Removing denied Tiers
                     String username = RestApiUtil.getLoggedInUsername();
                     APIConsumer apiConsumer = RestApiUtil.getConsumer(username);
-                    Set<String> deniedApis = apiConsumer.getDeniedTiers();
+                    Set<String> deniedTiers = apiConsumer.getDeniedTiers();
 
-                    for (String key : deniedApis) {
+                    for (String key : deniedTiers) {
                         apiTierMap.remove(key);
                     }
 
