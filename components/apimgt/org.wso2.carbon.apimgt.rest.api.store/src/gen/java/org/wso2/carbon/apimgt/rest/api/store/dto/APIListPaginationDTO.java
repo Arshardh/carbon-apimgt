@@ -2,11 +2,9 @@ package org.wso2.carbon.apimgt.rest.api.store.dto;
 
 
 import io.swagger.annotations.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
-
 
 
 
@@ -18,10 +16,10 @@ public class APIListPaginationDTO  {
   private Integer total = null;
   
   
-  private Integer limit = null;
-  
-  
   private Integer offset = null;
+  
+  
+  private Integer limit = null;
 
   
   /**
@@ -39,24 +37,24 @@ public class APIListPaginationDTO  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("limit")
-  public Integer getLimit() {
-    return limit;
-  }
-  public void setLimit(Integer limit) {
-    this.limit = limit;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
   @JsonProperty("offset")
   public Integer getOffset() {
     return offset;
   }
   public void setOffset(Integer offset) {
     this.offset = offset;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("limit")
+  public Integer getLimit() {
+    return limit;
+  }
+  public void setLimit(Integer limit) {
+    this.limit = limit;
   }
 
   
@@ -67,8 +65,8 @@ public class APIListPaginationDTO  {
     sb.append("class APIListPaginationDTO {\n");
     
     sb.append("  total: ").append(total).append("\n");
-    sb.append("  limit: ").append(limit).append("\n");
     sb.append("  offset: ").append(offset).append("\n");
+    sb.append("  limit: ").append(limit).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

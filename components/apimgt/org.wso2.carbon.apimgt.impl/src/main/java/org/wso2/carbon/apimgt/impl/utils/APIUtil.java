@@ -627,6 +627,7 @@ public final class APIUtil {
             }
             //set uuid
             api.setUUID(artifact.getId());
+            api.getId().setApplicationId(Integer.toString(apiId));
             api.setRating(getAverageRating(apiId));
             api.setThumbnailUrl(artifact.getAttribute(APIConstants.API_OVERVIEW_THUMBNAIL_URL));
             api.setStatus(getApiStatus(artifact.getAttribute(APIConstants.API_OVERVIEW_STATUS)));

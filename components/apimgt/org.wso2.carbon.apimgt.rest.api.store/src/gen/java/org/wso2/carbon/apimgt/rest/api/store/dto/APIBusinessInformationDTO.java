@@ -2,11 +2,9 @@ package org.wso2.carbon.apimgt.rest.api.store.dto;
 
 
 import io.swagger.annotations.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
-
 
 
 
@@ -15,28 +13,16 @@ public class APIBusinessInformationDTO  {
   
   
   
-  private String businessOwnerEmail = null;
-  
-  
   private String technicalOwnerEmail = null;
   
   
-  private String technicalOwner = null;
+  private String businessOwnerEmail = null;
   
   
   private String businessOwner = null;
-
   
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("businessOwnerEmail")
-  public String getBusinessOwnerEmail() {
-    return businessOwnerEmail;
-  }
-  public void setBusinessOwnerEmail(String businessOwnerEmail) {
-    this.businessOwnerEmail = businessOwnerEmail;
-  }
+  
+  private String technicalOwner = null;
 
   
   /**
@@ -54,12 +40,12 @@ public class APIBusinessInformationDTO  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("technicalOwner")
-  public String getTechnicalOwner() {
-    return technicalOwner;
+  @JsonProperty("businessOwnerEmail")
+  public String getBusinessOwnerEmail() {
+    return businessOwnerEmail;
   }
-  public void setTechnicalOwner(String technicalOwner) {
-    this.technicalOwner = technicalOwner;
+  public void setBusinessOwnerEmail(String businessOwnerEmail) {
+    this.businessOwnerEmail = businessOwnerEmail;
   }
 
   
@@ -75,16 +61,28 @@ public class APIBusinessInformationDTO  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("technicalOwner")
+  public String getTechnicalOwner() {
+    return technicalOwner;
+  }
+  public void setTechnicalOwner(String technicalOwner) {
+    this.technicalOwner = technicalOwner;
+  }
+
+  
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
     sb.append("class APIBusinessInformationDTO {\n");
     
-    sb.append("  businessOwnerEmail: ").append(businessOwnerEmail).append("\n");
     sb.append("  technicalOwnerEmail: ").append(technicalOwnerEmail).append("\n");
-    sb.append("  technicalOwner: ").append(technicalOwner).append("\n");
+    sb.append("  businessOwnerEmail: ").append(businessOwnerEmail).append("\n");
     sb.append("  businessOwner: ").append(businessOwner).append("\n");
+    sb.append("  technicalOwner: ").append(technicalOwner).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

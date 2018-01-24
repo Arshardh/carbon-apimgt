@@ -1,15 +1,12 @@
 package org.wso2.carbon.apimgt.rest.api.store.dto;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
 
 import io.swagger.annotations.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
-
 
 
 
@@ -85,9 +82,9 @@ public class TierDTO  {
 
   
   /**
-   * Custom attributes added to the tier policy\n
+   * Custom attributes added to the tier policy
    **/
-  @ApiModelProperty(value = "Custom attributes added to the tier policy\n")
+  @ApiModelProperty(value = "Custom attributes added to the tier policy")
   @JsonProperty("attributes")
   public Map<String, String> getAttributes() {
     return attributes;
@@ -98,9 +95,9 @@ public class TierDTO  {
 
   
   /**
-   * Maximum number of requests which can be sent within a provided unit time\n
+   * Maximum number of requests which can be sent within a provided unit time
    **/
-  @ApiModelProperty(required = true, value = "Maximum number of requests which can be sent within a provided unit time\n")
+  @ApiModelProperty(required = true, value = "Maximum number of requests which can be sent within a provided unit time")
   @JsonProperty("requestCount")
   public Long getRequestCount() {
     return requestCount;
@@ -123,9 +120,9 @@ public class TierDTO  {
 
   
   /**
-   * This attribute declares whether this tier is available under commercial or free\n
+   * This attribute declares whether this tier is available under commercial or free
    **/
-  @ApiModelProperty(required = true, value = "This attribute declares whether this tier is available under commercial or free\n")
+  @ApiModelProperty(required = true, value = "This attribute declares whether this tier is available under commercial or free")
   @JsonProperty("tierPlan")
   public TierPlanEnum getTierPlan() {
     return tierPlan;
@@ -136,9 +133,9 @@ public class TierDTO  {
 
   
   /**
-   * If this attribute is set to false, you are capabale of sending requests\neven if the request count exceeded within a unit time\n
+   * If this attribute is set to false, you are capabale of sending requests\neven if the request count exceeded within a unit time
    **/
-  @ApiModelProperty(required = true, value = "If this attribute is set to false, you are capabale of sending requests\neven if the request count exceeded within a unit time\n")
+  @ApiModelProperty(required = true, value = "If this attribute is set to false, you are capabale of sending requests\neven if the request count exceeded within a unit time")
   @JsonProperty("stopOnQuotaReach")
   public Boolean getStopOnQuotaReach() {
     return stopOnQuotaReach;

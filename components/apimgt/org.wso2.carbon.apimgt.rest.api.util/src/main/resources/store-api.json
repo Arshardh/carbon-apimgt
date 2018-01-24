@@ -44,7 +44,7 @@
         "x-wso2-curl": "curl -k -H \"Authorization: Bearer aa0ddec1ac656744234477f20fafcb0d\" https://127.0.0.1:9443/api/am/store/v0.9/apis",
         "x-wso2-response": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n   \"previous\": \"\",\n   \"list\":    [\n            {\n         \"provider\": \"admin\",\n         \"version\": \"1.0.0\",\n         \"description\": \"This API provide Account Status Validation.\",\n         \"status\": \"PUBLISHED\",\n         \"name\": \"AccountVal\",\n         \"context\": \"/account/1.0.0\",\n         \"id\": \"2e81f147-c8a8-4f68-b4f0-69e0e7510b01\"\n      },\n            {\n         \"provider\": \"admin\",\n         \"version\": \"1.0.0\",\n         \"description\": null,\n         \"status\": \"PUBLISHED\",\n         \"name\": \"api1\",\n         \"context\": \"/api1/1.0.0\",\n         \"id\": \"3e22d2fb-277a-4e9e-8c7e-1c0f7f73960e\"\n      },\n            {\n         \"provider\": \"admin\",\n         \"version\": \"2.0.0\",\n         \"description\": \"Verify a phone number\",\n         \"status\": \"PUBLISHED\",\n         \"name\": \"PhoneVerification\",\n         \"context\": \"/phoneverify/2.0.0\",\n         \"id\": \"c43a325c-260b-4302-81cb-768eafaa3aed\"\n      }\n   ],\n   \"count\": 3,\n   \"next\": \"\"\n}",
         "summary": "Retrieving APIs\n",
-        "description": "This operation provides you a list of available APIs qualifying under a given search condition.\n\nEach retrieved API is represented with a minimal amount of attributes. If you want to get complete details of an API, you need to use **Get details of API** operation.\n\nThis operation supports retriving APIs of other tenants. The required tenant domain need to be specified as a header `X-WSO2-Tenant`. If not specified, the user's tenant associated with the access token will be used.\n\n**NOTE:**\n* By default, this operation retrieves Published APIs. In order to retrieve Prototyped APIs, you need to use **query** parameter and specify **status:PROTOTYPED**.\n",
+        "description": "This operation provides you a list of available APIs qualifying under a given search condition.\n\nEach retrieved API is represented with a minimal amount of attributes. If you want to get complete details of an API, you need to use **Get details of API** operation.\n\nThis operation supports retriving APIs of other tenants. The required tenant domain need to be specified as a header `X-WSO2-Tenant`. If not specified, the user's tenant associated with the access token will be used.\n\nThe optional parameters `limit` and `query` can be used with the curl command. You have to use both parameters to successfully receive a response. For example, `curl -k -H \"Authorization: Bearer 1773d445d46d4a7312ca7d48d3c58d16\" \"https://127.0.0.1:9443/api/am/store/v0.9/apis?limit=2&query=*\"`\n\n**NOTE:**\n* By default, this operation retrieves Published APIs. In order to retrieve Prototyped APIs, you need to use **query** parameter and specify **status:PROTOTYPED**.\n",
         "parameters": [
           {
             "$ref": "#/parameters/limit"
@@ -897,7 +897,7 @@
         "x-wso2-request": "POST https://127.0.0.1:9443/api/am/store/v0.9/subscriptions\nAuthorization: Bearer aa0ddec1ac656744234477f20fafcb0d\nContent-Type: application/json\n\n{\n    \"tier\": \"Gold\",\n    \"apiIdentifier\": \"c43a325c-260b-4302-81cb-768eafaa3aed\",\n    \"applicationId\": \"c30f3a6e-ffa4-4ae7-afce-224d1f820524\"\n}",
         "x-wso2-response": "HTTP/1.1 201 Created\nLocation: https://localhost:9443/api/am/store/v0.9/subscriptions/5b65808c-cdf2-43e1-a695-de63e3ad0ae9\nContent-Type: application/json\n\n{\n   \"tier\": \"Gold\",\n   \"subscriptionId\": \"5b65808c-cdf2-43e1-a695-de63e3ad0ae9\",\n   \"apiIdentifier\": \"admin-PhoneVerification-2.0.0\",\n   \"applicationId\": \"c30f3a6e-ffa4-4ae7-afce-224d1f820524\",\n   \"status\": \"UNBLOCKED\"\n}",
         "summary": "Add a new subscription\n",
-        "description": "Add a new subscription\n",
+        "description": "Add a new subscription.\n\n**Note** : In a cross-tenant scenario, you must follow a workaround where the 'apiIdentifier' parameter must be replaced with the tenant ID in the format provider-apiname-version (replace '@' with 'AT'), as shown in the example below. This needes to be done because the `X-WSO2-Tenant` header is not supported for the subscripton-add rest api. As a result, it is not possible to identify the tenant domain based on the alphanumeric value.\n \n    {\n        \"tier\": \"Unlimited\",\n        \"apiIdentifier\": \"admin-AT-tenant1.com-Tenant1API1-1.0.0\",\n        \"applicationId\": \"355fa235-c0f5-4728-b85c-9c1e9360d887\"\n    }\n",
         "parameters": [
           {
             "in": "body",
@@ -1250,14 +1250,14 @@
     "apiId": {
       "name": "apiId",
       "in": "path",
-      "description": "**API ID** consisting of the **UUID** of the API.\nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API ID.\nShould be formatted as **provider-name-version**.\n",
+      "description": "**API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.\nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API ID.\nShould be formatted as **provider-name-version**.\n",
       "required": true,
       "type": "string"
     },
     "apiId-Q": {
       "name": "apiId",
       "in": "query",
-      "description": "**API ID** consisting of the **UUID** of the API.\nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API I.\nShould be formatted as **provider-name-version**.\n",
+      "description": "**API ID** consisting of the **UUID** of the API. Using the **UUID** in the API call is recommended.\nThe combination of the provider of the API, name of the API and the version is also accepted as a valid API I.\nShould be formatted as **provider-name-version**.\n",
       "required": true,
       "type": "string"
     },
@@ -1392,6 +1392,22 @@
           "items": {
             "$ref": "#/definitions/APIInfo"
           }
+        },
+        "pagination": {
+          "properties": {
+            "offset": {
+              "type": "integer",
+              "example": 12
+            },
+            "limit": {
+              "type": "integer",
+              "example": 25
+            },
+            "total": {
+              "type": "integer",
+              "example": 1290
+            }
+          }
         }
       }
     },
@@ -1426,6 +1442,12 @@
         "status": {
           "type": "string",
           "example": "PUBLISHED"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/APIInfo"
+          }
         }
       }
     },
@@ -1447,18 +1469,22 @@
         },
         "name": {
           "type": "string",
+          "description": "Name of the API",
           "example": "CalculatorAPI"
         },
         "description": {
           "type": "string",
+          "description": "A brief description about the API",
           "example": "A calculator API that supports basic operations"
         },
         "context": {
           "type": "string",
+          "description": "A string that represents the context of the API request",
           "example": "CalculatorAPI"
         },
         "version": {
           "type": "string",
+          "description": "The version of the API",
           "example": "1.0.0"
         },
         "provider": {
@@ -1469,10 +1495,11 @@
         "apiDefinition": {
           "description": "Swagger definition of the API which contains details about URI templates and scopes\n",
           "type": "string",
-          "example": "{\"paths\":{\"\\/substract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
+          "example": "{\"paths\":{\"\\/subtract\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}},\"\\/add\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"parameters\":[{\"name\":\"x\",\"required\":true,\"type\":\"string\",\"in\":\"query\"},{\"name\":\"y\",\"required\":true,\"type\":\"string\",\"in\":\"query\"}],\"responses\":{\"200\":{}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"CalculatorAPI\",\"version\":\"1.0.0\"}}"
         },
         "status": {
           "type": "string",
+          "description": "This describes in which status of the lifecycle the API is.",
           "example": "PUBLISHED"
         },
         "isDefaultVersion": {
@@ -1492,16 +1519,18 @@
         },
         "tags": {
           "type": "array",
+          "description": "Search keywords related to the API",
           "items": {
             "type": "string"
           },
           "example": [
-            "substract",
+            "subtract",
             "add"
           ]
         },
         "tiers": {
           "type": "array",
+          "description": "The subscription tiers selected for the particular API",
           "items": {
             "type": "string"
           },
@@ -1994,12 +2023,12 @@
       "properties": {
         "consumerKey": {
           "type": "string",
-          "description": "Consumer key of the application",
+          "description": "The consumer key associated with the application and identifying the client",
           "example": "vYDoc9s7IgAFdkSyNDaswBX7ejoa"
         },
         "consumerSecret": {
           "type": "string",
-          "description": "Consumer secret of the application",
+          "description": "The client secret that is used to authenticate the client with the authentication server",
           "example": "TIDlOFkpzB7WjufO3OJUhy1fsvAa"
         },
         "supportedGrantTypes": {
@@ -2007,7 +2036,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Supported grant types for the application",
+          "description": "The grant types that are supported by the application",
           "example": [
             "client_credentials",
             "password"
@@ -2015,11 +2044,11 @@
         },
         "keyState": {
           "type": "string",
-          "description": "State of the key generation of the application",
+          "description": "Describes the state of the key generation.",
           "example": "APPROVED"
         },
         "keyType": {
-          "description": "Key type",
+          "description": "Describes to which endpoint the key belongs",
           "type": "string",
           "enum": [
             "PRODUCTION",
@@ -2076,6 +2105,30 @@
           "example": [
             "am_application_scope",
             "default"
+          ]
+        }
+      }
+    },
+    "ScopeInfo": {
+      "title": "API Scope info object with scope details",
+      "properties": {
+        "key": {
+          "type": "string",
+          "example": "admin_scope"
+        },
+        "name": {
+          "type": "string",
+          "example": "admin scope"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Allowed roles for the scope",
+          "example": [
+            "manager",
+            "developer"
           ]
         }
       }

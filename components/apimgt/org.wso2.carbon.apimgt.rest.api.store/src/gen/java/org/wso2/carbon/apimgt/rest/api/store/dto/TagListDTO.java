@@ -1,15 +1,12 @@
 package org.wso2.carbon.apimgt.rest.api.store.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.wso2.carbon.apimgt.rest.api.store.dto.TagDTO;
+import java.util.*;
 
 import io.swagger.annotations.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
-
 
 
 
@@ -31,9 +28,9 @@ public class TagListDTO  {
 
   
   /**
-   * Number of Tags returned.\n
+   * Number of Tags returned.
    **/
-  @ApiModelProperty(value = "Number of Tags returned.\n")
+  @ApiModelProperty(value = "Number of Tags returned.")
   @JsonProperty("count")
   public Integer getCount() {
     return count;
@@ -44,9 +41,9 @@ public class TagListDTO  {
 
   
   /**
-   * Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.\n
+   * Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.
    **/
-  @ApiModelProperty(value = "Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.\n")
+  @ApiModelProperty(value = "Link to the next subset of resources qualified.\nEmpty if no more resources are to be returned.")
   @JsonProperty("next")
   public String getNext() {
     return next;
@@ -57,9 +54,9 @@ public class TagListDTO  {
 
   
   /**
-   * Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.\n
+   * Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.
    **/
-  @ApiModelProperty(value = "Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.\n")
+  @ApiModelProperty(value = "Link to the previous subset of resources qualified.\nEmpty if current subset is the first subset returned.")
   @JsonProperty("previous")
   public String getPrevious() {
     return previous;
