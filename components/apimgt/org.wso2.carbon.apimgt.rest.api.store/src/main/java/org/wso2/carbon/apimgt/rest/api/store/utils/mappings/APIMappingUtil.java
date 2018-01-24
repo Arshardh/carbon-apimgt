@@ -23,7 +23,6 @@ import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.model.API;
 import org.wso2.carbon.apimgt.api.model.APIIdentifier;
 import org.wso2.carbon.apimgt.api.model.Scope;
-import org.wso2.carbon.apimgt.impl.dao.ApiMgtDAO;
 import org.wso2.carbon.apimgt.impl.utils.APIUtil;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIBusinessInformationDTO;
 import org.wso2.carbon.apimgt.rest.api.store.dto.APIDTO;
@@ -184,7 +183,9 @@ public class APIMappingUtil {
         apiInfoDTO.setStatus(api.getStatus().toString());
         String providerName = api.getId().getProviderName();
         apiInfoDTO.setProvider(APIUtil.replaceEmailDomainBack(providerName));
-        apiInfoDTO.setScopes(getScopeInfoDTO(api.getScopes()));
+        if (api.getScopes() != null) {
+            apiInfoDTO.setScopes(getScopeInfoDTO(api.getScopes()));
+        }
         return apiInfoDTO;
     }
 

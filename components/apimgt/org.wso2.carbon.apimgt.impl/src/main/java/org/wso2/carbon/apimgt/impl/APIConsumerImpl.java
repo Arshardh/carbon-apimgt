@@ -1718,6 +1718,34 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
                     }
                 }
 
+                // Creating a apiids string
+                String apiIdsString = "";
+                int apiCount = apiList.size();
+                for (int i = 0; i < apiCount; i++) {
+                    String apiId = apiList.get(i).getId().getApplicationId();
+
+                    if (apiId != null && apiId != "") {
+                        if (apiIdsString == "") {
+                            apiIdsString = apiId;
+                        } else {
+                            apiIdsString = apiIdsString + "," + apiId;
+                        }
+                    }
+                }
+
+                // setting scope
+                if (apiIdsString != "") {
+                    Map<String, Set<Scope>> apiScopeSet = apiMgtDAO.getScopesForAPIS(apiIdsString);
+                    if (apiScopeSet.size() > 0) {
+                        for (int i = 0; i < apiCount; i++) {
+                            String apiId = apiList.get(i).getId().getApplicationId();
+                            if (apiId != null && apiId != "") {
+                                Set<Scope> scopes = apiScopeSet.get(apiId);
+                                apiList.get(i).setScopes(scopes);
+                            }
+                        }
+                    }
+                }
                 apiSet.addAll(apiList);
             }
         } catch (RegistryException e) {
@@ -3225,11 +3253,6 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         }
 
         return getTenantConfigValue(tenantDomain, apiTenantConfig, APIConstants.API_TENANT_CONF_ENABLE_MONITZATION_KEY);
-    }
-
-    @Override
-    public Set<Scope> getAPIScopes(APIIdentifier identifier) throws APIManagementException {
-        return apiMgtDAO.getAPIScopes(identifier);
     }
 
     private boolean getTenantConfigValue(String tenantDomain, JSONObject apiTenantConfig, String configKey) throws APIManagementException {
