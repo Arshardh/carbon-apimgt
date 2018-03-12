@@ -4119,6 +4119,8 @@ public final class APIUtil {
             handleException("Failed to search APIs with input url-pattern", e);
         } catch (GovernanceException e) {
             handleException("Failed to search APIs with input url-pattern", e);
+        } finally {
+            PaginationContext.destroy();
         }
         result.put("apis", apiSet);
         result.put("length", totalLength);

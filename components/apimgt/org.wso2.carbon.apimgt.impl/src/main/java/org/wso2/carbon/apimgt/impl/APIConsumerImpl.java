@@ -1750,6 +1750,8 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
             }
         } catch (RegistryException e) {
             handleException("Failed to search APIs with type", e);
+        } finally {
+            PaginationContext.destroy();
         }
         result.put("apis",apiSet);
         result.put("length",totalLength);
