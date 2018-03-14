@@ -46,6 +46,7 @@ import org.opensaml.xml.signature.impl.SignatureImpl;
 import org.opensaml.xml.util.Base64;
 import org.opensaml.xml.util.DatatypeHelper;
 import org.opensaml.xml.validation.ValidationException;
+import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -64,6 +65,11 @@ import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -152,8 +158,12 @@ public class Util {
             doBootstrap();
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
-            DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = docBuilder.parse(new ByteArrayInputStream(authReqStr.trim().getBytes()));
+            documentBuilderFactory.setIgnoringComments(true);
+            Document document = getDocument(documentBuilderFactory, authReqStr);
+            if (isSignedWithComments(document)) {
+                documentBuilderFactory.setIgnoringComments(false);
+                document = getDocument(documentBuilderFactory, authReqStr);
+            }
             Element element = document.getDocumentElement();
             UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
@@ -162,6 +172,53 @@ public class Util {
             throw new Exception("Error in constructing AuthRequest from " +
                                 "the encoded String ", e);
         }
+    }
+
+    /**
+     * Return whether SAML Assertion has the canonicalization method
+     * set to 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments'.
+     *
+     * @param document
+     * @return true if canonicalization method equals to 'http://www.w3.org/2001/10/xml-exc-c14n#WithComments'
+     */
+    private static boolean isSignedWithComments(Document document) {
+
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        try {
+            String assertionId = (String) xPath.compile("//*[local-name()='Assertion']/@ID")
+                    .evaluate(document, XPathConstants.STRING);
+
+            if (StringUtils.isBlank(assertionId)) {
+                return false;
+            }
+
+            NodeList nodeList = ((NodeList) xPath.compile(
+                    "//*[local-name()='Assertion']" +
+                            "/*[local-name()='Signature']" +
+                            "/*[local-name()='SignedInfo']" +
+                            "/*[local-name()='Reference'][@URI='#" + assertionId + "']" +
+                            "/*[local-name()='Transforms']" +
+                            "/*[local-name()='Transform']" +
+                            "[@Algorithm='http://www.w3.org/2001/10/xml-exc-c14n#WithComments']")
+                    .evaluate(document, XPathConstants.NODESET));
+            return nodeList != null && nodeList.getLength() > 0;
+        } catch (XPathExpressionException e) {
+            String message = "Failed to find the canonicalization algorithm of the assertion. Defaulting to: " +
+                    "http://www.w3.org/2001/10/xml-exc-c14n#";
+            log.warn(message);
+            if (log.isDebugEnabled()) {
+                log.debug(message, e);
+            }
+            return false;
+        }
+    }
+
+    private static Document getDocument(DocumentBuilderFactory documentBuilderFactory, String samlString)
+            throws IOException, SAXException, ParserConfigurationException {
+
+        DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(samlString.getBytes());
+        return docBuilder.parse(inputStream);
     }
 
     /**
