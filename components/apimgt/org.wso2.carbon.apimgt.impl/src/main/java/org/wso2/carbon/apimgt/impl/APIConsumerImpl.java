@@ -1953,7 +1953,7 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
     public SubscriptionResponse addSubscription(APIIdentifier identifier, String userId, int applicationId)
             throws APIManagementException {
         //check application is viewable to logged user
-        boolean isValid = validateApplication(userId, applicationId);
+        boolean isValid = isAppAllowed(userId, applicationId);
         if (!isValid) {
             log.error("Application " + applicationId + " is not accessible to user " + userId);
             throw new APIManagementException("Application is not accessible to user " + userId);
@@ -2026,7 +2026,7 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         }
     }
 
-    private boolean validateApplication(String userId, int applicationId) {
+    private boolean isAppAllowed(String userId, int applicationId) {
         org.json.JSONObject obj = new org.json.JSONObject();
         try {
             obj.put("user", userId);
@@ -2052,7 +2052,7 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
     public void removeSubscription(APIIdentifier identifier, String userId, int applicationId)
             throws APIManagementException {
         //check application is viewable to logged user
-        boolean isValid = validateApplication(userId, applicationId);
+        boolean isValid = isAppAllowed(userId, applicationId);
         if (!isValid) {
             log.error("Application " + applicationId + " is not accessible to user " + userId);
             throw new APIManagementException("Application is not accessible to user " + userId);
