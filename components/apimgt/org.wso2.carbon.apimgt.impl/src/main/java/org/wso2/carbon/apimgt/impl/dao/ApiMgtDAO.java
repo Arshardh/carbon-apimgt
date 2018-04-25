@@ -6731,6 +6731,64 @@ public void addUpdateAPIAsDefaultVersion(API api, Connection connection) throws 
         return application;
     }
 
+    /**
+     * Check a application is allowed for a user
+     *
+     * @param applicationId application id
+     * @param userId        user id
+     * @param groupId       group id
+     * @return boolean
+     * @throws APIManagementException thorws if a error occurred
+     */
+    public boolean isAllowedApp(int applicationId, String userId, String groupId) throws APIManagementException {
+        Connection connection = null;
+        PreparedStatement prepStmt = null;
+        ResultSet rs = null;
+
+        Application application = null;
+        try {
+            connection = APIMgtDBUtil.getConnection();
+
+            String query = "SELECT APP.APPLICATION_ID FROM AM_SUBSCRIBER SUB, AM_APPLICATION APP";
+            String whereClause =
+                    "  WHERE SUB.USER_ID =? AND APP.APPLICATION_ID=? AND " + "SUB.SUBSCRIBER_ID=APP.SUBSCRIBER_ID";
+            String whereClauseCaseInSensitive = "  WHERE LOWER(SUB.USER_ID) =LOWER(?) AND APP.APPLICATION_ID=? AND SUB"
+                    + ".SUBSCRIBER_ID=APP.SUBSCRIBER_ID";
+            String whereClauseWithGroupId =
+                    "  WHERE  (APP.GROUP_ID = ? OR (APP.GROUP_ID = '' AND SUB.USER_ID = ?)) AND "
+                            + "APP.APPLICATION_ID = ? AND SUB.SUBSCRIBER_ID = APP.SUBSCRIBER_ID";
+
+            if (groupId != null && !groupId.equals("null") && !groupId.isEmpty()) {
+                query += whereClauseWithGroupId;
+            } else {
+                if (forceCaseInsensitiveComparisons) {
+                    query = query + whereClauseCaseInSensitive;
+                } else {
+                    query = query + whereClause;
+                }
+            }
+            prepStmt = connection.prepareStatement(query);
+            if (groupId != null && !groupId.equals("null") && !groupId.isEmpty()) {
+                prepStmt.setString(1, groupId);
+                prepStmt.setString(2, userId);
+                prepStmt.setInt(3, applicationId);
+            } else {
+                prepStmt.setString(1, userId);
+                prepStmt.setInt(2, applicationId);
+            }
+            rs = prepStmt.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            handleException("Error while obtaining details of the Application : " + applicationId, e);
+        } finally {
+            APIMgtDBUtil.closeAllConnections(prepStmt, connection, rs);
+        }
+
+        return false;
+    }
+
     public Application getApplicationById(int applicationId) throws APIManagementException {
         Connection connection = null;
         PreparedStatement prepStmt = null;
