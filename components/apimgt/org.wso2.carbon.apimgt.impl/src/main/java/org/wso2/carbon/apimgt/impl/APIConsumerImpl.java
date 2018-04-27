@@ -2030,7 +2030,7 @@ class APIConsumerImpl extends AbstractAPIManager implements APIConsumer {
         org.json.JSONObject obj = new org.json.JSONObject();
         try {
             obj.put("user", userId);
-            obj.put("isSuperTenant", MultitenantUtils.getTenantDomain(username)
+            obj.put("isSuperTenant", MultitenantUtils.getTenantDomain(userId)
                     == org.wso2.carbon.base.MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
             String groupId = getGroupIds(obj.toString());
             if (groupId == null) {
