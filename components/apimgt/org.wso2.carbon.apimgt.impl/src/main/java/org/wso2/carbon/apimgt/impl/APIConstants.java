@@ -800,6 +800,8 @@ public final class APIConstants {
 
     public static final String RECENTLY_ADDED_API_CACHE_NAME = "RECENTLY_ADDED_API";
     public static final String API_STORE_RECENTLY_ADDED_API_CACHE_ENABLE = API_STORE + "EnableRecentlyAddedAPICache";
+    public static final String STORE_TOKEN_DISPLAY_URL = API_STORE + "StoreTokenDisplayURL";
+
     public static final String VELOCITY_LOGGER = "VelocityLogger";
 
 
