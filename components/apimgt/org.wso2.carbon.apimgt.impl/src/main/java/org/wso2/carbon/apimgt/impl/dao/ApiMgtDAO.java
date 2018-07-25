@@ -5538,7 +5538,7 @@ public class ApiMgtDAO {
         ArrayList<URITemplate> uriTemplates = new ArrayList<URITemplate>();
 
         String apiTenantDomain = MultitenantUtils.getTenantDomainFromRequestURL(apiContext);
-        if(apiTenantDomain != null) {
+        if (apiTenantDomain != null) {
             tenantId = APIUtil.getTenantIdFromTenantDomain(apiTenantDomain);
         } else {
             tenantId = MultitenantConstants.SUPER_TENANT_ID;
