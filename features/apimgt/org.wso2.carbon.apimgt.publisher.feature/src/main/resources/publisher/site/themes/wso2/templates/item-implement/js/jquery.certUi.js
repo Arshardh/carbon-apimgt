@@ -96,9 +96,12 @@
                             return containInCertUrl;
                         }
                     }
-                // Skip if productionEndpoints is `undefined`
                 } else if (productionEndpoints) {
-                    return productionEndpoints.url.toLowerCase().indexOf(certUrl) !== -1;
+                    // Skip if productionEndpoints is `undefined`
+                    var containInCertUrl = productionEndpoints.url.toLowerCase().indexOf(certUrl) !== -1;
+                    if (containInCertUrl) {
+                        return containInCertUrl;
+                    }
                 }
                 if (Array.isArray(sandboxEndpoints)) {
                     for (var index in sandboxEndpoints) {
@@ -107,9 +110,12 @@
                             return containInCertUrl;
                         }
                     }
-                // Skip if sandboxEndpoints is `undefined`
                 } else if (sandboxEndpoints) {
-                    return sandboxEndpoints.url.toLowerCase().indexOf(certUrl) !== -1;
+                    // Skip if sandboxEndpoints is `undefined`
+                    var containInCertUrl = sandboxEndpoints.url.toLowerCase().indexOf(certUrl) !== -1;
+                    if (containInCertUrl) {
+                        return containInCertUrl;
+                    }
                 }
             });
             return newCerts;
@@ -317,9 +323,9 @@
         switch (msgObject.code) {
             case (1) : {
                 if (msgObject.action === "add") {
-                    return i18n.t("Certificate is added successfully. This will be affect to all the users.");
+                    return i18n.t("The certificate was added successfully. Please note that it will be available to all users.");
                 } else {
-                    return i18n.t("Certificate is deleted Successfully. This will be affect to all the users.")
+                    return i18n.t("The certificate was deleted successfully. Note that it will not be accessible to any user hereafter.")
                 }
             }
             case (2) : {
@@ -361,9 +367,7 @@
         var port = a.port;
         var protocol = a.protocol;
         var address;
-        if (document.location.hostname === a.hostname) {
-            return undefined;
-        }
+
         if (port) {
             address = protocol + "//" + hostname + ":" + port;
         } else {
