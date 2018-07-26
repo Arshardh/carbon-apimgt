@@ -29,52 +29,42 @@ public class CertificateInformationDTO {
     private String version;
 
     public String getStatus() {
-
         return status;
     }
 
     public void setStatus(String status) {
-
         this.status = status;
     }
 
     public String getFrom() {
-
         return from;
     }
 
     public void setFrom(String from) {
-
         this.from = from;
     }
 
     public String getTo() {
-
         return to;
     }
 
     public void setTo(String to) {
-
         this.to = to;
     }
 
     public String getSubject() {
-
         return subject;
     }
 
     public void setSubject(String subject) {
-
         this.subject = subject;
     }
 
     public String getVersion() {
-
         return version;
     }
 
     public void setVersion(String version) {
-
         this.version = version;
     }
 }

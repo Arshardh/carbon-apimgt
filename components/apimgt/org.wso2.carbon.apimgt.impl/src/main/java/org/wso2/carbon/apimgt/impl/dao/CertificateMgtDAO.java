@@ -216,7 +216,7 @@ public class CertificateMgtDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         CertificateMetadataDTO certificateMetadataDTO;
-        List<CertificateMetadataDTO> certificateMetadataList = new ArrayList<>();
+        List<CertificateMetadataDTO> certificateMetadataList = new ArrayList<CertificateMetadataDTO>();
 
         if (StringUtils.isNotEmpty(alias) || StringUtils.isNotEmpty(endpoint)) {
             getCertQuery = SQLConstants.CertificateConstants.GET_CERTIFICATE_TENANT;
@@ -314,13 +314,11 @@ public class CertificateMgtDAO {
             connection = APIMgtDBUtil.getConnection();
             preparedStatement = connection.prepareStatement(certificateCountQuery);
             preparedStatement.setInt(1, tenantId);
-
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 count = resultSet.getInt("count");
             }
-
         } catch (SQLException e) {
             handleException("Error while retrieving the certificate count.", e);
         } finally {

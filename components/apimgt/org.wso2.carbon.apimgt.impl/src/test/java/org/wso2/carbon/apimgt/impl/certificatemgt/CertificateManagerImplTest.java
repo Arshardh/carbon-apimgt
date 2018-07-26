@@ -287,7 +287,7 @@ public class CertificateManagerImplTest {
     @Test
     public void testGetCertificate() throws APIManagementException {
         CertificateMetadataDTO certificateMetadata = generateMetadata();
-        List<CertificateMetadataDTO> certificateMetadataList = new ArrayList<>();
+        List<CertificateMetadataDTO> certificateMetadataList = new ArrayList<CertificateMetadataDTO>();
         certificateMetadataList.add(certificateMetadata);
         PowerMockito.stub(PowerMockito.method(CertificateMgtDAO.class, "getCertificates", String.class,
                 String.class, int.class)).toReturn(certificateMetadataList);
@@ -308,7 +308,7 @@ public class CertificateManagerImplTest {
     @Test
     public void testIsCertificatePresent() throws APIManagementException {
         CertificateMetadataDTO certificateMetadataDTO = generateMetadata();
-        List<CertificateMetadataDTO> certificateMetadataList = new ArrayList<>();
+        List<CertificateMetadataDTO> certificateMetadataList = new ArrayList<CertificateMetadataDTO>();
         certificateMetadataList.add(certificateMetadataDTO);
 
         PowerMockito.stub(PowerMockito.method(CertificateMgtDAO.class, "getCertificates", String.class,
