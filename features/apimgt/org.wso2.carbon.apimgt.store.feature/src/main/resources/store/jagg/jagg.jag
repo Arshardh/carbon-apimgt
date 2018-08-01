@@ -918,6 +918,12 @@ var jagg = jagg || (function () {
         }
     }
 
+    var validateForScript = function (content) {
+        var startPattern = /<script.*?>/g;
+        var endPattern = /<\script>/g;
+        return content.replace(startPattern, "&lt;script &gt;").replace(endPattern, "&lt;\script&gt;");
+    };
+
     return {
         setUser:setUser,
         getUser:getUser,
@@ -958,7 +964,8 @@ var jagg = jagg || (function () {
         validateInputs:validateInputs,
         getTenantURLPrefix:getTenantURLPrefix,
         log:log,
-        isMultiGroupEnabled:isMultiGroupEnabled
+        isMultiGroupEnabled:isMultiGroupEnabled,
+        validateForScript:validateForScript
     };
 
 }());
