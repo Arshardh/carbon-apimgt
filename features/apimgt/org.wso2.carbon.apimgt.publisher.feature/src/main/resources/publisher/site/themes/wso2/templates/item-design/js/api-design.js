@@ -597,6 +597,9 @@ APIDesigner.prototype.load_api_document = function(api_document){
         if (this.api_doc.info.description) {
             $("#description").val(this.api_doc.info.description);
         }
+        if (this.api_doc.basePath) {
+            $("#context").val(this.api_doc.basePath);
+        }
     }
 };
 
