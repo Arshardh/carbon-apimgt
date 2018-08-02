@@ -18,12 +18,15 @@
 package org.wso2.carbon.apimgt.impl.utils;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.wso2.carbon.apimgt.api.dto.CertificateInformationDTO;
 import org.wso2.carbon.apimgt.impl.certificatemgt.ResponseCode;
+import org.wso2.carbon.apimgt.impl.certificatemgt.exceptions.CertificateManagementException;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
 
@@ -42,20 +45,21 @@ public class CertificateMgtUtilTest {
     private static final String TRUST_STORE_FIELD = "TRUST_STORE";
     private static final String INVALID_TRUST_STORE_FILE = "/abc.jks";
     private static final String BASE64_ENCODED_CERT_STRING =
-            "MIIDPTCCAiWgAwIBAgIETWBSTzANBgkqhkiG9w0BAQsFADBOMQswCQYDVQQGEwJsazELMAkGA1U" +
-                    "ECBMCbGsxCzAJBgNVBAcTAmxrMQswCQYDVQQKEwJsazELMAkGA1UECxMCbGsxCzAJBgNVBAMTAmxrMCAXD" +
-                    "TE4MDEyNTExNDY1NloYDzMwMTcwNTI4MTE0NjU2WjBOMQswCQYDVQQGEwJsazELMAkGA1UECBMCbGsxCzA" +
-                    "JBgNVBAcTAmxrMQswCQYDVQQKEwJsazELMAkGA1UECxMCbGsxCzAJBgNVBAMTAmxrMIIBIjANBgkqhkiG9" +
-                    "w0BAQEFAAOCAQ8AMIIBCgKCAQEAxLw0sVn/HP3i/5Ghp9vy0OnCs0LEJUAvjndi/Gq+ZRw7HLCVvZkZc89" +
-                    "6Kdn2k/9zdmtUptAmXswttCt6cFMIMbeMi2qeCbmPM+WXgm0Ngw+XbBL4qsyvCfnGp7d2i+Qz7x1rm6cb4" +
-                    "WGScTdRHXC9EsUGEvotmn2w8g4ksZx/1bR1D/2IZ5BL4G/4kfVcOnPXXXq2IwjVzVUWrcq+fZxAo2iJ2Vz" +
-                    "Gh8vfyNj9Z97Q5ey+Nreqw5HAiPjBcnD8TrbKYfn6tQTTVg8AaY97SXC/AwSvtgvDPMTNNbE5c4JLo+/Ce" +
-                    "L5d6e6/qsolFpDJUfKES4Gp8MTDlwA3YF8/r0OrHQIDAQABoyEwHzAdBgNVHQ4EFgQU5ZqqRPSTyT8ESAE" +
-                    "3keTFMDQqG7owDQYJKoZIhvcNAQELBQADggEBAAL/i00VjPx9BtcUYMN6hJX5cVhbvUBNzuWy+FVk3m3Ff" +
-                    "RgjXdrWhIRHXVslo/NOoxznd5TGD0GYiBuPtPEG+wYzNgpEbdKrcsM1+YkZVvoon8rItY2vTC57uch/Eul" +
-                    "rKIeNiYeLxtKNgXpvvAYC0HPtKB/aiC7Vc0gH0JVNrJNah9Dbd7HmgeAeiDPvUpZWSvuJPg81G/rC1Gu9y" +
-                    "FuiR8HjzcTDRVMepkefA3IpHwYvoQGjeNC/GFGAH/9jihrqw8anwwPALocNSvzwB148w/viIOaopfrmMqB" +
-                    "lBWAwUf2wYCU6W3rhhg7H6Zf2cTweLe4v57GVlOWtYOXlgJzeUuc=";
+            "MIIDPTCCAiWgAwIBAgIETWBSTzANBgkqhkiG9w0BAQsFADBOMQswCQYDVQQGEwJsazELMAkGA1UECBMCbGsxCz" +
+                    "AJBgNVBAcTAmxrMQswCQYDVQQKEwJsazELMAkGA1UECxMCbGsxCzAJBgNVBAMTAmxrMCAXDTE4MDEy" +
+                    "NTExNDY1NloYDzMwMTcwNTI4MTE0NjU2WjBOMQswCQYDVQQGEwJsazELMAkGA1UECBMCbGsxCzAJBg" +
+                    "NVBAcTAmxrMQswCQYDVQQKEwJsazELMAkGA1UECxMCbGsxCzAJBgNVBAMTAmxrMIIBIjANBgkqhkiG" +
+                    "9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxLw0sVn/HP3i/5Ghp9vy0OnCs0LEJUAvjndi/Gq+ZRw7HLCVvZ" +
+                    "kZc896Kdn2k/9zdmtUptAmXswttCt6cFMIMbeMi2qeCbmPM+WXgm0Ngw+XbBL4qsyvCfnGp7d2i+Qz" +
+                    "7x1rm6cb4WGScTdRHXC9EsUGEvotmn2w8g4ksZx/1bR1D/2IZ5BL4G/4kfVcOnPXXXq2IwjVzVUWrc" +
+                    "q+fZxAo2iJ2VzGh8vfyNj9Z97Q5ey+Nreqw5HAiPjBcnD8TrbKYfn6tQTTVg8AaY97SXC/AwSvtgvD" +
+                    "PMTNNbE5c4JLo+/CeL5d6e6/qsolFpDJUfKES4Gp8MTDlwA3YF8/r0OrHQIDAQABoyEwHzAdBgNVHQ" +
+                    "4EFgQU5ZqqRPSTyT8ESAE3keTFMDQqG7owDQYJKoZIhvcNAQELBQADggEBAAL/i00VjPx9BtcUYMN6" +
+                    "hJX5cVhbvUBNzuWy+FVk3m3FfRgjXdrWhIRHXVslo/NOoxznd5TGD0GYiBuPtPEG+wYzNgpEbdKrcs" +
+                    "M1+YkZVvoon8rItY2vTC57uch/EulrKIeNiYeLxtKNgXpvvAYC0HPtKB/aiC7Vc0gH0JVNrJNah9Db" +
+                    "d7HmgeAeiDPvUpZWSvuJPg81G/rC1Gu9yFuiR8HjzcTDRVMepkefA3IpHwYvoQGjeNC/GFGAH/9jih" +
+                    "rqw8anwwPALocNSvzwB148w/viIOaopfrmMqBlBWAwUf2wYCU6W3rhhg7H6Zf2cTweLe4v57GVlOWt" +
+                    "YOXlgJzeUuc=";
 
     private static final String BASE64_ENCODED_ERROR_CERT =
             "U3lzdGVtLnNldFByb3BlcnR5KCJqYXZheC5uZXQuc3NsLnRydXN0U3RvcmV" +
@@ -84,8 +88,9 @@ public class CertificateMgtUtilTest {
                     "2/Qh4Zy17IIUltCQEOIpVsS07wf/sU16c4v6xZQogxKvBLMTLKW2NzLIxA2/3xV5v1loyY/vVQ85\n" +
                     "Q877zXfwTUGO5ZN3QCGncCpCEfWbnj6pxAM=";
 
-    @BeforeClass
-    public static void init() {
+    @Before
+    public void init() {
+
         System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
         System.setProperty("javax.net.ssl.trustStore", CERT_PATH.getPath());
         certificateMgtUtils = new CertificateMgtUtils();
@@ -93,18 +98,21 @@ public class CertificateMgtUtilTest {
 
     @Test
     public void testAddCertificateToTrustStore() {
+
         ResponseCode result = certificateMgtUtils.addCertificateToTrustStore(BASE64_ENCODED_CERT_STRING, ALIAS);
         Assert.assertEquals(result, ResponseCode.SUCCESS);
     }
 
     @Test
     public void testAddExistingCertificate() {
+
         ResponseCode result = certificateMgtUtils.addCertificateToTrustStore(BASE64_ENCODED_CERT_STRING, ALIAS);
         Assert.assertEquals(result, ResponseCode.ALIAS_EXISTS_IN_TRUST_STORE);
     }
 
     @Test
     public void testDeleteCertificateFromTrustStore() {
+
         certificateMgtUtils.addCertificateToTrustStore(ALIAS, BASE64_ENCODED_CERT_STRING);
         ResponseCode responseCode = certificateMgtUtils.removeCertificateFromTrustStore(ALIAS);
         Assert.assertEquals(responseCode, ResponseCode.SUCCESS);
@@ -112,18 +120,21 @@ public class CertificateMgtUtilTest {
 
     @Test
     public void testDeleteNonExistingCertificate() {
+
         ResponseCode responseCode = certificateMgtUtils.removeCertificateFromTrustStore(ALIAS_NOT_EXIST);
         Assert.assertEquals(responseCode, ResponseCode.CERTIFICATE_NOT_FOUND);
     }
 
     @Test
     public void testAddCertificateWithCertificateException() {
+
         ResponseCode responseCode = certificateMgtUtils.addCertificateToTrustStore(ALIAS, BASE64_ENCODED_ERROR_CERT);
         Assert.assertEquals(responseCode, ResponseCode.INTERNAL_SERVER_ERROR);
     }
 
     @Test
     public void testAddCertificateWithFileNotFoundException() throws NoSuchFieldException, IllegalAccessException {
+
         Field field = CertificateMgtUtils.class.getDeclaredField(TRUST_STORE_FIELD);
         field.setAccessible(true);
         field.set(certificateMgtUtils, INVALID_TRUST_STORE_FILE);
@@ -134,8 +145,65 @@ public class CertificateMgtUtilTest {
 
     @Test
     public void testAddExpiredCertificate() {
+
         ResponseCode responseCode = certificateMgtUtils.addCertificateToTrustStore(EXPIRED_CERTIFICATE,
                 ALIAS_EXPIRED);
         Assert.assertEquals(responseCode, ResponseCode.CERTIFICATE_EXPIRED);
+    }
+
+    @Test
+    public void testGetCertificateInformation() throws CertificateManagementException {
+
+        certificateMgtUtils.addCertificateToTrustStore(BASE64_ENCODED_CERT_STRING,
+                ALIAS);
+        CertificateInformationDTO certificateInformationDTO = certificateMgtUtils.getCertificateInformation(ALIAS);
+        Assert.assertNotNull(certificateInformationDTO);
+    }
+
+    @Test
+    public void testUpdateCertificate() throws CertificateManagementException {
+
+        ResponseCode responseCode = certificateMgtUtils.updateCertificate(BASE64_ENCODED_CERT_STRING, ALIAS);
+        Assert.assertEquals(ResponseCode.SUCCESS, responseCode);
+    }
+
+    @Test
+    public void testUpdateCertificateWithCertificateException() {
+
+        try {
+            ResponseCode responseCode = certificateMgtUtils.updateCertificate(BASE64_ENCODED_ERROR_CERT, ALIAS);
+        } catch (CertificateManagementException e) {
+            Assert.assertEquals(CertificateManagementException.class, e.getClass());
+        }
+    }
+
+    @Test
+    public void testUpdateCertificateWithExpiredCertificate() throws CertificateManagementException {
+
+        ResponseCode responseCode = certificateMgtUtils.updateCertificate(EXPIRED_CERTIFICATE, ALIAS);
+        Assert.assertEquals(ResponseCode.CERTIFICATE_EXPIRED, responseCode);
+    }
+
+    @Test
+    public void testUpdateCertificateWithCertificateNotFound() throws CertificateManagementException {
+
+        ResponseCode responseCode = certificateMgtUtils.updateCertificate(BASE64_ENCODED_CERT_STRING, ALIAS_NOT_EXIST);
+        Assert.assertEquals(ResponseCode.CERTIFICATE_NOT_FOUND, responseCode);
+    }
+
+    @Test
+    public void testUpdateCertificateWithEmptyCertificate() throws CertificateManagementException {
+
+        ResponseCode responseCode = certificateMgtUtils.updateCertificate("", ALIAS);
+        Assert.assertEquals(ResponseCode.INTERNAL_SERVER_ERROR, responseCode);
+    }
+
+    @Test
+    public void testGetCertificateContent() throws CertificateManagementException {
+
+        certificateMgtUtils.addCertificateToTrustStore(BASE64_ENCODED_CERT_STRING, ALIAS);
+        Object certificateStream = certificateMgtUtils.getCertificateContent(ALIAS);
+        Assert.assertNotNull(certificateStream);
+        Assert.assertEquals(certificateStream.getClass().getName(), ByteArrayInputStream.class.getName());
     }
 }
