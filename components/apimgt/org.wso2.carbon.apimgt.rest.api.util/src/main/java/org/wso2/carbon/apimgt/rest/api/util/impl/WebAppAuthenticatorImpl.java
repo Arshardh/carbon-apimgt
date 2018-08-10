@@ -147,8 +147,9 @@ public class WebAppAuthenticatorImpl implements WebAppAuthenticator {
                     if (scp != null) {
                         if (scopes[i].equalsIgnoreCase(scp.getKey())) {
                             //we found scopes matches
-                            if (log.isDebugEnabled() && tokenInfo.getAccessToken() != null) {
-                                log.debug("Scope validation successful for access token: " +
+                            if (log.isDebugEnabled()) {
+                                log.debug("Scope validation successful for access token " +
+                                        (tokenInfo.getAccessToken() != null ? tokenInfo.getAccessToken() : "") +
                                         tokenInfo.getAccessToken() + " with scope: " + scp.getKey() +
                                         " for resource path: " + path + " and verb " + verb);
                             }
