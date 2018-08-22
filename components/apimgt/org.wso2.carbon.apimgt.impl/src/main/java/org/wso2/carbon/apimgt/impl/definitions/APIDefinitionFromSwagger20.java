@@ -85,6 +85,11 @@ public class APIDefinitionFromSwagger20 extends APIDefinition {
                                  "for api \"" + api.getId().getApiName() + '\"');
                         continue;
                     }
+
+                    if (path.keySet().isEmpty()) {
+                        handleException("HTTP methods are not defined for resource '" + uriTempVal + "'");
+                    }
+
                     for (Object o1 : path.keySet()) {
                         String httpVerb = (String) o1;
 
