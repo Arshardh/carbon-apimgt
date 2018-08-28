@@ -391,20 +391,21 @@ APIDesigner.prototype.init_controllers = function(){
         var operations = operations[0]
         var i = $(this).attr('data-index');
         var pn = $(this).attr('data-path-name');
-        var op = $(this).attr('data-operation');        
+        var op = $(this).attr('data-operation');
         jagg.message({
             // @todo: param_string
-        	content:'Do you want to remove "'+op+' : '+ Handlebars.Utils.escapeExpression(pn) +'" resource from list.',
-        	type:'confirm',
-        	title:"Remove Resource",
-        	okCallback:function(){
-        		API_DESIGNER = APIDesigner();
-        		delete API_DESIGNER.api_doc.paths[pn][op];
-        		API_DESIGNER.render_resources();
-        		if(Object.keys(API_DESIGNER.api_doc.paths[pn]).length == 0) {
-        			delete API_DESIGNER.api_doc.paths[pn];
-        		}
-        	}});
+            content: 'Do you want to remove "' + op + ' : ' + Handlebars.Utils.escapeExpression(pn) + '" resource from list.',
+            type: 'confirm',
+            title: "Remove Resource",
+            okCallback: function () {
+                API_DESIGNER = APIDesigner();
+                delete API_DESIGNER.api_doc.paths[pn][op];
+                if (Object.keys(API_DESIGNER.api_doc.paths[pn]).length == 0) {
+                    delete API_DESIGNER.api_doc.paths[pn];
+                }
+                API_DESIGNER.render_resources();
+            }
+        });
         //delete resource if no operations       
     });
 
