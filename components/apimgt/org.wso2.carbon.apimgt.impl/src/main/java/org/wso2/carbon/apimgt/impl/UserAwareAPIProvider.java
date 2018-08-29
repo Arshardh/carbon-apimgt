@@ -475,56 +475,56 @@ public class UserAwareAPIProvider extends APIProviderImpl {
 
     @Override
     public int addCertificate(String userName, String certificate, String alias, String endpoint) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.addCertificate(userName, certificate, alias, endpoint);
     }
 
     @Override
     public int deleteCertificate(String userName, String alias, String endpoint) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.deleteCertificate(userName, alias, endpoint);
     }
 
     @Override
     public List<CertificateMetadataDTO> getCertificates(String userName) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.getCertificates(userName);
     }
 
     @Override
     public List<CertificateMetadataDTO> searchCertificates(int tenantId, String alias, String endpoint)
             throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.searchCertificates(tenantId, alias, endpoint);
     }
 
     @Override
     public boolean isCertificatePresent(int tenantId, String alias) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.isCertificatePresent(tenantId, alias);
     }
 
     @Override
     public CertificateInformationDTO getCertificateStatus(String alias) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.getCertificateStatus(alias);
     }
 
     @Override
     public int updateCertificate(String certificateString, String alias) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.updateCertificate(certificateString, alias);
     }
 
     @Override
     public int getCertificateCountPerTenant(int tenantId) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.getCertificateCountPerTenant(tenantId);
     }
 
     @Override
     public ByteArrayInputStream getCertificateContent(String alias) throws APIManagementException {
-        checkPublishPermission();
+        checkCreatePermission();
         return super.getCertificateContent(alias);
     }
 }
