@@ -29,6 +29,7 @@ import org.apache.synapse.rest.RESTUtils;
 import org.apache.synapse.rest.Resource;
 import org.apache.synapse.rest.dispatch.RESTDispatcher;
 import org.wso2.carbon.apimgt.api.model.URITemplate;
+import org.wso2.carbon.apimgt.gateway.APIMgtGatewayConstants;
 import org.wso2.carbon.apimgt.gateway.handlers.Utils;
 import org.wso2.carbon.apimgt.gateway.handlers.security.keys.APIKeyDataStore;
 import org.wso2.carbon.apimgt.gateway.handlers.security.keys.WSAPIKeyDataStore;
@@ -58,7 +59,7 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  */
 public class APIKeyValidator {
 
-    private APIKeyDataStore dataStore;
+    protected APIKeyDataStore dataStore;
 
     private AxisConfiguration axisConfig;
 
@@ -161,8 +162,10 @@ public class APIKeyValidator {
         APIKeyValidationInfoDTO info = doGetKeyValidationInfo(context, prefixedVersion, apiKey, authenticationScheme, clientDomain,
                                                               matchingResource, httpVerb);
         if (info != null) {
+            boolean isClientDomainSpecificTokencachingEnabled =
+                    Boolean.parseBoolean(System.getProperty(APIMgtGatewayConstants.CLIENT_DOMAIN_TOKEN_CACHING_ENABLED)) == Boolean.TRUE;
             //save into cache only if, validation is correct and api is allowed for all domains
-            if (gatewayKeyCacheEnabled && clientDomain == null) {
+            if (gatewayKeyCacheEnabled && (isClientDomainSpecificTokencachingEnabled || clientDomain == null)) {
 
                 //Get the tenant domain of the API that is being invoked.
                 String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
