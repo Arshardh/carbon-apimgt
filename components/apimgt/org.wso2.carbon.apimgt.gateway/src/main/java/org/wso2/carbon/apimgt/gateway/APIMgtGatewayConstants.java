@@ -45,6 +45,8 @@ public class APIMgtGatewayConstants {
     public static final String DEACTIVATED_ACCESS_TOKEN = "DeactivatedAccessToken";
     public static final String AUTHORIZED_USER = "AuthorizedUser";
     public static final String SCOPES = "Scopes";
+    //This property is introduced to fix https://github.com/wso2/product-apim/issues/3679
+    public static final String CLIENT_DOMAIN_TOKEN_CACHING_ENABLED = "CLIENT_DOMAIN_TOKEN_CACHING_ENABLED";
 
 }
 

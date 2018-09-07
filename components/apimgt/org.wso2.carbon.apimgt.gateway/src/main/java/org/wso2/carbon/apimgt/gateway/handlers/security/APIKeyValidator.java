@@ -29,6 +29,7 @@ import org.apache.synapse.rest.RESTUtils;
 import org.apache.synapse.rest.Resource;
 import org.apache.synapse.rest.dispatch.RESTDispatcher;
 import org.wso2.carbon.apimgt.api.model.URITemplate;
+import org.wso2.carbon.apimgt.gateway.APIMgtGatewayConstants;
 import org.wso2.carbon.apimgt.gateway.handlers.Utils;
 import org.wso2.carbon.apimgt.gateway.handlers.security.keys.APIKeyDataStore;
 import org.wso2.carbon.apimgt.gateway.handlers.security.keys.WSAPIKeyDataStore;
@@ -41,12 +42,17 @@ import org.wso2.carbon.apimgt.impl.dto.APIKeyValidationInfoDTO;
 import org.wso2.carbon.apimgt.impl.dto.ResourceInfoDTO;
 import org.wso2.carbon.apimgt.impl.dto.VerbInfoDTO;
 import org.wso2.carbon.apimgt.impl.utils.APIUtil;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.cache.Cache;
 import javax.cache.Caching;
-import java.util.*;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * This class is used to validate a given API key against a given API context and a version.
@@ -58,7 +64,7 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  */
 public class APIKeyValidator {
 
-    private APIKeyDataStore dataStore;
+    protected APIKeyDataStore dataStore;
 
     private AxisConfiguration axisConfig;
 
@@ -162,7 +168,8 @@ public class APIKeyValidator {
                                                               matchingResource, httpVerb);
         if (info != null) {
             //save into cache only if, validation is correct and api is allowed for all domains
-            if (gatewayKeyCacheEnabled && clientDomain == null) {
+            if (gatewayKeyCacheEnabled && (System.getProperty(APIMgtGatewayConstants.CLIENT_DOMAIN_TOKEN_CACHING_ENABLED)
+                    != null || clientDomain == null)) {
 
                 //Get the tenant domain of the API that is being invoked.
                 String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
