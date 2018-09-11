@@ -74,7 +74,6 @@ public class APIAuthenticationHandler extends AbstractHandler implements Managed
 
     private SynapseEnvironment synapseEnvironment;
 
-    @MethodStats
     public void init(SynapseEnvironment synapseEnvironment) {
         this.synapseEnvironment = synapseEnvironment;
         if (log.isDebugEnabled()) {
@@ -109,6 +108,7 @@ public class APIAuthenticationHandler extends AbstractHandler implements Managed
         return authenticator;
     }
 
+    @MethodStats
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "EXS_EXCEPTION_SOFTENING_RETURN_FALSE",
             justification = "Error is sent through payload")
     public boolean handleRequest(MessageContext messageContext) {
@@ -194,6 +194,7 @@ public class APIAuthenticationHandler extends AbstractHandler implements Managed
         return APIUtil.isAnalyticsEnabled();
     }
 
+    @MethodStats
     public boolean handleResponse(MessageContext messageContext) {
         return true;
     }

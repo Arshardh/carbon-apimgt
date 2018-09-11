@@ -20,16 +20,12 @@ public class Logger
 {
     private static final Log log = LogFactory.getLog("timing");
 
-    @Pointcut("execution(* org.wso2.carbon.apimgt.gateway.handlers..*(..)) && if()")
+    @Pointcut("execution(* org.wso2.carbon.apimgt.gateway.handlers..*(..)) && @annotation(MethodStats) && if()")
     public static boolean pointCut() {
         boolean enabled = false;
-        APIManagerConfiguration configuration = ServiceReferenceHolder.getInstance()
-                .getAPIManagerConfigurationService().getAPIManagerConfiguration();
-        List<String> config = configuration.getProperty("MethodTimeLogging");
-        if (config != null) {
-            String configString = config.get(0);
-            if (!configString.equals(""))
-                enabled = Boolean.parseBoolean(config.get(0));
+        String config = CarbonUtils.getServerConfiguration().getFirstProperty("EnableTimingLogs");
+        if (config != null && !config.equals("")) {
+            enabled = Boolean.parseBoolean(config);
         }
         return enabled;
     }
@@ -39,9 +35,9 @@ public class Logger
     {
         long start = System.currentTimeMillis();
         Object result = point.proceed();
-        log.info("className={"+MethodSignature.class.cast(point.getSignature()).getDeclaringTypeName()+
-                "}, methodName={"+MethodSignature.class.cast(point.getSignature()).getMethod().getName()+
-                "}, timeMs={"+ (System.currentTimeMillis() - start) +"},threadId={"+Thread.currentThread().getId()+"}");
+        log.info("className="+MethodSignature.class.cast(point.getSignature()).getDeclaringTypeName()+
+                ", methodName="+MethodSignature.class.cast(point.getSignature()).getMethod().getName()+
+                ",threadId="+Thread.currentThread().getId() + ", timeMs="+ (System.currentTimeMillis() - start) );
         return result;
     }
 }
