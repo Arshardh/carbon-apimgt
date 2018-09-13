@@ -625,7 +625,7 @@ public class APIKeyValidator {
     }
 
     @MethodStats
-    private APIInfoDTO doGetAPIInfo(String context, String apiVersion) throws APISecurityException{
+    private APIInfoDTO doGetAPIInfo(String context, String apiVersion) throws APISecurityException {
         APIInfoDTO apiInfoDTO = new APIInfoDTO();
 
         ArrayList<URITemplate> uriTemplates = getAllURITemplates(context, apiVersion);
