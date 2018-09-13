@@ -30,6 +30,7 @@ import org.apache.synapse.rest.RESTUtils;
 import org.apache.synapse.rest.Resource;
 import org.apache.synapse.rest.dispatch.RESTDispatcher;
 import org.wso2.carbon.apimgt.api.model.URITemplate;
+import org.wso2.carbon.apimgt.gateway.MethodStats;
 import org.wso2.carbon.apimgt.gateway.handlers.security.keys.APIKeyDataStore;
 import org.wso2.carbon.apimgt.gateway.handlers.security.keys.WSAPIKeyDataStore;
 import org.wso2.carbon.apimgt.gateway.handlers.security.thrift.ThriftAPIDataStore;
@@ -162,6 +163,7 @@ public class APIKeyValidator {
         return getCacheFromCacheManager(APIConstants.GATEWAY_INVALID_TOKEN_CACHE_NAME);
     }
 
+    @MethodStats
     protected Cache getResourceCache() {
 
         if (!resourceCacheInit) {
@@ -350,6 +352,7 @@ public class APIKeyValidator {
         return true;
     }
 
+    @MethodStats
     public String getResourceAuthenticationScheme(MessageContext synCtx) throws APISecurityException {
 
         VerbInfoDTO verb = null;
@@ -633,6 +636,7 @@ public class APIKeyValidator {
         return false;
     }
 
+    @MethodStats
     private APIInfoDTO doGetAPIInfo(String context, String apiVersion) throws APISecurityException {
         APIInfoDTO apiInfoDTO = new APIInfoDTO();
 
@@ -786,6 +790,7 @@ public class APIKeyValidator {
     }
 
 
+    @MethodStats
     protected ArrayList<URITemplate> getAllURITemplates(String context, String apiVersion)
             throws APISecurityException {
         return dataStore.getAllURITemplates(context, apiVersion);

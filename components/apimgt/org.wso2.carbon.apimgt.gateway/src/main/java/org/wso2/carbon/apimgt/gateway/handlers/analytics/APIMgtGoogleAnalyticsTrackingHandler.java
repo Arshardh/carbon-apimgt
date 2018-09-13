@@ -40,6 +40,7 @@ import org.apache.synapse.core.axis2.Axis2MessageContext;
 import org.apache.synapse.rest.AbstractHandler;
 import org.apache.synapse.rest.RESTConstants;
 import org.wso2.carbon.apimgt.gateway.handlers.Utils;
+import org.wso2.carbon.apimgt.gateway.MethodStats;
 import org.wso2.carbon.apimgt.gateway.handlers.security.APISecurityUtils;
 import org.wso2.carbon.apimgt.gateway.handlers.security.AuthenticationContext;
 import org.wso2.carbon.apimgt.gateway.utils.APIMgtGoogleAnalyticsUtils;
@@ -65,9 +66,10 @@ public class APIMgtGoogleAnalyticsTrackingHandler extends AbstractHandler {
 
     protected GoogleAnalyticsConfig config = null;
 
-	@Override
-	public boolean handleRequest(MessageContext msgCtx) {
-		if (configKey == null) {
+    @MethodStats
+    @Override
+    public boolean handleRequest(MessageContext msgCtx) {
+        if (configKey == null) {
             throw new SynapseException("Google Analytics configuration unspecified for the API");
         }
 
@@ -235,8 +237,9 @@ public class APIMgtGoogleAnalyticsTrackingHandler extends AbstractHandler {
 		return "0x" + md5String.substring(0, 16);
 	}
 
-	@Override
-	public boolean handleResponse(MessageContext arg0) {
+    @MethodStats
+    @Override
+    public boolean handleResponse(MessageContext arg0) {
         return true;
 	}
 	
