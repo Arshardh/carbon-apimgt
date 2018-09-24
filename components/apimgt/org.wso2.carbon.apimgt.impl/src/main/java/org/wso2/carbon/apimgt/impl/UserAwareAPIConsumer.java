@@ -36,6 +36,7 @@ import org.wso2.carbon.governance.api.generic.dataobjects.GenericArtifact;
  * available operations. However if the user attempts to execute a privileged operation
  * when the object had been created in the anonymous mode, an exception will be thrown.
  */
+@MethodStats
 public class UserAwareAPIConsumer extends APIConsumerImpl {
 
     private String username;

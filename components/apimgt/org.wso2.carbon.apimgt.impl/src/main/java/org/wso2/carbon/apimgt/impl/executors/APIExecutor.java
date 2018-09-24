@@ -85,12 +85,12 @@ public class APIExecutor implements Execution {
         boolean executed = false;
         String user = PrivilegedCarbonContext.getThreadLocalCarbonContext().getUsername();
         String domain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-     
+
         String userWithDomain = user;
         if(!MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(domain)){
             userWithDomain = user + APIConstants.EMAIL_DOMAIN_SEPARATOR + domain;
-        }       
-        
+        }
+
         userWithDomain = APIUtil.replaceEmailDomainBack(userWithDomain);
 
         try {
