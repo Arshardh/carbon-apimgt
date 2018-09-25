@@ -281,7 +281,6 @@ public class APIStoreHostObject extends ScriptableObject {
                 //ignore
             }
         }
-
         if (hostName == null) {
             hostName = CarbonUtils.getServerConfiguration().getFirstProperty("HostName");
         }

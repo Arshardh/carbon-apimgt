@@ -57,6 +57,6 @@
         "context":"",
       //"regContext":"" // Use only if different path is used for registry
     },
-  "mapExistingAuthApps" : false
-
+  "mapExistingAuthApps" : false,
+  "whiteListedHostNames" : ["localhost"]
 }
