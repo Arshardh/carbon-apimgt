@@ -51,6 +51,25 @@ public class URITemplate implements Serializable{
     private boolean amznResourceContentEncoded;
     private List<OperationPolicy> operationPolicies = new ArrayList<>();
 
+    private String description;
+    private String shemaDefinition;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getShemaDefinition() {
+        return shemaDefinition;
+    }
+
+    public void setShemaDefinition(String shemaDefinition) {
+        this.shemaDefinition = shemaDefinition;
+    }
+
     public ConditionGroupDTO[] getConditionGroups() {
         return conditionGroups;
     }
